@@ -18,7 +18,7 @@ export class CanvasComponent implements AfterViewInit {
   private cellSize: number = 25;
   ctx: CanvasRenderingContext2D;
   private player: Player;
-  private clockTick: number = 100; //arbitrary af
+  private clockTick: number = 150; //arbitrary af
   private letterObjects: Map<string, Entity> = new Map<string, Entity>();
   private letters: string = 'abcdefghijklmnopqrstuvwxyz';
   private rows: number;
@@ -79,7 +79,7 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   animatePlayer(x: number, y: number): void {
-    //moves the player, erases the last position, and redraws the grid
+    //moves the player and redraws the grid
 
     this.ctx.beginPath();
     this.ctx.fillStyle = 'red';
