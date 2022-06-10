@@ -1,11 +1,12 @@
 export default class Entity{
-    constructor(public name: string, public x: number=-1, public y: number=-1, public radius: number, public sprites: Array<string>, public frame: number=0){
+    public frame: number;
+    constructor(public name: string, public x: number=-1, public y: number=-1, public radius: number, public sprites: Array<string>){
       this.x = x;
       this.y = y;
       this.name = name;
       this.radius = radius;
       this.sprites = sprites;
-      this.frame = frame;
+      this.frame = 0;
     }
     public moveEntity(x:number, y:number): void {
         this.x = x;
