@@ -1,0 +1,27 @@
+{
+  "sizeX": 25,
+  "sizeY": 25,
+  "name": "Level 0",
+  "id":0,
+  "letters": [
+    {
+      "name": "a",
+      "xPos": 10,
+      "yPos": 10,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true
+    },
+    {
+      "name": "b",
+      "xPos": 10,
+      "yPos": 11,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true
+    }
+  ],
+  "player": { "xPos": 5, "yPos": 10, "size": 10, "layerValue": 0 }
+}

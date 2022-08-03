@@ -5,6 +5,7 @@ import { HostListener } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import Letter from '../gameObjects/letter';
 import Entity from '../gameObjects/entity';
+import Level from '../gameObjects/level';
 
 @Component({
   selector: 'canvas-component',
@@ -19,6 +20,7 @@ export class CanvasComponent implements AfterViewInit {
   private cellSize: number = 25;
   ctx: CanvasRenderingContext2D;
   private player: Player;
+  private level: Level;
   private clockTick: number = 150; //arbitrary af
   private letterObjects: Map<string, Letter> = new Map<string, Letter>();
   private letters: string = 'abcdefghijklmnopqrstuvwxyz';
@@ -29,11 +31,12 @@ export class CanvasComponent implements AfterViewInit {
     Array<HTMLImageElement>
   >();
   constructor() {
-    this.player = new Player(5, 10, this.cellSize, [
+    this.player = new Player(5, 10, this.cellSize, 0, [
       'assets/images/player1.png',
       'assets/images/player2.png',
       'assets/images/player3.png',
     ]);
+    // this.level = new Level ();
   }
   drawGrid(): void {
     this.ctx.beginPath();
@@ -242,13 +245,15 @@ export class CanvasComponent implements AfterViewInit {
     this.animateObjects([this.allEntities], this.player);
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
+    let levelData = await import('../../assets/level_data/00.json');
+    this.level = new Level(levelData.default);
+    this.level.showData();
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');
     let theight = this.cellSize * (Math.floor(innerHeight / this.cellSize) - 3);
     let twidth = this.cellSize * (Math.floor(innerWidth / this.cellSize) - 1);
     this.rows = Math.floor(theight / this.cellSize);
     this.cols = Math.floor(twidth / this.cellSize);
-    console.log(this.rows, this.cols);
     let yPos = 0;
     for (let i = 0; i < this.letters.length; i++) {
       let xPos = i % this.cols;
@@ -261,6 +266,7 @@ export class CanvasComponent implements AfterViewInit {
           5, //x position
           9, //y position
           this.cellSize,
+          0,
           [
             'assets/images/' + this.letters[i] + '1.png',
             'assets/images/' + this.letters[i] + '2.png',
@@ -274,6 +280,7 @@ export class CanvasComponent implements AfterViewInit {
           xPos, //x position
           yPos, //y position
           this.cellSize,
+          0,
           [
             'assets/images/' + this.letters[i] + '1.png',
             'assets/images/' + this.letters[i] + '2.png',
