@@ -5,16 +5,16 @@ import { CanvasComponent } from '../canvas/canvas.component';
 // import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'game-engine-component',
-  templateUrl: './game-engine.component.html',
-  styleUrls: ['./game-engine.component.scss'],
+  selector: 'game-handler-component',
+  templateUrl: './game-handler.component.html',
+  styleUrls: ['./game-handler.component.scss'],
 })
 
 @NgModule({
   // imports: [IonicModule, CommonModule, FormsModule],
   declarations:[CanvasComponent],
 })
-export class GameEngineComponent implements OnInit {
+export class GameHandlerComponent implements OnInit {
 
   constructor() { }
 

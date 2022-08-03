@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
-import { GameEngineComponent } from '../game-engine/game-engine.component';
+import { GameHandlerComponent } from '../game-handler/game-handler.component';
 import { HomePageRoutingModule } from './home-routing.module';
 import { CanvasComponent } from '../canvas/canvas.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule],
-  declarations: [HomePage, GameEngineComponent, CanvasComponent],//shouldn't have to import canvascomponent here, have to find how to avoid this later
+  declarations: [HomePage, GameHandlerComponent, CanvasComponent],//shouldn't have to import canvascomponent here, have to find how to avoid this later
 })
 export class HomePageModule {}

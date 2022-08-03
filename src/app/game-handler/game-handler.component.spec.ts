@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { GameEngineComponent } from './game-engine.component';
+import { GameHandlerComponent } from './game-handler.component';
 
-describe('GameEngineComponent', () => {
-  let component: GameEngineComponent;
-  let fixture: ComponentFixture<GameEngineComponent>;
+describe('GameHandlerComponent', () => {
+  let component: GameHandlerComponent;
+  let fixture: ComponentFixture<GameHandlerComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GameEngineComponent ],
+      declarations: [ GameHandlerComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GameEngineComponent);
+    fixture = TestBed.createComponent(GameHandlerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
