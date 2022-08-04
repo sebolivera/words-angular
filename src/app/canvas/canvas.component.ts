@@ -16,28 +16,17 @@ export class CanvasComponent implements AfterViewInit {
   @ViewChild('mainCanvas')
   private mainCanvas: ElementRef = {} as ElementRef;
   private subsciption: Subscription;
-  private allEntities: Map<string, Entity>;
-  private cellSize: number = 25;
+  private allEntities: Array<Entity>;
+  private cellSize: number = 100;
   ctx: CanvasRenderingContext2D;
-  private player: Player;
   private level: Level;
+  private steps: Array<Array<Entity>> = [];
   private clockTick: number = 150; //arbitrary af
-  private letterObjects: Map<string, Letter> = new Map<string, Letter>();
-  private letters: string = 'abcdefghijklmnopqrstuvwxyz';
-  private rows: number;
-  private cols: number;
   private imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>
   >();
-  constructor() {
-    this.player = new Player(5, 10, this.cellSize, 0, [
-      'assets/images/player1.png',
-      'assets/images/player2.png',
-      'assets/images/player3.png',
-    ]);
-    // this.level = new Level ();
-  }
+  constructor() {}
   drawGrid(): void {
     this.ctx.beginPath();
     this.ctx.strokeStyle = '#cccccc';
@@ -61,33 +50,9 @@ export class CanvasComponent implements AfterViewInit {
     this.ctx.stroke();
   }
 
-  animateObjects(
-    entityArray: Array<Map<string, Entity>>,
-    player: Player = null
-  ): void {
-    entityArray.forEach((entities) => {
-      if (player) {
-        this.ctx.drawImage(
-          this.imgMap[player.name][player.frame],
-          player.x * this.cellSize,
-          player.y * this.cellSize,
-          this.cellSize,
-          this.cellSize
-        );
-        player.updateFrame();
-      }
-      Object.keys(entities).forEach((key) => {
-        let entity = entities[key];
-        // not needed right now, but will be useful if I need to remove background behind entities
-        // this.ctx.beginPath();
-        // this.ctx.fillStyle = 'white';
-        // this.ctx.rect(
-        //   entity.x * this.cellSize,
-        //   entity.y * this.cellSize,
-        //   this.cellSize,
-        //   this.cellSize
-        // );
-        // this.ctx.fill();
+  animateObjects(entityArray: Array<Entity>): void {
+    entityArray.forEach((entity) => {
+      if (entity.name === 'player') {
         this.ctx.drawImage(
           this.imgMap[entity.name][entity.frame],
           entity.x * this.cellSize,
@@ -96,12 +61,38 @@ export class CanvasComponent implements AfterViewInit {
           this.cellSize
         );
         entity.updateFrame();
-      });
+      }
+      // not needed right now, but will be useful if I need to remove background behind entities
+      // this.ctx.beginPath();
+      // this.ctx.fillStyle = 'white';
+      // this.ctx.rect(
+      //   entity.x * this.cellSize,
+      //   entity.y * this.cellSize,
+      //   this.cellSize,
+      //   this.cellSize
+      // );
+      // this.ctx.fill();
+      else {
+        this.ctx.drawImage(
+          this.imgMap[entity.name][entity.frame],
+          entity.x * this.cellSize,
+          entity.y * this.cellSize,
+          this.cellSize,
+          this.cellSize
+        );
+        entity.updateFrame();
+      }
     });
   }
 
+  restart() {
+    this.steps = [];
+    this.subsciption.unsubscribe();
+    this.ngAfterViewInit();
+  }
+
   getEntitiesAtCoordinates(
-    entities: Map<string, Entity>,
+    entities: Array<Entity>,
     x: number,
     y: number
   ): Map<string, Array<string>> {
@@ -112,54 +103,81 @@ export class CanvasComponent implements AfterViewInit {
     >([
       ['walkable', []],
       ['pushable', []],
-      ['wall', []],
+      ['adminwall', []],
+      ['death', []]
     ]);
     let walkable = [];
     let pushable = [];
-    let wall = [];
-    for (let j = 0; j < Object.keys(entities).length; j++) {
-      // console.log(entities[Object.keys(entities)[j]].name,entities[Object.keys(entities)[j]].x, entities[Object.keys(entities)[j]].y, x, y);
-      if (
-        entities[Object.keys(entities)[j]].x === x &&
-        entities[Object.keys(entities)[j]].y === y
-      ) {
-        if (entities[Object.keys(entities)[j]].isPushable) {
-          pushable.push(Object.keys(entities)[j]);
-        } else if (entities[Object.keys(entities)[j]].isWalkable) {
-          walkable.push(Object.keys(entities)[j]);
+    let adminwall = [];
+    let death = [];
+    for (let j = 0; j < entities.length; j++) {
+      // console.log(entities[j].name,entities[j].x, entities[j].y, x, y);
+      if (entities[j].x === x && entities[j].y === y) {
+        if (entities[j].isPushable) {
+          pushable.push(j);
+        } else if (entities[j].isWalkable) {
+          walkable.push(j);
         } else {
-          wall.push(Object.keys(entities)[j]);
+          adminwall.push(j);
+        }
+        if(entities[j].name==='death' && entities[j].x === x && entities[j].y === y)
+        {
+          death.push(j)
         }
       }
     }
     entitiesFound.set('pushable', pushable);
     entitiesFound.set('walkable', walkable);
-    entitiesFound.set('wall', wall);
+    entitiesFound.set('adminwall', adminwall);
+    entitiesFound.set('death', death);
     return entitiesFound;
   }
 
   @HostListener('document:keydown', ['$event'])
   move(event: KeyboardEvent): void {
-    let x = this.player.x;
-    let y = this.player.y;
-    let oldX = x;
-    let oldY = y;
+    let x = this.level.player.x;
+    let y = this.level.player.y;
     switch (event.key) {
       case 'ArrowUp':
         y--;
+        this.steps.push(
+          this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
+        );
         break;
       case 'ArrowDown':
         y++;
+        this.steps.push(
+          this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
+        );
         break;
       case 'ArrowLeft':
         x--;
+        this.steps.push(
+          this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
+        );
         break;
       case 'ArrowRight':
         x++;
+        this.steps.push(
+          this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
+        );
         break;
+      case 'u':
+        if (this.steps.length > 1) {
+          for (let i = 0; i < this.steps[this.steps.length - 1].length; i++) {
+            this.allEntities[i].setAll(this.steps[this.steps.length - 1][i]);
+          }
+          this.steps.pop();
+        }
+        return;
+      case 'r':
+        this.restart();
+        return;
       default:
         break;
     }
+
+    //TODO: Fix this part so that multiple objects can be pushed. Also, make it legible.
     if (
       x >= 0 &&
       y >= 0 &&
@@ -172,7 +190,11 @@ export class CanvasComponent implements AfterViewInit {
         string,
         Array<string>
       > = this.getEntitiesAtCoordinates(this.allEntities, x, y);
-      if (entitiesAtCoordinates.get('wall').length === 0) {
+      if (entitiesAtCoordinates.get('death').length>0)
+      {
+        this.restart();
+      }
+      if (entitiesAtCoordinates.get('adminwall').length === 0) {
         if (entitiesAtCoordinates.get('pushable').length > 0) {
           for (
             let i = 0;
@@ -181,19 +203,18 @@ export class CanvasComponent implements AfterViewInit {
           ) {
             if (
               this.allEntities[entitiesAtCoordinates.get('pushable')[i]].x -
-                (this.player.x - x) >
+                (this.level.player.x - x) >=
                 0 &&
               this.allEntities[entitiesAtCoordinates.get('pushable')[i]].x -
-                (this.player.x - x) <
+                (this.level.player.x - x) <
                 Math.floor(
                   this.mainCanvas.nativeElement.width / this.cellSize
-                ) -
-                  1 &&
+                ) &&
               this.allEntities[entitiesAtCoordinates.get('pushable')[i]].y -
-                (this.player.y - y) >
+                (this.level.player.y - y) >=
                 0 &&
               this.allEntities[entitiesAtCoordinates.get('pushable')[i]].y -
-                (this.player.y - y) <
+                (this.level.player.y - y) <
                 Math.floor(this.mainCanvas.nativeElement.height / this.cellSize)
             ) {
               let entitiesBehindCoordinates: Map<
@@ -202,12 +223,12 @@ export class CanvasComponent implements AfterViewInit {
               > = this.getEntitiesAtCoordinates(
                 this.allEntities,
                 this.allEntities[entitiesAtCoordinates.get('pushable')[i]].x -
-                  (this.player.x - x),
+                  (this.level.player.x - x),
                 this.allEntities[entitiesAtCoordinates.get('pushable')[i]].y -
-                  (this.player.y - y)
+                  (this.level.player.y - y)
               );
               if (
-                entitiesBehindCoordinates.get('wall').length === 0 &&
+                entitiesBehindCoordinates.get('adminwall').length === 0 &&
                 entitiesBehindCoordinates.get('pushable').length === 0 &&
                 entitiesBehindCoordinates.get('walkable').length === 0
               ) {
@@ -215,16 +236,16 @@ export class CanvasComponent implements AfterViewInit {
                   entitiesAtCoordinates.get('pushable')[i]
                 ].moveEntity(
                   this.allEntities[entitiesAtCoordinates.get('pushable')[i]].x -
-                    (this.player.x - x),
+                    (this.level.player.x - x),
                   this.allEntities[entitiesAtCoordinates.get('pushable')[i]].y -
-                    (this.player.y - y)
+                    (this.level.player.y - y)
                 );
-                this.player.movePlayer(x, y);
+                this.level.player.movePlayer(x, y);
               }
             }
           }
         } else {
-          this.player.movePlayer(x, y);
+          this.level.player.movePlayer(x, y);
         }
       }
     }
@@ -242,85 +263,63 @@ export class CanvasComponent implements AfterViewInit {
     );
     this.ctx.fill();
     this.drawGrid(); //grid is behind everything else
-    this.animateObjects([this.allEntities], this.player);
+    this.animateObjects(this.allEntities);
   }
 
   async ngAfterViewInit(): Promise<void> {
-    let levelData = await import('../../assets/level_data/00.json');
+    let levelData = await import('../../assets/level_data/test_level.json');
     this.level = new Level(levelData.default);
     this.level.showData();
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');
-    let theight = this.cellSize * (Math.floor(innerHeight / this.cellSize) - 3);
-    let twidth = this.cellSize * (Math.floor(innerWidth / this.cellSize) - 1);
-    this.rows = Math.floor(theight / this.cellSize);
-    this.cols = Math.floor(twidth / this.cellSize);
-    let yPos = 0;
-    for (let i = 0; i < this.letters.length; i++) {
-      let xPos = i % this.cols;
-      if (xPos === 0 && i !== 0) {
-        yPos += 1;
-      }
-      if (this.letters[i] === 'x') {
-        this.letterObjects[this.letters[i]] = new Letter(
-          this.letters[i], //name
-          5, //x position
-          9, //y position
-          this.cellSize,
-          0,
-          [
-            'assets/images/' + this.letters[i] + '1.png',
-            'assets/images/' + this.letters[i] + '2.png',
-            'assets/images/' + this.letters[i] + '3.png',
-          ], //frames
-          true //is walkable
-        );
-      } else {
-        this.letterObjects[this.letters[i]] = new Letter(
-          this.letters[i], //name
-          xPos, //x position
-          yPos, //y position
-          this.cellSize,
-          0,
-          [
-            'assets/images/' + this.letters[i] + '1.png',
-            'assets/images/' + this.letters[i] + '2.png',
-            'assets/images/' + this.letters[i] + '3.png',
-          ], //frames
-          true //is walkable
-        );
-      }
+    let cellHeight = this.cellSize;
+    let safetyCounter = 0;
+
+    // Optimization for the grid size, not strictly needed but eh, looks cool
+    while (
+      safetyCounter < 100 &&
+      cellHeight * this.level.sizeY > window.innerHeight
+    ) {
+      cellHeight *= 0.9; //somehow giving this more precision makes the grid overflow to to the bottom...?
+      safetyCounter += 1;
     }
-    this.allEntities = this.letterObjects;
+    let cellWidth = Math.floor(cellHeight);
+    safetyCounter = 0;
+    while (
+      safetyCounter < 100 &&
+      cellWidth * this.level.sizeX > window.innerWidth
+    ) {
+      cellWidth *= 0.9;
+      safetyCounter += 1;
+    }
+    this.cellSize = Math.floor(cellWidth);
+    let theight = this.cellSize * this.level.sizeY;
+    let twidth = this.cellSize * this.level.sizeX;
+    this.allEntities = [...this.level.letters];
+    this.allEntities = this.allEntities.concat([...this.level.entities]);
+    this.allEntities.push(this.level.player);
     this.ctx.canvas.height = theight; //TODO : find a fix for the height & width issue
     this.ctx.canvas.width = twidth;
     this.drawGrid();
-    this.ctx.fillStyle = 'red';
-    this.ctx.beginPath();
-    this.ctx.arc(
-      this.player.x * this.cellSize + this.cellSize / 2,
-      this.player.y * this.cellSize + this.cellSize / 2,
-      this.cellSize / 2,
-      0,
-      2 * Math.PI
-    );
-    this.imgMap[this.player.name] = [];
-    for (let i = 0; i < 3; i++) {
-      this.imgMap[this.player.name].push(new Image());
-      this.imgMap[this.player.name][i].src =
-        'assets/images/' + this.player.name + (i + 1) + '.png';
-    }
+
+    // Draws a dot, forgot why
+    // this.ctx.fillStyle = 'red';
+    // this.ctx.beginPath();
+    // this.ctx.arc(
+    //   this.level.player.x * this.cellSize + this.cellSize / 2,
+    //   this.level.player.y * this.cellSize + this.cellSize / 2,
+    //   this.cellSize / 2,
+    //   0,
+    //   2 * Math.PI
+    // );
+
     this.ctx.fill();
-    for (let i = 0; i < Object.keys(this.allEntities).length; i++) {
-      this.imgMap[this.allEntities[this.letters[i]].name] = [];
-      for (
-        let j = 0;
-        j < this.allEntities[this.letters[i]].sprites.length;
-        j++
-      ) {
-        this.imgMap[this.allEntities[this.letters[i]].name].push(new Image());
-        this.imgMap[this.allEntities[this.letters[i]].name][
-          this.imgMap[this.allEntities[this.letters[i]].name].length - 1
-        ].src = this.allEntities[this.letters[i]].sprites[j];
+    for (let i = 0; i < this.allEntities.length; i++) {
+      let name = this.allEntities[i].name;
+      this.imgMap[name] = [];
+      for (let j = 0; j < this.allEntities[i].sprites.length; j++) {
+        this.imgMap[name].push(new Image());
+        this.imgMap[name][this.imgMap[name].length - 1].src =
+          this.allEntities[i].sprites[j];
       }
     }
     this.subsciption = timer(0, this.clockTick)
