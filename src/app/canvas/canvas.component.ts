@@ -137,6 +137,10 @@ export class CanvasComponent implements AfterViewInit {
   move(event: KeyboardEvent): void {
     let x = this.level.player.x;
     let y = this.level.player.y;
+    if (this.steps.length>1000)
+    {
+      this.steps.shift();//don't want to keep too many steps in case of memory issues
+    }
     switch (event.key) {
       case 'ArrowUp':
         y--;
