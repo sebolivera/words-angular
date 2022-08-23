@@ -6,7 +6,6 @@ import { Subscription, timer } from 'rxjs';
 import Letter from '../gameObjects/letter';
 import Entity from '../gameObjects/entity';
 import Level from '../gameObjects/level';
-
 @Component({
   selector: 'canvas-component',
   templateUrl: './canvas.component.html',
@@ -21,14 +20,15 @@ export class CanvasComponent implements AfterViewInit {
   ctx: CanvasRenderingContext2D;
   private level: Level;
   private steps: Array<Array<Entity>> = [];
-  private missingTexturesImg:HTMLImageElement = new Image();
+  private missingTexturesImg: HTMLImageElement = new Image();
   private clockTick: number = 150; //arbitrary af
   private imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>
   >();
   constructor() {
-    this.missingTexturesImg.src = '../assets/images/entities/missingTextures.png'
+    this.missingTexturesImg.src =
+      '../assets/images/entities/missingTextures.png';
   }
   drawGrid(): void {
     this.ctx.beginPath();
@@ -40,8 +40,10 @@ export class CanvasComponent implements AfterViewInit {
       i < this.mainCanvas.nativeElement.width;
       i += this.cellSize
     ) {
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillText((i/this.cellSize).toString(), 0, i+10)
+      if (this.level?.debug) {
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
+      }
       this.ctx.moveTo(i, 0);
       this.ctx.lineTo(i, this.mainCanvas.nativeElement.height);
     }
@@ -50,8 +52,10 @@ export class CanvasComponent implements AfterViewInit {
       i < this.mainCanvas.nativeElement.height;
       i += this.cellSize
     ) {
-      this.ctx.fillStyle = 'blue';
-      this.ctx.fillText((i/this.cellSize).toString(), i, 10)
+      if (this.level?.debug) {
+        this.ctx.fillStyle = 'blue';
+        this.ctx.fillText((i / this.cellSize).toString(), i, 10);
+      }
       this.ctx.moveTo(0, i);
       this.ctx.lineTo(this.mainCanvas.nativeElement.width, i);
     }
@@ -160,28 +164,28 @@ export class CanvasComponent implements AfterViewInit {
     switch (event.key) {
       case 'ArrowUp':
         y--;
-        this.allEntities.forEach(entity => entity.aiMove(this.level))
+        this.allEntities.forEach((entity) => entity.aiMove(this.level));
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowDown':
         y++;
-        this.allEntities.forEach(entity => entity.aiMove(this.level))
+        this.allEntities.forEach((entity) => entity.aiMove(this.level));
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowLeft':
         x--;
-        this.allEntities.forEach(entity => entity.aiMove(this.level))
+        this.allEntities.forEach((entity) => entity.aiMove(this.level));
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowRight':
         x++;
-        this.allEntities.forEach(entity => entity.aiMove(this.level))
+        this.allEntities.forEach((entity) => entity.aiMove(this.level));
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );

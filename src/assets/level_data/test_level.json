@@ -3,6 +3,7 @@
   "sizeY": 25,
   "name": "TEST LEVEL",
   "id": 0,
+  "debug":true,
   "letters": [
     {
       "name": "t",

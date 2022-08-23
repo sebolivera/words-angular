@@ -12,11 +12,13 @@ export default class Level {
   public player: Player;
   public letters: Array<Letter>;
   public entities: Array<Entity>;
+  public debug:Boolean;
   constructor(initObject: any) {
     this.sizeX = initObject.sizeX;
     this.sizeY = initObject.sizeY;
     this.name = initObject.name;
     this.id = initObject.id;
+    this.debug = initObject.debug?initObject.debug:false;
     // this.cellData = initObject.cellData;
     let letters: Array<Letter> = [];
     for (let i = 0; i < initObject.letters.length; i++) {
