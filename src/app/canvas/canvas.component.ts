@@ -21,21 +21,27 @@ export class CanvasComponent implements AfterViewInit {
   ctx: CanvasRenderingContext2D;
   private level: Level;
   private steps: Array<Array<Entity>> = [];
+  private missingTexturesImg:HTMLImageElement = new Image();
   private clockTick: number = 150; //arbitrary af
   private imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>
   >();
-  constructor() {}
+  constructor() {
+    this.missingTexturesImg.src = '../assets/images/entities/missingTextures.png'
+  }
   drawGrid(): void {
     this.ctx.beginPath();
     this.ctx.strokeStyle = '#cccccc';
     this.ctx.lineWidth = 2;
+    this.ctx.font = '10px serif';
     for (
       let i = 0;
       i < this.mainCanvas.nativeElement.width;
       i += this.cellSize
     ) {
+      this.ctx.fillStyle = 'red';
+      this.ctx.fillText((i/this.cellSize).toString(), 0, i+10)
       this.ctx.moveTo(i, 0);
       this.ctx.lineTo(i, this.mainCanvas.nativeElement.height);
     }
@@ -44,6 +50,8 @@ export class CanvasComponent implements AfterViewInit {
       i < this.mainCanvas.nativeElement.height;
       i += this.cellSize
     ) {
+      this.ctx.fillStyle = 'blue';
+      this.ctx.fillText((i/this.cellSize).toString(), i, 10)
       this.ctx.moveTo(0, i);
       this.ctx.lineTo(this.mainCanvas.nativeElement.width, i);
     }
@@ -73,13 +81,23 @@ export class CanvasComponent implements AfterViewInit {
       // );
       // this.ctx.fill();
       else {
-        this.ctx.drawImage(
-          this.imgMap[entity.name][entity.frame],
-          entity.x * this.cellSize,
-          entity.y * this.cellSize,
-          this.cellSize,
-          this.cellSize
-        );
+        try {
+          this.ctx.drawImage(
+            this.imgMap[entity.name][entity.frame],
+            entity.x * this.cellSize,
+            entity.y * this.cellSize,
+            this.cellSize,
+            this.cellSize
+          );
+        } catch (e: any) {
+          this.ctx.drawImage(
+            this.missingTexturesImg,
+            entity.x * this.cellSize,
+            entity.y * this.cellSize,
+            this.cellSize,
+            this.cellSize
+          );
+        }
         entity.updateFrame();
       }
     });
@@ -104,7 +122,7 @@ export class CanvasComponent implements AfterViewInit {
       ['walkable', []],
       ['pushable', []],
       ['adminwall', []],
-      ['death', []]
+      ['death', []],
     ]);
     let walkable = [];
     let pushable = [];
@@ -120,9 +138,8 @@ export class CanvasComponent implements AfterViewInit {
         } else {
           adminwall.push(j);
         }
-        if(entities[j].name==='death' && entities[j].x === x && entities[j].y === y)
-        {
-          death.push(j)
+        if (entities[j].kills) {
+          death.push(j);
         }
       }
     }
@@ -137,31 +154,34 @@ export class CanvasComponent implements AfterViewInit {
   move(event: KeyboardEvent): void {
     let x = this.level.player.x;
     let y = this.level.player.y;
-    if (this.steps.length>1000)
-    {
-      this.steps.shift();//don't want to keep too many steps in case of memory issues
+    if (this.steps.length > 1000) {
+      this.steps.shift(); //don't want to keep too many steps in case of memory issues
     }
     switch (event.key) {
       case 'ArrowUp':
         y--;
+        this.allEntities.forEach(entity => entity.aiMove(this.level))
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowDown':
         y++;
+        this.allEntities.forEach(entity => entity.aiMove(this.level))
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowLeft':
         x--;
+        this.allEntities.forEach(entity => entity.aiMove(this.level))
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
         break;
       case 'ArrowRight':
         x++;
+        this.allEntities.forEach(entity => entity.aiMove(this.level))
         this.steps.push(
           this.allEntities.map((e) => JSON.parse(JSON.stringify(e)))
         );
@@ -194,8 +214,7 @@ export class CanvasComponent implements AfterViewInit {
         string,
         Array<string>
       > = this.getEntitiesAtCoordinates(this.allEntities, x, y);
-      if (entitiesAtCoordinates.get('death').length>0)
-      {
+      if (entitiesAtCoordinates.get('death').length > 0) {
         this.restart();
       }
       if (entitiesAtCoordinates.get('adminwall').length === 0) {
@@ -273,7 +292,8 @@ export class CanvasComponent implements AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     let levelData = await import('../../assets/level_data/test_level.json');
     this.level = new Level(levelData.default);
-    this.level.showData();
+    //this.level.showData(); //For debugging only$
+    // console.log(this.level.getWalkableMatrix());
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');
     let cellHeight = this.cellSize;
     let safetyCounter = 0;

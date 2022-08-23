@@ -1,0 +1,6 @@
+{
+  "behaviors": {
+    "moving": ["seeking", "fleeing", "roaming"],
+    "immobile": [ "dead", "inert", "stopped"]
+  }
+}

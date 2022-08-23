@@ -54,7 +54,10 @@ export default class Level {
             'assets/images/entities/' + initObject.entities[i].name + '1.png',
             'assets/images/entities/' + initObject.entities[i].name + '2.png',
             'assets/images/entities/' + initObject.entities[i].name + '3.png',
-          ] //frames
+          ], //frames
+          initObject.entities[i].kills,
+          initObject.entities[i].additionnalProperties,
+          initObject.entities[i]?.ai
         )
       );
     }
@@ -85,6 +88,24 @@ export default class Level {
     );
   }
 
+  public getWalkableMatrix():Array<Array<Boolean>> {//creates a matrix of cells. Walkable cells are marked as true, non-walkable ones are marked as false
+
+    let matrix: Array<Array<Boolean>> = [];
+    for (let i = 0; i<this.sizeY; i++)
+    {
+      matrix.push(new Array(this.sizeX).fill(true));
+    }
+    for (let k = 0; k < this.entities.length; k++) {//dont know whether or not this is the most efficient way to do it, but it will do for now
+      matrix[this.entities[k].x][this.entities[k].y] = this.entities[k]?.isWalkable;
+    }
+    return matrix;
+  }
+  public isWalkableCell(coords:Array<any>):Boolean{
+    let x:number = coords[0];
+    let y:number = coords[1];
+    let blockingEntities = this.entities.filter(e => (e.x===x && e.y===y && !e.isWalkable));//grabs all entities on the cell that aren't walkable
+    return blockingEntities.length===0;//if there's at least one entity on the cell, you can't walk on it
+  }
   public showData(): void {
     // FOR DEBBUGING PURPOSES ONLY, DELETE IT LATER
     console.log(
