@@ -1,9 +1,12 @@
 // Had to implement my own version as apparently nobody has a decent js one...?
 
+import { Color } from "@ionic/core";
+
 export const pathFinderAStar = (
   start: [number, number],
   end: [number, number],
-  inputGrid: any, maxIterations:number=10000
+  inputGrid: any,
+  maxIterations: number = 10000
 ): Array<[number, number]> => {
   let path: Array<[number, number]> = [];
   let grid: Array<Array<any>> = [];
@@ -82,13 +85,15 @@ export const pathFinderAStar = (
     return minFCost;
   };
   let safetyCounter: number = 0;
-  while (safetyCounter < maxIterations) {//prevents endless runs of iteration in case the target isn't reachable
+  while (safetyCounter < maxIterations) {
+    //prevents endless runs of iteration in case the target isn't reachable
     //stop condition is if all the cells are closedSet, untested as of now
-    if (openSet.size===0){//shouldn't happen, but it does :/
-      openSet.add([...start].join(','))
+    if (openSet.size === 0) {
+      //shouldn't happen, but it does :/
+      openSet.add([...start].join(','));
     }
     let minFCostIndex: [number, number] = getLowestFValue(openSet, grid);
-    if (minFCostIndex[0] === end[0] && minFCostIndex[1]===end[1]){
+    if (minFCostIndex[0] === end[0] && minFCostIndex[1] === end[1]) {
       break;
     }
     current[0] = minFCostIndex[0];
@@ -107,13 +112,13 @@ export const pathFinderAStar = (
         j++
       ) {
         if (
-          ((i !== current[0] || j !== current[1]) && grid[i][j].walkable) &&
+          (i !== current[0] || j !== current[1]) &&
+          grid[i][j].walkable &&
           !closedSet.has([i, j].toString())
         ) {
           if (
             !openSet.has([i, j].toString()) &&
-            (i !== current[0] ||
-            j !== current[1])
+            (i !== current[0] || j !== current[1])
           ) {
             grid[i][j].g = heuristicTimesTen([i, j], start);
             grid[i][j].h = heuristicTimesTen([i, j], end);
@@ -128,13 +133,16 @@ export const pathFinderAStar = (
     }
     safetyCounter++;
   }
-  let reversePathCell:Record<string, any> = {...grid[current[0]][current[1]]};
+  let reversePathCell: Record<string, any> = {
+    ...grid[current[0]][current[1]],
+  };
   let c = 0;
   while (reversePathCell.parent) {
-    reversePathCell = {...grid[current[0]][current[1]]};
-    if (!reversePathCell.parent ||
-      reversePathCell.parent[0] === current[0] &&
-      reversePathCell.parent[1] === current[1]
+    reversePathCell = { ...grid[current[0]][current[1]] };
+    if (
+      !reversePathCell.parent ||
+      (reversePathCell.parent[0] === current[0] &&
+        reversePathCell.parent[1] === current[1])
     ) {
       break;
     }
@@ -143,6 +151,63 @@ export const pathFinderAStar = (
     c++;
   }
   path.pop(); //excludes the starting cell
-  path.unshift(end)//adds the player position that I accidently removed above
+  path.unshift(end); //adds the player position that I accidently removed above
   return path;
+};
+
+export const getRandomInt = (max: number): number => {
+  return Math.floor(Math.random() * max);
+};
+
+export const clamp = (
+  value: number,
+  min: number = 0,
+  max: number = 100
+): number => {
+  return Math.min(max, Math.max(value, min));
+};
+
+export const roundRect = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: any = 5,
+  strokeColor:any="black",
+  fill: Boolean = false,
+  stroke: Boolean = true
+): void => {
+  let tStyle = ctx.strokeStyle;
+  ctx.strokeStyle=strokeColor;
+  if (typeof radius === 'number') {
+    radius = { tl: radius, tr: radius, br: radius, bl: radius };
+  } else {
+    radius = { ...{ tl: 0, tr: 0, br: 0, bl: 0 }, ...radius };
+  }
+  ctx.beginPath();
+  ctx.lineWidth = 4;
+  ctx.moveTo(x + radius.tl, y);
+  ctx.lineTo(x + width - radius.tr, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+  ctx.lineTo(x + width, y + height - radius.br);
+  ctx.quadraticCurveTo(
+    x + width,
+    y + height,
+    x + width - radius.br,
+    y + height
+  );
+  ctx.lineTo(x + radius.bl, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+  ctx.lineTo(x, y + radius.tl);
+  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+  ctx.closePath();
+  if (fill) {
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.stroke();
+  }
+  ctx.strokeStyle = tStyle;
+  ctx.closePath();
 };

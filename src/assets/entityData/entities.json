@@ -1,0 +1,69 @@
+{
+  "mobs": {
+    "bat": {
+      "name": "bat",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "canFly": true,
+      "additionnalProperties": null,
+      "properties": { "canWalkDiagonnally": true },
+      "ai": "seeking"
+    },
+    "rat": {
+      "name": "rat",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionnalProperties": { "canWalkDiagonnally": true },
+      "canFly": false,
+      "ai": "fleeing"
+    }
+  },
+  "obstacles": {
+    "wall": {
+      "name": "wall",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionnalProperties": null,
+      "ai": "inert"
+    },
+    "skull": {
+      "name": "skull",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionnalProperties": null
+    }
+  },
+  "collectibles": {
+    "key": {
+      "name": "key",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": true,
+      "isCollectible": true,
+      "additionnalProperties": null
+    }
+  },
+  "other": {
+    "boat": {
+      "name": "boat",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": true,
+      "isWalkable": false,
+      "additionnalProperties": { "canSwim": true }
+    }
+  }
+}

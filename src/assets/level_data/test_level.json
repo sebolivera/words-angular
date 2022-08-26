@@ -136,6 +136,50 @@
       "isPushable": true,
       "kills":false,
       "additionnalProperties":null
+    },
+    {
+      "name": "o",
+      "xPos": 11,
+      "yPos": 12,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "k",
+      "xPos": 18,
+      "yPos": 9,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "e",
+      "xPos": 18,
+      "yPos": 10,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "y",
+      "xPos": 18,
+      "yPos": 12,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills":false,
+      "additionnalProperties":null
     }
   ],
   "player": { "xPos": 5, "yPos": 10, "size": 10, "layerValue": 0 },
@@ -314,8 +358,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills":true,
-      "additionnalProperties":null,
-      "properties": { "absoluteDeath": true }
+      "additionnalProperties": { "absoluteDeath": true }
     },
     {
       "name": "bat",
@@ -323,12 +366,23 @@
       "yPos": 5,
       "cellSize": 1,
       "layerValue": 0,
-      "isWalkable": false,
+      "isWalkable": true,
       "isPushable": false,
       "kills":false,
-      "additionnalProperties":null,
-      "properties": { "absoluteDeath": true },
+      "additionnalProperties": { "absoluteDeath": false },
       "ai":"seeking"
+    },
+    {
+      "name": "rat",
+      "xPos": 4,
+      "yPos": 15,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties": { "absoluteDeath": true },
+      "ai":"fleeing"
     },
     {
       "name": "car",
@@ -340,8 +394,19 @@
       "isPushable": false,
       "ai":"vroom",
       "kills":false,
-      "additionnalProperties":null,
-      "properties": { "absoluteDeath": true }
+      "additionnalProperties": { "absoluteDeath": true }
+    },
+    {
+      "name":"key",
+      "xPos" : 8,
+      "yPos" : 11,
+      "layerValue" : 0,
+      "isWalkable" : true,
+      "isPushable" : true,
+      "isCollectible" : true,
+      "ai" : "inert",
+      "kills" :false,
+      "additionnalProperties":null
     }
   ]
 }

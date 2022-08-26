@@ -1,29 +1,29 @@
 import EntityBehavior from './entityBehavior';
-import behaviorList from '../misc/entityBehaviorMap.json';
+import behaviorList from '../../assets/entityData/entityBehaviorMap.json';
 import Level from './level';
 export default class Entity {
-  public frame: number;
-  public active: boolean = true;
-  public ai: EntityBehavior;
   constructor(
-    public name: string,
+    public name: string = '',
     public x: number = -1,
     public y: number = -1,
     public size: number,
     public layerValue: number = 0,
     public isWalkable: Boolean = false,
     public isPushable: Boolean = true,
-    public sprites: Array<string> = null,
+    public sprites: Array<string> = [],
     public kills: Boolean = false,
     public additionnalProperties: Map<string, any> = undefined,
-    ai: string = undefined
+    public aiName: string = undefined,
+    public frame: number = 0,
+    public active: boolean = true,
+    public ai: EntityBehavior = null
   ) {
     this.x = x;
     this.y = y;
     this.name = name;
     this.size = size;
     this.layerValue = layerValue;
-    if (sprites) {
+    if (sprites && sprites !== null && sprites.length>0) {
       this.sprites = sprites;
     } else {
       let tsprites = [];
@@ -40,20 +40,20 @@ export default class Entity {
     this.kills = kills;
     this.additionnalProperties = additionnalProperties;
     if (
-      !ai ||
-      ai.length === 0 ||
-      (!behaviorList.behaviors.moving.includes(ai) &&
-        !behaviorList.behaviors.immobile.includes(ai))
+      !aiName || aiName===undefined||
+      aiName.length === 0 ||
+      (!behaviorList.behaviors.moving.includes(aiName) &&
+        !behaviorList.behaviors.immobile.includes(aiName))
     ) {
-      if (ai)
+      if (aiName)
         console.info(
-          `Behavior '${ai}' was not included in [${behaviorList.behaviors.moving.join(
+          `Behavior '${aiName}' was not included in [${behaviorList.behaviors.moving.join(
             ', '
           )}] or [${behaviorList.behaviors.immobile.join(', ')}]`
         );
       this.ai = new EntityBehavior('inert');
     } else {
-      this.ai = new EntityBehavior(ai);
+      this.ai = new EntityBehavior(aiName);
     }
   }
   public moveEntityTo(coords: Array<any>): void {
@@ -76,12 +76,29 @@ export default class Entity {
 
   public setAll(setObj: any): void {
     for (let key of Object.keys(setObj)) {
-      this[key] = setObj[key]; //I'm guessing I did that to manage some kind of shallow copy problem...? Tbh I forgot and it works well enough.
+      if (key === 'ai') {
+        //apparently AI stops working after state revert...? Even when it was properly bound.
+        if (
+          !setObj[key].name ||
+          setObj[key].name.length === 0 ||
+          (!behaviorList.behaviors.moving.includes(setObj[key].name) &&
+            !behaviorList.behaviors.immobile.includes(setObj[key].name))
+        ) {
+          this.ai = new EntityBehavior('inert');
+        } else {
+          this.ai = new EntityBehavior(setObj[key].name);
+        }
+      } else {
+        this[key] = setObj[key];
+      }
     }
   }
   public aiMove(levelData: Level): void {
     if (this.ai.moves) {
-      if (this.ai.getNextPos(this, levelData) && levelData.isWalkableCell(this.ai.getNextPos(this, levelData)[0])) {
+      if (
+        this.ai.getNextPos(this, levelData) &&
+        levelData.isWalkableCell(this.ai.getNextPos(this, levelData)[0])
+      ) {
         this.moveEntityTo(this.ai.getNextPos(this, levelData)[0]);
       }
     }
