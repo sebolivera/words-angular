@@ -1,11 +1,21 @@
-<div style="display: flex;">
-  <canvas-component></canvas-component>
-  <div style="padding-left:10px;">
-    <h3>Commands:</h3>
-    <ul>
-      <li>Use the arrow buttons to move around</li>
-      <li>Press 'u' to undo</li>
-      <li>Press 'r' to restart the level</li>
-    </ul>
-  </div>
+<div *ngIf="currentPage == 'level'; then thenBlock; else elseBlock"></div>
+<ng-template #thenBlock>
+  <button ion-button (click)="this.switchTo('editor')">
+    <ion-button>Go to Editor</ion-button>
+  </button>
+</ng-template>
+<ng-template #elseBlock
+  ><button ion-button (click)="this.switchTo('level')">
+    <ion-button>Go to Level</ion-button>
+  </button></ng-template
+>
+<div style="display: flex">
+  <div *ngIf="currentPage == 'level'; then canvasBlock; else editorBlock"></div>
+
+  <ng-template #canvasBlock>
+    <canvas-component></canvas-component>
+  </ng-template>
+  <ng-template #editorBlock>
+    <editor-component></editor-component>
+  </ng-template>
 </div>

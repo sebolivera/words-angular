@@ -171,12 +171,12 @@ export const roundRect = (
   width: number,
   height: number,
   radius: any = 5,
-  strokeColor:any="black",
+  strokeColor: any = 'black',
   fill: Boolean = false,
   stroke: Boolean = true
 ): void => {
   let tStyle = ctx.strokeStyle;
-  ctx.strokeStyle=strokeColor;
+  ctx.strokeStyle = strokeColor;
   if (typeof radius === 'number') {
     radius = { tl: radius, tr: radius, br: radius, bl: radius };
   } else {
@@ -208,3 +208,10 @@ export const roundRect = (
   ctx.strokeStyle = tStyle;
   ctx.closePath();
 };
+
+export function titleCaseWord(word: string) {
+  if (!word) {
+    return word;
+  }
+  return word[0].toUpperCase() + word.substring(1).toLowerCase();
+}

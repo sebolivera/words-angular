@@ -1,7 +1,7 @@
-<ion-grid id="page" fixed grid-width-xs>
+<ion-grid id="page" width="100%" padding="0">
   <ion-row>
-    <ion-col
-      ><ion-header [translucent]="true">
+    <div>
+      <ion-header [translucent]="true">
         <ion-toolbar>
           <ion-title> Probably a game </ion-title>
         </ion-toolbar>
@@ -10,10 +10,12 @@
         <ion-toolbar>
           <ion-title size="large">Probably a game</ion-title>
         </ion-toolbar>
-      </ion-header></ion-col
-    >
+      </ion-header>
+    </div>
   </ion-row>
   <ion-row id="container" class="container">
-    <ion-col class="container"><game-handler-component></game-handler-component></ion-col>
+    <ion-col class="container"
+      ><game-handler-component></game-handler-component
+    ></ion-col>
   </ion-row>
 </ion-grid>

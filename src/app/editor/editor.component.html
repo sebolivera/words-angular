@@ -1,3 +1,112 @@
-<p>
-  editor works!
-</p>
+<div style="display: flex">
+  <div>
+    <canvas
+      #editorCanvas
+      id="editorCanvas"
+      (click)="doClick($event)"
+      (mousemove)="mouseMove($event)"
+    ></canvas>
+  </div>
+
+  <div style="padding-left: 2px; width: 600px">
+    <h3>Instructions:</h3>
+    <ion-list>
+      <ion-item style="padding-bottom: 5px;">
+        <ion-label style="margin-right: 1rem">Level Name</ion-label>
+        <ion-item fill="outline"
+          ><ion-input
+            type="text"
+            (ionChange)="setName($event.target)"
+          ></ion-input>
+        </ion-item>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Level Width
+          {{
+            this.level && this.level.sizeX ? this.level.sizeX : "?"
+          }}</ion-label
+        >
+        <ion-range
+          [pin]="true"
+          [pinFormatter]="pinFormatterX"
+          value="10"
+          min="4"
+          max="50"
+          (ionChange)="setLevelsizeX($event.target)"
+        ></ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label
+          >Level Height{{
+            this.level && this.level.sizeY ? this.level.sizeY : "?"
+          }}</ion-label
+        >
+        <ion-range
+          [pin]="true"
+          [pinFormatter]="pinFormatterY"
+          value="10"
+          min="4"
+          max="50"
+          (ionChange)="setLevelsizeY($event.target)"
+        ></ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-button id="open-modal" expand="block"
+          >Open entity list</ion-button
+        ></ion-item
+      >
+    </ion-list>
+  </div>
+</div>
+
+<ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Select an entity to place</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content *ngIf="recordedEntities" class="ion-padding">
+      <ion-list>
+        <ion-item
+          *ngFor="let entityGroup of recordedEntities.default | keyvalue"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h2>{{ titleCaseWord(entityGroup.key) }}</h2>
+            <ion-grid col-4>
+              <ion-row>
+                <ion-col
+                  size="4"
+                  *ngFor="let entity of entityGroup.value | keyvalue"
+                >
+                  <span
+                    [class]="{
+                      clickable: entity.key !== selectedKey,
+                      clicked: entity.key === selectedKey
+                    }"
+                    style="display: flex; flex-direction: column"
+                    (click)="selectEntity(entity.key)"
+                  >
+                    <img
+                      class="borderImg ion-text-center"
+                      src="{{ imgMap[entity.key][currentFrame].src }}"
+                    />
+                    <h4>{{ entity.value["verboseName"] }}</h4>
+                    <p>{{ entity.value["editorDescription"] }}</p>
+                  </span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

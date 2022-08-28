@@ -4,6 +4,7 @@
       "name": "bat",
       "verboseName": "Angry Bat",
       "description": "Careful, it's out for your blood.",
+      "editorDescription": "Bat enemy. Seeks and kills the player if they are unprotected. Is not pushable, is not walkable, can fly, can move diagonnally.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
@@ -18,6 +19,7 @@
       "name": "rat",
       "verboseName": "Scared Rat",
       "description": "A tiny rodent that tries to flee whenever you come close to it.",
+      "editorDescription": "Rat enemy. Flees from the player if they are unprotected. Is walkable, can move diagonally.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
@@ -25,10 +27,22 @@
       "kills": false,
       "additionnalProperties": {
         "canWalkDiagonnally": true,
-        "fearRadius": true
+        "fearRadius": 10
       },
       "canFly": false,
       "ai": "fleeing"
+    },
+    "skull": {
+      "name": "skull",
+      "verboseName": "Skull of Death",
+      "description": "Don't touch it.",
+      "editorDescription": "Skull enemy. Doesn't move. Is walkable, but kills the player if they step on it, no matter what.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionnalProperties": {"absoluteDeath":true}
     }
   },
   "obstacles": {
@@ -36,6 +50,7 @@
       "name": "wall",
       "verboseName": "Brick Wall",
       "description": "A sturdy wall. It is too smooth for you to climb.",
+      "editorDescription": "Wall obstacle. Blocks the player if they can't fly.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -48,6 +63,7 @@
       "name": "water",
       "verboseName": "Water Cell",
       "description": "It's deep and nasty. And you'd rather not get your clothes wet.",
+      "editorDescription": "Wall obstacle. Blocks the player if they can't swim.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -56,21 +72,11 @@
       "additionnalProperties": { "isSwimeable": true },
       "ai": "inert"
     },
-    "skull": {
-      "name": "skull",
-      "verboseName": "Skull of Death",
-      "description": "Don't touch it.",
-      "cellSize": 1,
-      "layerValue": 0,
-      "isWalkable": true,
-      "isPushable": false,
-      "kills": true,
-      "additionnalProperties": null
-    },
     "lockedDoor": {
       "name": "lockedDoor",
       "verboseName": "Locked Door",
       "description": "A wooden locked door with a keyhole.",
+      "editorDescription": "Door obstacle. Blocks the player if they don't have a key.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -84,6 +90,7 @@
       "name": "key",
       "verboseName": "Common Key",
       "description": "A key. Who knows what it could unlock.",
+      "editorDescription": "Key collectible. Can open locked doors and vehicles.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
@@ -95,6 +102,7 @@
       "name": "beak",
       "verboseName": "Bird Beak",
       "description": "Imagine stumbling upon a human mouth on the floor in the middle of nowhere. That's how birds must feel when seeing this.",
+      "editorDescription": "Beak collectible. Doesn't do anything.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
@@ -106,6 +114,7 @@
       "name": "byte",
       "verboseName": "A Byte of Data",
       "description": "A random byte of data. It's useless.",
+      "editorDescription": "Byte collectible. Doesn't do anything.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
@@ -117,6 +126,7 @@
       "name": "toy",
       "verboseName": "Toy",
       "description": "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
+      "editorDescription": "Toy collectible. Distracts seeking enemies if placed closer than the player to them.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
@@ -130,6 +140,7 @@
       "name": "boat",
       "verboseName": "Tiny Sailboat",
       "description": "A boat. You could use it to cross expanses of water.",
+      "editorDescription": "Boat vehicle. If the player is in the boat, they can go across water.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
@@ -140,11 +151,12 @@
       "name": "car",
       "verboseName": "Regular Car",
       "description": "A car. Too bad you don't can't drive.",
+      "editorDescription": "Car vehicle. Protects the player from basic enemies.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": false,
-      "additionnalProperties": { "canSwim": false, "protects":true }
+      "additionnalProperties": { "canSwim": false, "protects": true }
     }
   },
   "other": {
@@ -152,6 +164,7 @@
       "name": "money",
       "verboseName": "Money",
       "description": "A couple of dollar signs? Probably a dismissed feature.",
+      "editorDescription": "Money sign. Doesn't do anything.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,

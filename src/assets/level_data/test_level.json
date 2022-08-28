@@ -215,7 +215,7 @@
       "additionnalProperties": null
     }
   ],
-  "player": { "xPos": 5, "yPos": 10, "size": 10, "layerValue": 0 },
+  "player": { "xPos": 5, "yPos": 10, "size": 1, "layerValue": 0 },
   "entities": [
     {
       "name": "wall",

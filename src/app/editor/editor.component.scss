@@ -1,0 +1,24 @@
+.borderImg {
+  border: 2px solid black;
+}
+.clicked {
+
+    .borderImg {
+        border: 2px solid rgb(34, 21, 176);
+        background-color: rgba(34, 21, 176, 0.3);
+      }
+      * {
+        color: rgb(34, 21, 176);
+      }
+}
+
+
+.clickable:hover {
+  .borderImg {
+    border: 2px solid rgb(163, 176, 21);
+    background-color: rgba(163, 176, 21, 0.3);
+  }
+  * {
+    color: rgb(163, 176, 21);
+  }
+}

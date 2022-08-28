@@ -14,9 +14,9 @@ import recordedEntities from '../../assets/entityData/entities.json';
 export class CanvasComponent implements AfterViewInit {
   @ViewChild('mainCanvas')
   private mainCanvas: ElementRef = {} as ElementRef;
-  private subsciption: Subscription;
+  private subscription: Subscription;
   private cellSize: number = 100;
-  ctx: CanvasRenderingContext2D;
+  private ctx: CanvasRenderingContext2D;
   private level: Level;
   private missingTexturesImg: HTMLImageElement = new Image();
   private clockTick: number = 150; //arbitrary af
@@ -87,12 +87,9 @@ export class CanvasComponent implements AfterViewInit {
       i <= this.mainCanvas.nativeElement.width;
       i += this.cellSize
     ) {
-      if (
-        this.level?.debug &&
-        i < this.mainCanvas.nativeElement.height - this.inventoryHeight
-      ) {
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
+      if (this.level?.debug && i < this.mainCanvas.nativeElement.width) {
+        this.ctx.fillStyle = 'blue';
+        this.ctx.fillText((i / this.cellSize).toString(), i, 10);
       }
       this.ctx.moveTo(i, 0);
       this.ctx.strokeStyle = '#cccccc';
@@ -106,9 +103,12 @@ export class CanvasComponent implements AfterViewInit {
       i <= this.mainCanvas.nativeElement.height - this.inventoryHeight * 0.9;
       i += this.cellSize
     ) {
-      if (this.level?.debug && i < this.mainCanvas.nativeElement.width) {
-        this.ctx.fillStyle = 'blue';
-        this.ctx.fillText((i / this.cellSize).toString(), i, 10);
+      if (
+        this.level?.debug &&
+        i < this.mainCanvas.nativeElement.height - this.inventoryHeight
+      ) {
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
       }
       this.ctx.moveTo(0, i);
       this.ctx.strokeStyle = '#cccccc';
@@ -151,7 +151,6 @@ export class CanvasComponent implements AfterViewInit {
             this.mainCanvas.nativeElement.height -
             this.inventoryHeight / 1.5,
         ]);
-        console.log(this.arrayIndexInventoryItems);
       }
 
       if (i < this.level.player.inventory.length) {
@@ -206,7 +205,7 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   restart() {
-    this.subsciption.unsubscribe();
+    this.subscription.unsubscribe();
     this.ngAfterViewInit();
   }
 
@@ -230,7 +229,6 @@ export class CanvasComponent implements AfterViewInit {
     let adminwall = [];
     let death = [];
     for (let j = 0; j < entities.length; j++) {
-      // console.log(entities[j].name,entities[j].x, entities[j].y, x, y);
       if (entities[j].x === x && entities[j].y === y) {
         if (entities[j].isPushable) {
           pushable.push(j);
@@ -327,7 +325,6 @@ export class CanvasComponent implements AfterViewInit {
     let levelData = await import('../../assets/level_data/test_level.json');
     this.level = new Level(levelData.default);
     //this.level.showData(); //For debugging only$
-    // console.log(this.level.getWalkableMatrix());
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');
     let cellHeight: number = this.cellSize;
     let safetyCounter: number = 0;
@@ -408,13 +405,15 @@ export class CanvasComponent implements AfterViewInit {
       this.imgMap['player'][this.imgMap['player'].length - 1].src =
         this.level.player.sprites[j];
     }
-    this.subsciption = timer(0, this.clockTick)
+    this.subscription = timer(0, this.clockTick)
       .pipe()
       .subscribe(() => {
         this.animate();
       });
   }
   ngOnDestroy() {
-    this.subsciption.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

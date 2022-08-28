@@ -1,0 +1,10 @@
+{
+  "sizeX": 10,
+  "sizeY": 10,
+  "name": "",
+  "id": 0,
+  "debug": true,
+  "letters": [],
+  "player": { "xPos": 5, "yPos": 5, "size": 1, "layerValue": 0 },
+  "entities": []
+}

@@ -102,13 +102,22 @@ export default class Level {
         playerSprites.push('assets/images/player/' + customSprite);
       }
     }
-    this.player = new Player(
-      initObject.player.xPos,
-      initObject.player.yPos,
-      initObject.player.size,
-      initObject.layerValue,
-      playerSprites
-    );
+    if (initObject.player) {
+      this.player = new Player(
+        initObject.player.xPos,
+        initObject.player.yPos,
+        initObject.player.size,
+        initObject.layerValue,
+        playerSprites
+      );
+    }
+    else
+    {
+      this.player = new Player(Math.floor(this.sizeX/2), Math.floor(this.sizeY/2),
+      1,
+      0,
+      playerSprites)
+    }
   }
 
   private letterGrid = (): Array<Array<Letter>> => {
@@ -451,15 +460,13 @@ export default class Level {
             ) {
               this.player.removeFromInventory(this.player.isInInventory('key'));
               this.removeFromLevel(entity);
-            } 
-            else if (
+            } else if (
               this.player.additionnalProperties &&
               this.player.additionnalProperties['canSwim'] &&
               entity.additionnalProperties &&
-              entity.additionnalProperties['isSwimeable']){
-
-              }
-            else {
+              entity.additionnalProperties['isSwimeable']
+            ) {
+            } else {
               walkable = false;
             }
           } else if (entity instanceof Collectible) {
