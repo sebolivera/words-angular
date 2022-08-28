@@ -32,7 +32,6 @@ export class CanvasComponent implements AfterViewInit {
       '../assets/images/entities/missingTextures.png';
   }
   mouseMove(e: Event) {
-
     //item selection, not yet implemented
     if (
       this.level.player.selectedInventoryItem >= 0 &&
@@ -66,9 +65,7 @@ export class CanvasComponent implements AfterViewInit {
           if (this.level.player.selectedInventoryItem !== i) {
             this.level.player.selectedInventoryItem = i;
             selected = true;
-          }
-          else
-          {
+          } else {
             this.level.player.selectedInventoryItem = -1;
           }
           break;
@@ -182,7 +179,10 @@ export class CanvasComponent implements AfterViewInit {
           this.cellSize
         );
         entity.updateFrame();
-      } else {
+      } else if (
+        entity === this.level.player.playerIsInVehicle ||
+        (entity.x !== this.level.player.x || entity.y !== this.level.player.y)
+      ) {
         try {
           this.ctx.drawImage(
             this.imgMap[entity.name][entity.frame],

@@ -1,6 +1,7 @@
 import Entity from './entity';
 
 export default class Player extends Entity {
+  public playerIsInVehicle:Entity= null;
   public selectedInventoryItem: number = -1;
   constructor(
     public x: number = 0,

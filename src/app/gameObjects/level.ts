@@ -247,7 +247,9 @@ export default class Level {
 
   public pushNextEntity(vector: [number, number], entity: Entity): Boolean {
     for (let e of this.entitiesMinusPlayer()) {
+      //grabs all entities
       if (entity.x + vector[0] === e.x && entity.y + vector[1] === e.y) {
+        //gets the entity (if there is one) on the place of where the current entity was pushed
         if (e.isPushable && this.pushNextEntity(vector, e)) {
           if (
             entity.x + vector[0] >= this.sizeX ||
@@ -255,6 +257,15 @@ export default class Level {
           ) {
             return false;
           }
+          entity.x += vector[0];
+          entity.y += vector[1];
+          return true;
+        } else if (
+          entity.additionnalProperties &&
+          entity.additionnalProperties['canSwim'] &&
+          e.additionnalProperties &&
+          e.additionnalProperties['isSwimeable']
+        ) {
           entity.x += vector[0];
           entity.y += vector[1];
           return true;
@@ -286,7 +297,12 @@ export default class Level {
     let entityList: Array<string> = [];
 
     for (let types of Object.keys(recordedEntities)) {
-      if (['obstacles', 'mobs', 'collectibles', 'other'].includes(types)) {//not needed atm but will help if I add custom types
+      if (
+        ['obstacles', 'mobs', 'collectibles', 'other', 'vehicles'].includes(
+          types
+        )
+      ) {
+        //not needed atm but will help if I add custom types
         for (let obj of Object.keys(recordedEntities[types])) {
           entityList.push(obj);
         }
@@ -400,13 +416,50 @@ export default class Level {
             // console.log(entity.additionnalProperties, entity.additionnalProperties['locked'], this.player.isInInventory('key'))
             if (
               entity.additionnalProperties &&
+              entity.additionnalProperties['isVehicle'] &&
+              !(
+                entity.additionnalProperties['isLocked'] &&
+                !this.player.isInInventory('key')
+              )
+            ) {
+              if (
+                entity.additionnalProperties &&
+                entity.additionnalProperties['isLocked'] &&
+                this.player.isInInventory('key')
+              ) {
+                this.player.removeFromInventory(
+                  this.player.isInInventory('key')
+                );
+              }
+              if (
+                entity.additionnalProperties &&
+                entity.additionnalProperties['canSwim']
+              ) {
+                if (!this.player.additionnalProperties) {
+                  this.player.additionnalProperties = JSON.parse(
+                    JSON.stringify({ canSwim: true })
+                  );
+                } else {
+                  this.player.additionnalProperties['canSwim'] = true;
+                }
+              }
+              this.player.playerIsInVehicle = entity;
+            } else if (
+              entity.additionnalProperties &&
               entity.additionnalProperties['locked'] &&
               this.player.isInInventory('key') !== null
             ) {
               this.player.removeFromInventory(this.player.isInInventory('key'));
               this.removeFromLevel(entity);
-              walkable = true;
-            } else {
+            } 
+            else if (
+              this.player.additionnalProperties &&
+              this.player.additionnalProperties['canSwim'] &&
+              entity.additionnalProperties &&
+              entity.additionnalProperties['isSwimeable']){
+
+              }
+            else {
               walkable = false;
             }
           } else if (entity instanceof Collectible) {
@@ -417,6 +470,9 @@ export default class Level {
       if (walkable) {
         //if cell was empty (or walkable)
         this.player.movePlayer(x, y);
+        if (this.player.playerIsInVehicle) {
+          this.player.playerIsInVehicle.moveEntity(x, y);
+        }
         if (collectibles.length > 0) {
           for (let collectedObjects of this.collect(x, y)) {
             this.player.inventory.push(collectedObjects);
@@ -455,10 +511,10 @@ export default class Level {
           let mobs: Record<string, any> = recordedEntities.mobs;
           let collectibles: Record<string, any> = recordedEntities.collectibles;
           let obstacles: Record<string, any> = recordedEntities.obstacles;
+          let vehicles: Record<string, any> = recordedEntities.vehicles;
           let other: Record<string, any> = recordedEntities.other;
           if (foundWordsStr[i] in collectibles) {
             obj = collectibles[foundWordsStr[i]];
-
             this.entities.push(
               new Collectible(
                 foundWordsStr[i],
@@ -505,6 +561,34 @@ export default class Level {
                 obj?.sprites,
                 obj?.kills,
                 obj?.additionnalProperties,
+                obj?.ai
+              )
+            );
+          } else if (foundWordsStr[i] in vehicles) {
+            obj = vehicles[foundWordsStr[i]];
+            let additionnalProperties: Record<string, any> = {};
+            if (!obj?.additionnalProperties) {
+              additionnalProperties = { isVehicle: true };
+            } else if (!obj?.additionnalProperties['isVehicle']) {
+              additionnalProperties = {
+                ...obj.additionnalProperties,
+                isVehicle: true,
+              };
+            } else {
+              additionnalProperties = { ...obj.additionnalProperties };
+            }
+            this.entities.push(
+              new Entity(
+                foundWordsStr[i],
+                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
+                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                obj.cellSize,
+                obj?.layerValue,
+                obj?.isWalkable,
+                obj?.isPushable,
+                obj?.sprites,
+                obj?.kills,
+                JSON.parse(JSON.stringify(additionnalProperties)), //not sure why, but Map/Record types are doing some shennanies here
                 obj?.ai
               )
             );

@@ -53,7 +53,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"isSwimeable":true},
+      "additionnalProperties": { "isSwimeable": true },
       "ai": "inert"
     },
     "skull": {
@@ -76,7 +76,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"locked":true}
+      "additionnalProperties": { "locked": true }
     }
   },
   "collectibles": {
@@ -91,48 +91,48 @@
       "isCollectible": true,
       "additionnalProperties": null
     },
-    "beak":{
-      "name" :"beak",
-      "verboseName":"Bird Beak",
-      "description" : "Imagine stumbling upon a human mouth on the floor in the middle of nowhere. That's how birds must feel when seeing this.",
-      "cellSize" : 1,
-      "layerValue" : 0,
-      "isPushable" : false,
-      "isWalkable" : true,
+    "beak": {
+      "name": "beak",
+      "verboseName": "Bird Beak",
+      "description": "Imagine stumbling upon a human mouth on the floor in the middle of nowhere. That's how birds must feel when seeing this.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties" : {"useless":true}
+      "additionnalProperties": { "useless": true }
     },
-    "byte":{
-      "name" :"byte",
-      "verboseName":"A Byte of Data",
-      "description" : "A random byte of data. It's useless.",
-      "cellSize" : 1,
-      "layerValue" : 0,
-      "isPushable" : false,
-      "isWalkable" : true,
+    "byte": {
+      "name": "byte",
+      "verboseName": "A Byte of Data",
+      "description": "A random byte of data. It's useless.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties" : {"useless":true}
+      "additionnalProperties": { "useless": true }
     },
-    "toy":{
-      "name" :"toy",
-      "verboseName":"Toy",
-      "description" : "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
-      "cellSize" : 1,
-      "layerValue" : 0,
-      "isPushable" : false,
-      "isWalkable" : true,
+    "toy": {
+      "name": "toy",
+      "verboseName": "Toy",
+      "description": "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties" : {"useless":true}
+      "additionnalProperties": { "useless": true }
     }
   },
-  "other": {
+  "vehicles": {
     "boat": {
       "name": "boat",
       "verboseName": "Tiny Sailboat",
       "description": "A boat. You could use it to cross expanses of water.",
       "cellSize": 1,
       "layerValue": 0,
-      "isPushable": true,
+      "isPushable": false,
       "isWalkable": false,
       "additionnalProperties": { "canSwim": true }
     },
@@ -142,19 +142,21 @@
       "description": "A car. Too bad you don't can't drive.",
       "cellSize": 1,
       "layerValue": 0,
-      "isPushable": true,
+      "isPushable": false,
       "isWalkable": false,
-      "additionnalProperties": { "canSwim": false }
-    },
-    "money":{
-      "name" :"money",
-      "verboseName":"Money",
-      "description" : "A couple of dollar signs? Probably a dismissed feature.",
-      "cellSize" : 1,
-      "layerValue" : 0,
-      "isPushable" : false,
-      "isWalkable" : true,
-      "additionnalProperties" : {"useless":true}
+      "additionnalProperties": { "canSwim": false, "protects":true }
+    }
+  },
+  "other": {
+    "money": {
+      "name": "money",
+      "verboseName": "Money",
+      "description": "A couple of dollar signs? Probably a dismissed feature.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "additionnalProperties": { "useless": true }
     }
   }
 }

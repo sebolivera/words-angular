@@ -8,11 +8,9 @@ export default class EntityBehavior {
   constructor(
     public name: string,
     public canFly: boolean = false,
-    public canSwim: boolean = false
   ) {
     this.name = name;
     this.canFly = canFly;
-    this.canSwim = canSwim;
     if (behaviorList.behaviors.moving.includes(this.name)) {
       this.moves = true;
     }
