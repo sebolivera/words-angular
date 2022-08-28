@@ -2,6 +2,8 @@
   "mobs": {
     "bat": {
       "name": "bat",
+      "verboseName": "Angry Bat",
+      "description": "Careful, it's out for your blood.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
@@ -14,12 +16,17 @@
     },
     "rat": {
       "name": "rat",
+      "verboseName": "Scared Rat",
+      "description": "A tiny rodent that tries to flee whenever you come close to it.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": { "canWalkDiagonnally": true },
+      "additionnalProperties": {
+        "canWalkDiagonnally": true,
+        "fearRadius": true
+      },
       "canFly": false,
       "ai": "fleeing"
     }
@@ -27,6 +34,8 @@
   "obstacles": {
     "wall": {
       "name": "wall",
+      "verboseName": "Brick Wall",
+      "description": "A sturdy wall. It is too smooth for you to climb.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -35,35 +44,117 @@
       "additionnalProperties": null,
       "ai": "inert"
     },
+    "water": {
+      "name": "water",
+      "verboseName": "Water Cell",
+      "description": "It's deep and nasty. And you'd rather not get your clothes wet.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionnalProperties": {"isSwimeable":true},
+      "ai": "inert"
+    },
     "skull": {
       "name": "skull",
+      "verboseName": "Skull of Death",
+      "description": "Don't touch it.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
       "isPushable": false,
       "kills": true,
       "additionnalProperties": null
+    },
+    "lockedDoor": {
+      "name": "lockedDoor",
+      "verboseName": "Locked Door",
+      "description": "A wooden locked door with a keyhole.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionnalProperties": {"locked":true}
     }
   },
   "collectibles": {
     "key": {
       "name": "key",
+      "verboseName": "Common Key",
+      "description": "A key. Who knows what it could unlock.",
       "cellSize": 1,
       "layerValue": 0,
       "isWalkable": true,
       "isPushable": true,
       "isCollectible": true,
       "additionnalProperties": null
+    },
+    "beak":{
+      "name" :"beak",
+      "verboseName":"Bird Beak",
+      "description" : "Imagine stumbling upon a human mouth on the floor in the middle of nowhere. That's how birds must feel when seeing this.",
+      "cellSize" : 1,
+      "layerValue" : 0,
+      "isPushable" : false,
+      "isWalkable" : true,
+      "isCollectible": true,
+      "additionnalProperties" : {"useless":true}
+    },
+    "byte":{
+      "name" :"byte",
+      "verboseName":"A Byte of Data",
+      "description" : "A random byte of data. It's useless.",
+      "cellSize" : 1,
+      "layerValue" : 0,
+      "isPushable" : false,
+      "isWalkable" : true,
+      "isCollectible": true,
+      "additionnalProperties" : {"useless":true}
+    },
+    "toy":{
+      "name" :"toy",
+      "verboseName":"Toy",
+      "description" : "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
+      "cellSize" : 1,
+      "layerValue" : 0,
+      "isPushable" : false,
+      "isWalkable" : true,
+      "isCollectible": true,
+      "additionnalProperties" : {"useless":true}
     }
   },
   "other": {
     "boat": {
       "name": "boat",
+      "verboseName": "Tiny Sailboat",
+      "description": "A boat. You could use it to cross expanses of water.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": true,
       "isWalkable": false,
       "additionnalProperties": { "canSwim": true }
+    },
+    "car": {
+      "name": "car",
+      "verboseName": "Regular Car",
+      "description": "A car. Too bad you don't can't drive.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": true,
+      "isWalkable": false,
+      "additionnalProperties": { "canSwim": false }
+    },
+    "money":{
+      "name" :"money",
+      "verboseName":"Money",
+      "description" : "A couple of dollar signs? Probably a dismissed feature.",
+      "cellSize" : 1,
+      "layerValue" : 0,
+      "isPushable" : false,
+      "isWalkable" : true,
+      "additionnalProperties" : {"useless":true}
     }
   }
 }

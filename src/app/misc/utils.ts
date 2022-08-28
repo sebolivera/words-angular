@@ -1,7 +1,4 @@
 // Had to implement my own version as apparently nobody has a decent js one...?
-
-import { Color } from "@ionic/core";
-
 export const pathFinderAStar = (
   start: [number, number],
   end: [number, number],

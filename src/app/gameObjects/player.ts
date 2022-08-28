@@ -1,6 +1,7 @@
 import Entity from './entity';
 
 export default class Player extends Entity {
+  public selectedInventoryItem: number = -1;
   constructor(
     public x: number = 0,
     public y: number = 0,
@@ -18,6 +19,16 @@ export default class Player extends Entity {
     //will probably add stuff for player specific interactions here
     super.moveEntity(x, y);
   };
+
+  public isInInventory(searchTerm: string): Entity {
+    for (let i = this.inventory.length - 1; i >= 0; i--) {
+      if (this.inventory[i].name === searchTerm) {
+        return this.inventory[i];
+      }
+    }
+    return null;
+  }
+
   public addToInventory(entity: Entity): Boolean {
     if (this.inventory.length < this.maxInventorySize) {
       this.inventory.push(entity);
@@ -26,6 +37,7 @@ export default class Player extends Entity {
       return false;
     }
   }
+
   public removeFromInventory(entity: Entity) {
     this.inventory = this.inventory.filter(
       (item) => JSON.stringify(entity) !== JSON.stringify(item)

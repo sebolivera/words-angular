@@ -1,7 +1,11 @@
 import EntityBehavior from './entityBehavior';
 import behaviorList from '../../assets/entityData/entityBehaviorMap.json';
+import recordedEntities from '../../assets/entityData/entities.json';
 import Level from './level';
 export default class Entity {
+  //desc etc are only pulled from the recorded entity
+  public verboseName:string;
+  public description:string;
   constructor(
     public name: string = '',
     public x: number = -1,
@@ -18,6 +22,24 @@ export default class Entity {
     public active: boolean = true,
     public ai: EntityBehavior = null
   ) {
+    this.description = '';
+    this.verboseName = '';
+    let entityParams:Record<string, any> = null;
+    for (let types of Object.keys(recordedEntities)) {
+      for (let e of Object.keys(recordedEntities[types]))
+      {
+        if (e === this.name)
+        {
+          entityParams = recordedEntities[types][e];
+          break;
+        }
+      }
+    }
+    if (entityParams)
+    {
+      this.description = entityParams.description;
+      this.verboseName = entityParams.verboseName;
+    }
     this.x = x;
     this.y = y;
     this.name = name;

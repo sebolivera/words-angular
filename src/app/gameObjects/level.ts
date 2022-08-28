@@ -9,8 +9,6 @@ export default class Level {
   public sizeY: number;
   public name: string;
   public id: number;
-  // public cellData:Array<any>;//I'll figure that one out later
-  // public allEntities: Map<string, Entity>;
   public player: Player;
   public letters: Array<Letter>;
   public entities: Array<Entity>;
@@ -178,7 +176,7 @@ export default class Level {
     let clonedLetters: Array<Letter> = [];
 
     for (let letter of this.letters) {
-      clonedEntities.push(this.clone(letter));
+      clonedLetters.push(this.clone(letter));
     }
     this.levelHistory.push({
       sizeX: this.sizeX,
@@ -200,14 +198,12 @@ export default class Level {
     });
   }
 
-  public removeLastFromHistory(): void {
+  public undo(): void {
     if (this.levelHistory.length > 0) {
       this.sizeX = this.levelHistory[this.levelHistory.length - 1].sizeX;
       this.sizeY = this.levelHistory[this.levelHistory.length - 1].sizeY;
       this.name = this.levelHistory[this.levelHistory.length - 1].name;
       this.id = this.levelHistory[this.levelHistory.length - 1].id;
-      // public cellData:Array<any>;//I'll figure that one out later
-      // public allEntities: Map<string, Entity>;
       for (let [pKey, pValue] of Object.entries(
         this.levelHistory[this.levelHistory.length - 1].player
       )) {
@@ -290,7 +286,7 @@ export default class Level {
     let entityList: Array<string> = [];
 
     for (let types of Object.keys(recordedEntities)) {
-      if (['obstacles', 'mobs', 'collectibles', 'other'].includes(types)) {
+      if (['obstacles', 'mobs', 'collectibles', 'other'].includes(types)) {//not needed atm but will help if I add custom types
         for (let obj of Object.keys(recordedEntities[types])) {
           entityList.push(obj);
         }
@@ -368,6 +364,17 @@ export default class Level {
     return [foundWordsStr, foundWords];
   };
 
+  public removeFromLevel(entity: Entity): void {
+    let tempLevelEntities: Array<Entity> = [];
+    for (let e of this.entities) {
+      //will not work for letters
+      if (JSON.stringify(entity) !== JSON.stringify(e)) {
+        tempLevelEntities.push(e);
+      }
+    }
+    this.entities = tempLevelEntities;
+  }
+
   public movePlayer(x: number, y: number): void {
     let walkable: Boolean = true;
     let collectibles: Array<Collectible> = [];
@@ -389,7 +396,19 @@ export default class Level {
             }
           } else if (!entity.isWalkable) {
             //if cell is occupied by a non-walkable (ex: wall)
-            walkable = false;
+            // console.info('trying to walk into', entity, "with");
+            // console.log(entity.additionnalProperties, entity.additionnalProperties['locked'], this.player.isInInventory('key'))
+            if (
+              entity.additionnalProperties &&
+              entity.additionnalProperties['locked'] &&
+              this.player.isInInventory('key') !== null
+            ) {
+              this.player.removeFromInventory(this.player.isInInventory('key'));
+              this.removeFromLevel(entity);
+              walkable = true;
+            } else {
+              walkable = false;
+            }
           } else if (entity instanceof Collectible) {
             collectibles.push(entity as Collectible);
           }
@@ -455,6 +474,7 @@ export default class Level {
               )
             );
           } else if (foundWordsStr[i] in mobs) {
+            obj = mobs[foundWordsStr[i]];
             this.entities.push(
               new Entity(
                 foundWordsStr[i],

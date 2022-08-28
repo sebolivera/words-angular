@@ -5,7 +5,6 @@ import { Subscription, timer } from 'rxjs';
 import { roundRect } from '../misc/utils';
 import Entity from '../gameObjects/entity';
 import Level from '../gameObjects/level';
-import Collectible from '../gameObjects/collectible';
 import recordedEntities from '../../assets/entityData/entities.json';
 @Component({
   selector: 'canvas-component',
@@ -16,13 +15,14 @@ export class CanvasComponent implements AfterViewInit {
   @ViewChild('mainCanvas')
   private mainCanvas: ElementRef = {} as ElementRef;
   private subsciption: Subscription;
-  private allEntities: Array<Entity>;
   private cellSize: number = 100;
   ctx: CanvasRenderingContext2D;
   private level: Level;
   private missingTexturesImg: HTMLImageElement = new Image();
   private clockTick: number = 150; //arbitrary af
   private inventoryHeight: number = 200;
+  private arrayIndexInventoryItems: Array<[number, number, number, number]> =
+    []; //shitty way to keep the indexes of the inventory item boxes "dynamically"
   private imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>
@@ -31,6 +31,55 @@ export class CanvasComponent implements AfterViewInit {
     this.missingTexturesImg.src =
       '../assets/images/entities/missingTextures.png';
   }
+  mouseMove(e: Event) {
+
+    //item selection, not yet implemented
+    if (
+      this.level.player.selectedInventoryItem >= 0 &&
+      this.level.player.selectedInventoryItem <
+        this.level.player.maxInventorySize
+    ) {
+      if (
+        this.level.player.inventory[this.level.player.selectedInventoryItem]
+      ) {
+        // console.log(
+        //   this.level.player.inventory[this.level.player.selectedInventoryItem]
+        // );
+      } else {
+        // console.log('No item selected');
+      }
+    }
+  }
+  doClick(e: Event) {
+    let selected: Boolean = false;
+    if (
+      this.arrayIndexInventoryItems.length ===
+      this.level.player.maxInventorySize
+    ) {
+      for (let i = 0; i < this.arrayIndexInventoryItems.length; i++) {
+        if (
+          e['layerX'] >= this.arrayIndexInventoryItems[i][0] &&
+          e['layerX'] <= this.arrayIndexInventoryItems[i][2] &&
+          e['layerY'] >= this.arrayIndexInventoryItems[i][1] &&
+          e['layerY'] <= this.arrayIndexInventoryItems[i][3]
+        ) {
+          if (this.level.player.selectedInventoryItem !== i) {
+            this.level.player.selectedInventoryItem = i;
+            selected = true;
+          }
+          else
+          {
+            this.level.player.selectedInventoryItem = -1;
+          }
+          break;
+        }
+      }
+    }
+    if (!selected) {
+      this.level.player.selectedInventoryItem = -1;
+    }
+  }
+
   drawGrid(): void {
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
@@ -71,15 +120,43 @@ export class CanvasComponent implements AfterViewInit {
     this.ctx.stroke();
     this.ctx.closePath();
     for (let i = 0; i < this.level.player.maxInventorySize; i++) {
-      roundRect(
-        this.ctx,
-        50 + (i * this.inventoryHeight) / 2,
-        this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-        this.inventoryHeight / 2 - 10,
-        this.inventoryHeight / 2 - 10,
-        10,
-        '#7777DD'
-      );
+      if (this.level.player.selectedInventoryItem === i) {
+        roundRect(
+          this.ctx,
+          50 + (i * this.inventoryHeight) / 2,
+          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+          this.inventoryHeight / 2 - 10,
+          this.inventoryHeight / 2 - 10,
+          10,
+          '#DDDD77'
+        );
+      } else {
+        roundRect(
+          this.ctx,
+          50 + (i * this.inventoryHeight) / 2,
+          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+          this.inventoryHeight / 2 - 10,
+          this.inventoryHeight / 2 - 10,
+          10,
+          '#7777DD'
+        );
+      }
+      if (
+        this.arrayIndexInventoryItems.length <
+        this.level.player.maxInventorySize
+      ) {
+        this.arrayIndexInventoryItems.push([
+          50 + (i * this.inventoryHeight) / 2,
+          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+          this.inventoryHeight / 2 - 10 + 50 + (i * this.inventoryHeight) / 2,
+          this.inventoryHeight / 2 -
+            10 +
+            this.mainCanvas.nativeElement.height -
+            this.inventoryHeight / 1.5,
+        ]);
+        console.log(this.arrayIndexInventoryItems);
+      }
+
       if (i < this.level.player.inventory.length) {
         let inventoryItem: Entity = this.level.player.inventory[i];
         this.ctx.drawImage(
@@ -105,18 +182,7 @@ export class CanvasComponent implements AfterViewInit {
           this.cellSize
         );
         entity.updateFrame();
-      }
-      // not needed right now, but will be useful if I need to remove background behind entities
-      // this.ctx.beginPath();
-      // this.ctx.fillStyle = 'white';
-      // this.ctx.rect(
-      //   entity.x * this.cellSize,
-      //   entity.y * this.cellSize,
-      //   this.cellSize,
-      //   this.cellSize
-      // );
-      // this.ctx.fill();
-      else {
+      } else {
         try {
           this.ctx.drawImage(
             this.imgMap[entity.name][entity.frame],
@@ -211,7 +277,7 @@ export class CanvasComponent implements AfterViewInit {
         this.level.moveAIs();
         break;
       case 'u':
-        this.level.removeLastFromHistory();
+        this.level.undo();
         return;
       case 'r':
         this.restart();
@@ -305,28 +371,26 @@ export class CanvasComponent implements AfterViewInit {
     }
     for (let objectTypes of Object.keys(recordedEntities)) {
       for (let objName of Object.keys(recordedEntities[objectTypes])) {
-        if (!(objName in this.imgMap)){
-        this.imgMap[objName] = [];
-        if (recordedEntities[objectTypes].sprites) {
-          for (
-            let i = 0;
-            i < recordedEntities[objectTypes].sprites.length;
-            i++
-          ) {
-            this.imgMap[objName].push(new Image());
-            this.imgMap[objName][this.imgMap[objName].length - 1].src =
-              recordedEntities[objectTypes].sprites[i];
+        if (!(objName in this.imgMap)) {
+          this.imgMap[objName] = [];
+          if (recordedEntities[objectTypes].sprites) {
+            for (
+              let i = 0;
+              i < recordedEntities[objectTypes].sprites.length;
+              i++
+            ) {
+              this.imgMap[objName].push(new Image());
+              this.imgMap[objName][this.imgMap[objName].length - 1].src =
+                recordedEntities[objectTypes].sprites[i];
+            }
+          } else {
+            for (let i = 0; i < 3; i++) {
+              this.imgMap[objName].push(new Image());
+              this.imgMap[objName][this.imgMap[objName].length - 1].src =
+                'assets/images/entities/' + objName + (i + 1) + '.png';
+            }
           }
-        } else {
-          for (
-            let i = 0;
-            i < 3;
-            i++
-          ) {
-            this.imgMap[objName].push(new Image());
-            this.imgMap[objName][this.imgMap[objName].length - 1].src ='assets/images/entities/' + objName + (i+1)+'.png'
-          }
-        }}
+        }
       }
     }
     for (let i = 0; i < this.level.letters.length; i++) {

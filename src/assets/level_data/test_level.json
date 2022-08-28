@@ -219,6 +219,72 @@
     },
     {
       "name": "wall",
+      "xPos": 14,
+      "yPos": 14,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
+      "xPos": 13,
+      "yPos": 14,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
+      "xPos": 13,
+      "yPos": 15,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
+      "xPos": 13,
+      "yPos": 17,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
+      "xPos": 15,
+      "yPos": 14,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
+      "xPos": 14,
+      "yPos": 17,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "wall",
       "xPos": 0,
       "yPos": 1,
       "cellSize": 1,
@@ -350,6 +416,50 @@
       "additionnalProperties":null
     },
     {
+      "name": "water",
+      "xPos": 14,
+      "yPos": 9,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "water",
+      "xPos": 14,
+      "yPos": 10,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "water",
+      "xPos": 15,
+      "yPos": 9,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
+      "name": "water",
+      "xPos": 15,
+      "yPos": 10,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills":false,
+      "additionnalProperties":null
+    },
+    {
       "name": "skull",
       "xPos": 10,
       "yPos": 5,
@@ -397,16 +507,14 @@
       "additionnalProperties": { "absoluteDeath": true }
     },
     {
-      "name":"key",
-      "xPos" : 8,
-      "yPos" : 11,
-      "layerValue" : 0,
-      "isWalkable" : true,
-      "isPushable" : true,
-      "isCollectible" : true,
-      "ai" : "inert",
-      "kills" :false,
-      "additionnalProperties":null
+      "name":"lockedDoor",
+      "xPos" : 13,
+      "yPos" : 16,
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "additionnalProperties": {"locked":true}
     }
   ]
 }
