@@ -525,10 +525,19 @@ export class EditorComponent implements OnInit {
         type: 'text/json;charset=utf-8',
       });
       saveAs(blob, this.level.name + '.json');
-    } else {
-      console.log(this.validationErrors);
     }
   }
+
+  saveToLocalStorage() {
+    if (Object.keys(this.validationErrors).length === 0) {
+      localStorage.removeItem(this.level.name);
+      localStorage.setItem(
+        this.level.name,
+        JSON.stringify(this.level.exportAsJSON())
+      );
+    }
+  }
+
   animateObjects(entityArray: Array<Entity>): void {
     if (this.selectedEntity && this.imgMap[this.selectedEntity.name]) {
       this.ctx.globalAlpha = 0.4;
