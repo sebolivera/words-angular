@@ -156,6 +156,11 @@ export const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * max);
 };
 
+export const getRandomArbitrary = (min:number, max:number):number => {
+  return Math.random() * (max - min) + min;
+}
+
+
 export const clamp = (
   value: number,
   min: number = 0,
@@ -209,7 +214,7 @@ export const roundRect = (
   ctx.closePath();
 };
 
-export function titleCaseWord(word: string) {
+export const titleCaseWord = (word: string):string=> {
   if (!word) {
     return word;
   }

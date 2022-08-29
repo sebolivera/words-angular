@@ -2,16 +2,14 @@
   border: 2px solid black;
 }
 .clicked {
-
-    .borderImg {
-        border: 2px solid rgb(34, 21, 176);
-        background-color: rgba(34, 21, 176, 0.3);
-      }
-      * {
-        color: rgb(34, 21, 176);
-      }
+  .borderImg {
+    border: 2px solid rgb(34, 21, 176);
+    background-color: rgba(34, 21, 176, 0.3);
+  }
+  * {
+    color: rgb(34, 21, 176);
+  }
 }
-
 
 .clickable:hover {
   .borderImg {

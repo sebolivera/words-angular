@@ -125,4 +125,18 @@ export default class Entity {
       }
     }
   }
+  public exportAsJSON():Record<string, any>
+  {
+    let finalJSON:Record<string, any> = {};
+    finalJSON['name'] = this.name;
+    finalJSON['xPos'] = this.x;
+    finalJSON['yPos'] = this.y;
+    finalJSON['cellSize'] = this.size;
+    finalJSON['layerValue'] = this.layerValue;
+    finalJSON['isWalkable'] = this.isWalkable;
+    finalJSON['isPushable'] = this.isPushable;
+    finalJSON['kills'] = this.kills;
+    finalJSON['additionnalProperties'] = this.additionnalProperties;
+    return finalJSON;
+  }
 }

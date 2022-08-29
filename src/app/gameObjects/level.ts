@@ -3,6 +3,7 @@ import Letter from './letter';
 import Player from './player';
 import recordedEntities from '../../assets/entityData/entities.json';
 import Collectible from './collectible';
+import { getRandomArbitrary } from '../misc/utils';
 
 export default class Level {
   public sizeX: number;
@@ -626,20 +627,26 @@ export default class Level {
   public moveAIs(): void {
     this.entities.forEach((entity) => entity.aiMove(this));
   }
-  public showData(): void {
-    // FOR DEBBUGING PURPOSES ONLY, DELETE IT LATER
-    console.log(
-      '\n\n\n\n\n============================Level contents============================'
-    );
-    console.log('>id:', this.id);
-    console.log('>name:', this.name);
-    console.log('>letters:', this.letters);
-    console.log('>entities:', this.entities);
-    console.log('>player:', this.player);
-    console.log('>sizeX:', this.sizeX);
-    console.log('>sizeY:', this.sizeY);
-    console.log(
-      '============================End level contents============================\n\n\n\n\n'
-    );
+
+  public exportAsJSON():Record<string, any>{//export from objects to JSON is not reliable enough
+    let finalJSON:Record<string, any> = {};
+    finalJSON['sizeX'] = this.sizeX;
+    finalJSON['sizeY'] = this.sizeY;
+    finalJSON['name'] = this.name;
+    finalJSON['id'] = getRandomArbitrary(0, 10000);//idk why this is here in the first place...
+    finalJSON['debug'] = this.debug;
+    finalJSON['letters'] = [];
+    finalJSON['entities'] = [];
+    finalJSON['player'] = this.player.exportAsJSON();
+    for (let e of this.entities)
+    {
+      finalJSON['entities'].push(e.exportAsJSON());
+    }
+    for (let l of this.letters)
+    {
+      finalJSON['letters'].push(l.exportAsJSON());
+    }
+    return finalJSON;
   }
+
 }

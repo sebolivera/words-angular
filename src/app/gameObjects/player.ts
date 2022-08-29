@@ -44,4 +44,12 @@ export default class Player extends Entity {
       (item) => JSON.stringify(entity) !== JSON.stringify(item)
     );
   }
+  public exportAsJSON(): Record<string, any> {//i know this overlaps with the entity export but I didn't plan ahead and I'm too lazy to fix it
+      let finalJSON:Record<string, any> = {};
+      finalJSON['xPos'] = this.x;
+      finalJSON['yPos'] = this.y;
+      finalJSON['size'] = this.size;
+      finalJSON['layerValue'] = this.layerValue;      
+      return finalJSON;
+  }
 }

@@ -7,8 +7,8 @@ export default class Collectible extends Entity {
     public y: number = -1,
     public size: number = 0,
     public layerValue: number = -1,
-    public isWalkable: boolean = true,
-    public isPushable: boolean = true,
+    public isWalkable: Boolean = true,
+    public isPushable: Boolean = true,
     public sprites: Array<string> = [],
     public additionnalProperties: Map<string, any> = undefined,
     public isCollectible: boolean = true
