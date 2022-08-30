@@ -24,3 +24,21 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.alert-button.confirmAlertButton
+{
+    color:var(--ion-color-danger-contrast) !important;
+    background-color: var(--ion-color-danger) !important;
+    &:hover{
+        background-color: var(--ion-color-danger-tint) !important;
+    }
+}
+
+.alert-button.cancelAlertButton
+{
+    color:var(--ion-color-primary-contrast) !important;
+    background-color: var(--ion-color-primary) !important;
+    &:hover{
+        background-color: var(--ion-color-primary-tint) !important;
+    }
+}

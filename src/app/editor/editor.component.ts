@@ -1,51 +1,57 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+import { IonInput, IonModal, IonRange } from '@ionic/angular';
 import { Subscription, timer } from 'rxjs';
 import Collectible from '../gameObjects/collectible';
 import Entity from '../gameObjects/entity';
 import Letter from '../gameObjects/letter';
 import Level from '../gameObjects/level';
 import { titleCaseWord } from '../misc/utils';
+import { AlertController } from '@ionic/angular';
 import { saveAs } from 'file-saver';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 @Component({
   selector: 'editor-component',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
+  @ViewChild('nameInput')
+  defaultInput: IonInput;
   @ViewChild(IonModal)
   modal: IonModal;
   @ViewChild('letterModal')
   letterModal: IonModal;
   @ViewChild('editorCanvas')
   private editorCanvas: ElementRef = {} as ElementRef;
+  @ViewChild('rangeX')
+  rangeX: IonRange;
+  @ViewChild('rangeY')
+  rangeY: IonRange;
+  public localStorageLevelAvailable: Boolean = false;
   public validationErrors: Record<string, Boolean> = {};
   private subscription: Subscription;
   private clockTick: number = 150;
   public level: Level;
+  public storedLevels: Record<string, any> = {};
   private initCellSize: number = 200;
   public selectedEraser: Boolean = false;
   private cellSize: number = 100;
   public recordedEntities: any = null;
   private ctx: CanvasRenderingContext2D;
+  public defaultName: string;
   public currentFrame: number = 0;
   private missingTexturesImg: HTMLImageElement = new Image();
   public selectedKey: string = null;
   public selectedEntity: Entity = null;
-  private eraserPos: [number, number] = [-1, -1];
-  private dynamicDownload: HTMLElement = null;
+  private eraserPos: [number, number];
   public selectedLetterKey: string = null;
   public selectedLetter: Letter = null;
   public allLetters: string = 'abcdefghijklmnopqrstuvwxyz';
-  public imgMap: Map<string, Array<HTMLImageElement>> = new Map<
-    string,
-    Array<HTMLImageElement>
-  >();
-  public letterImgMap: Map<string, Array<HTMLImageElement>> = new Map<
-    string,
-    Array<HTMLImageElement>
-  >();
-  constructor() {
+  public imgMap: Map<string, Array<HTMLImageElement>>;
+  public letterImgMap: Map<string, Array<HTMLImageElement>>;
+  public savedLevelKeys: Array<string> = [];
+  constructor(private alertController: AlertController) {
+    defineCustomElements(window);
     this.missingTexturesImg.src =
       '../assets/images/entities/missingTextures.png';
   }
@@ -55,6 +61,35 @@ export class EditorComponent implements OnInit {
   allLettersAsArray() {
     return this.allLetters.split('');
   }
+  async resetEditor() {
+    const alert = await this.alertController.create({
+      header: 'WAIT!',
+      message: 'Are you sure you want to discard all the changes you made?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'cancelAlertButton',
+          handler: () => {},
+        },
+        {
+          text: 'Confirm',
+          role: 'confirm',
+          cssClass: 'confirmAlertButton',
+          handler: () => {
+            this.reset();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  reset() {
+    this.subscription.unsubscribe();
+    this.ngAfterViewInit();
+  }
+
   animate() {
     this.currentFrame = (this.currentFrame += 1) % 3;
     this.ctx.lineWidth = 0;
@@ -225,7 +260,6 @@ export class EditorComponent implements OnInit {
     this.drawGrid();
   }
   setName(e: EventTarget) {
-    this.validateErrors();
     this.level.name = e['value'];
   }
 
@@ -440,6 +474,9 @@ export class EditorComponent implements OnInit {
     this.selectedLetter = null;
   }
 
+  confirmLevel() {}
+  cancelLevel() {}
+
   confirmLetters() {
     //to complete for entity selection
     this.letterModal.dismiss(null, 'Confirm');
@@ -529,13 +566,35 @@ export class EditorComponent implements OnInit {
   }
 
   saveToLocalStorage() {
+    this.validateErrors();
     if (Object.keys(this.validationErrors).length === 0) {
-      localStorage.removeItem(this.level.name);
-      localStorage.setItem(
-        this.level.name,
-        JSON.stringify(this.level.exportAsJSON())
-      );
+      if (Object.keys(this.validationErrors).length === 0) {
+        if (localStorage.length !== 0 && localStorage.getItem('levels')) {
+          for (let [key, value] of Object.entries(
+            localStorage.getItem('levels')
+          )) {
+            if (key === this.level.name) {
+              localStorage.removeItem(this.level.name);
+            }
+          }
+        }
+        let levels: Record<string, any>;
+
+        if (
+          'levels' in localStorage &&
+          localStorage.getItem('levels') &&
+          localStorage.getItem('levels') !== 'undefined'
+        ) {
+          levels = JSON.parse(localStorage.getItem('levels'));
+          levels[this.level.name] = this.level.exportAsJSON();
+        } else {
+          levels = { [this.level.name]: this.level.exportAsJSON() };
+        }
+        localStorage.setItem('levels', JSON.stringify(levels));
+        this.localStorageLevelAvailable = true;
+      }
     }
+    this.grabLocalStorageLevels();
   }
 
   animateObjects(entityArray: Array<Entity>): void {
@@ -615,7 +674,98 @@ export class EditorComponent implements OnInit {
       }
     });
   }
+
+  async deleteStoredLevel(levelKey: string) {
+    const alert = await this.alertController.create({
+      header: 'Delete stored level?',
+      message: 'Are you sure you want to delete the level?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'cancelAlertButton',
+          handler: () => {},
+        },
+        {
+          text: 'Confirm',
+          role: 'confirm',
+          cssClass: 'confirmAlertButton',
+          handler: () => {
+            let storedLevels: Array<Record<string, any>> = [];
+            let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
+            if (
+              localStorage.getItem('levels') &&
+              localStorage.getItem('levels') !== 'undefined'
+            ) {
+              this.storedLevels = [];
+              this.savedLevelKeys = [];
+              for (let [key, value] of Object.entries(tempStoredLevels)) {
+                if (key !== levelKey) {
+                  this.storedLevels.push(value);
+                  this.savedLevelKeys.push(key);
+                }
+              }
+
+              delete tempStoredLevels[levelKey];
+              localStorage.setItem('levels', JSON.stringify(tempStoredLevels));
+              this.localStorageLevelAvailable = true;
+            }
+            this.checkLocalStorage();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+  selectLoadedLevel(key: string) {
+    console.log('selected', key);
+  }
+  importLevel() {}
+
+  checkLocalStorage(){
+    if (
+      !localStorage.getItem('levels') || localStorage.getItem('levels').length===0 ||
+      localStorage.getItem('levels') === 'undefined' ||
+      localStorage.getItem('levels') === '{}'
+    ) {
+      localStorage.removeItem('levels');
+      this.localStorageLevelAvailable = false;
+    }
+    else
+    {
+      this.localStorageLevelAvailable = true;
+    }
+  }
+
+  grabLocalStorageLevels() {
+    if (
+      localStorage.getItem('levels') &&
+      localStorage.getItem('levels').length !== 0 &&
+      localStorage.getItem('levels') !== '{}' &&
+      localStorage.getItem('levels') !== 'undefined'
+    ) {
+      this.storedLevels = [];
+      this.savedLevelKeys = [];
+      let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
+      for (let [key, value] of Object.entries(tempStoredLevels)) {
+        this.storedLevels.push(value);
+        this.savedLevelKeys.push(key);
+      }
+    }
+    this.checkLocalStorage();
+  }
+
   async ngAfterViewInit(): Promise<void> {
+    this.defaultInput.value = '';
+    this.imgMap = new Map<string, Array<HTMLImageElement>>();
+    this.letterImgMap = new Map<string, Array<HTMLImageElement>>();
+    this.eraserPos = [-1, -1];
+    this.selectedEntity = null;
+    this.selectedKey = null;
+    this.selectedLetter = null;
+    this.selectedLetterKey = null;
+    this.rangeX.value = 10;
+    this.rangeY.value = 10;
     let levelData = await import('../../assets/level_data/template_level.json');
     this.recordedEntities = await import(
       '../../assets/entityData/entities.json'
@@ -630,6 +780,10 @@ export class EditorComponent implements OnInit {
       .subscribe(() => {
         this.animate();
       });
+    Object.keys(this.validationErrors).forEach(
+      (key) => delete this.validationErrors[key]
+    );
+    this.grabLocalStorageLevels();
   }
   ngOnDestroy() {
     if (this.subscription) {

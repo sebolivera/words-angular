@@ -23,14 +23,11 @@
             </ion-col>
             <ion-col>
               <ion-input
+                #nameInput
                 type="text"
                 [color]="validationErrors['name'] ? 'danger' : 'default'"
                 style="width: 100%"
-                [placeholder]="
-                  validationErrors['name']
-                    ? 'Please enter a valid name'
-                    : 'Enter a name here (it can\'t be empty)'
-                "
+                placeholder="Enter a name here (it can't be empty)"
                 (ionChange)="setName($event.target)"
               ></ion-input></ion-col
           ></ion-row>
@@ -44,6 +41,7 @@
           }}</ion-label
         >
         <ion-range
+        #rangeX
           [pin]="true"
           [pinFormatter]="pinFormatterX"
           value="10"
@@ -60,6 +58,7 @@
           }}</ion-label
         >
         <ion-range
+        #rangeY
           [pin]="true"
           [pinFormatter]="pinFormatterY"
           value="10"
@@ -87,38 +86,80 @@
                 expand="block"
                 >Open Letter List</ion-button
               >
+            </ion-col>
+            <ion-col>
+              <ion-button
+                (click)="selectEraser()"
+                id="entity-modal"
+                expand="block"
+                [fill]="selectedEraser ? 'solid' : 'clear'"
+                [color]="selectedEraser ? 'warning' : 'dark'"
+              >
+                <ion-icon
+                  [name]="
+                    selectedEraser ? 'remove-circle' : 'remove-circle-outline'
+                  "
+                ></ion-icon>
+                <ion-label style="margin-left: 5px">Erase</ion-label>
+              </ion-button></ion-col
+            >
+          </ion-row>
+        </ion-grid> </ion-item
+      ><ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" color="success" (click)="exportLevel()"
+                >Export level data</ion-button
+              >
+            </ion-col>
+            <ion-col>
+              <ion-button
+                expand="block"
+                color="tertiary"
+                (click)="saveToLocalStorage()"
+                >Save level data (local storage)</ion-button
+              >
             </ion-col></ion-row
-          >
-        </ion-grid>
+          ></ion-grid
+        >
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button
+                expand="block"
+                fill="outline"
+                color="success"
+                (click)="importLevel()"
+                >Import level from file</ion-button
+              >
+            </ion-col>
+            <ion-col>
+              <ion-button
+                expand="block"
+                fill="outline"
+                [disabled]="!localStorageLevelAvailable"
+                color="tertiary"
+                id="level-modal"
+                expand="block"
+                >Load local level (local storage)</ion-button
+              >
+            </ion-col></ion-row
+          ></ion-grid
+        >
       </ion-item>
       <ion-item>
         <ion-button
-          (click)="selectEraser()"
-          id="entity-modal"
-          expand="block"
-          [fill]="selectedEraser ? 'solid' : 'clear'"
-          [color]="selectedEraser ? 'warning' : 'dark'"
+          (click)="resetEditor()"
+          style="margin-left: 12px"
+          color="danger"
+          fill="outline"
+          ><ion-icon name="trash-outline"></ion-icon
+          ><ion-label>Reset</ion-label></ion-button
         >
-          <ion-icon
-            [name]="selectedEraser ? 'remove-circle' : 'remove-circle-outline'"
-          ></ion-icon>
-          <ion-label style="margin-left: 5px">Erase</ion-label>
-        </ion-button>
       </ion-item>
-      <ion-item>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-button
-            expand="block" (click)="exportLevel()">Export level data</ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button
-            expand="block" (click)="saveToLocalStorage()">Save level data (local storage)</ion-button>
-          </ion-col></ion-row
-        ></ion-grid
-      >
-        </ion-item>
     </ion-list>
   </div>
 </div>
@@ -218,6 +259,44 @@
           </ion-grid>
         </div>
       </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  #levelSelect
+  trigger="level-modal"
+  (willDismiss)="onWillDismissLetter($event)"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancelLevel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Pick a level</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-item>
+        <h2>Available levels:</h2>
+      </ion-item>
+      <ion-item>
+        <ion-list interface="action-sheet" class="fullWidth">
+          <ion-item
+            class="flexList"
+            href="javascript:void(0)"
+            *ngFor="let levelKey of savedLevelKeys"
+          >
+            <ion-label (click)="selectLoadedLevel(levelKey)">{{
+              levelKey
+            }}</ion-label
+            ><ion-button icon-only shape="round" color="dark" fill="clear" (click)="deleteStoredLevel(levelKey)" class="ion-float-right roundIconButton"
+              ><ion-icon class="ion-activatable" name="trash-outline"></ion-icon
+            ></ion-button>
+          </ion-item> </ion-list
+      ></ion-item>
     </ion-content>
   </ng-template>
 </ion-modal>
