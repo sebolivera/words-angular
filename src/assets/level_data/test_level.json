@@ -14,7 +14,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "e",
@@ -25,7 +25,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "s",
@@ -36,7 +36,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "t",
@@ -47,7 +47,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "l",
@@ -58,7 +58,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "e",
@@ -69,7 +69,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "v",
@@ -80,7 +80,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "e",
@@ -91,7 +91,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "l",
@@ -102,7 +102,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "a",
@@ -113,7 +113,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "b",
@@ -124,7 +124,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "t",
@@ -135,7 +135,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "o",
@@ -146,7 +146,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "k",
@@ -157,7 +157,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "e",
@@ -168,7 +168,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "y",
@@ -179,7 +179,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "k",
@@ -190,7 +190,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "e",
@@ -201,7 +201,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "y",
@@ -212,7 +212,7 @@
       "isWalkable": false,
       "isPushable": true,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     }
   ],
   "player": { "xPos": 5, "yPos": 10, "size": 1, "layerValue": 0 },
@@ -226,7 +226,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -237,7 +237,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -248,7 +248,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -259,7 +259,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -270,7 +270,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -281,7 +281,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -292,7 +292,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -303,7 +303,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -314,7 +314,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -325,7 +325,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -336,7 +336,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -347,7 +347,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -358,7 +358,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -369,7 +369,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -380,7 +380,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -391,7 +391,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -402,7 +402,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -413,7 +413,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -424,7 +424,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -435,7 +435,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "wall",
@@ -446,7 +446,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     {
       "name": "water",
@@ -457,7 +457,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"isSwimeable":true}
+      "additionalProperties": {"isSwimeable":true}
     },
     {
       "name": "water",
@@ -468,7 +468,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"isSwimeable":true}
+      "additionalProperties": {"isSwimeable":true}
     },
     {
       "name": "water",
@@ -479,7 +479,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"isSwimeable":true}
+      "additionalProperties": {"isSwimeable":true}
     },
     {
       "name": "water",
@@ -490,7 +490,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {"isSwimeable":true}
+      "additionalProperties": {"isSwimeable":true}
     },
     {
       "name": "skull",
@@ -501,7 +501,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": true,
-      "additionnalProperties": { "absoluteDeath": true }
+      "additionalProperties": { "absoluteDeath": true }
     },
     {
       "name": "rat",
@@ -512,7 +512,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": { "absoluteDeath": true },
+      "additionalProperties": { "absoluteDeath": true },
       "ai": "fleeing"
     },
     {
@@ -525,7 +525,7 @@
       "isPushable": false,
       "ai": "vroom",
       "kills": false,
-      "additionnalProperties": {
+      "additionalProperties": {
         "isVehicle": true,
         "isLocked": true,
         "protects" : true
@@ -539,7 +539,7 @@
       "layerValue": 0,
       "isWalkable": false,
       "isPushable": false,
-      "additionnalProperties": { "locked": true }
+      "additionalProperties": { "locked": true }
     }
   ]
 }

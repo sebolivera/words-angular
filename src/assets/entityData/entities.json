@@ -11,7 +11,7 @@
       "isPushable": false,
       "kills": true,
       "canFly": true,
-      "additionnalProperties": null,
+      "additionalProperties": null,
       "properties": { "canWalkDiagonnally": true },
       "ai": "seeking"
     },
@@ -25,7 +25,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": {
+      "additionalProperties": {
         "canWalkDiagonnally": true,
         "fearRadius": 10
       },
@@ -42,7 +42,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": true,
-      "additionnalProperties": {"absoluteDeath":true}
+      "additionalProperties": {"absoluteDeath":true}
     }
   },
   "obstacles": {
@@ -56,7 +56,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": null,
+      "additionalProperties": null,
       "ai": "inert"
     },
     "water": {
@@ -69,7 +69,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": { "isSwimeable": true },
+      "additionalProperties": { "isSwimeable": true },
       "ai": "inert"
     },
     "lockedDoor": {
@@ -82,7 +82,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionnalProperties": { "locked": true }
+      "additionalProperties": { "locked": true }
     }
   },
   "collectibles": {
@@ -96,7 +96,7 @@
       "isWalkable": true,
       "isPushable": true,
       "isCollectible": true,
-      "additionnalProperties": null
+      "additionalProperties": null
     },
     "beak": {
       "name": "beak",
@@ -108,7 +108,7 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties": { "useless": true }
+      "additionalProperties": { "useless": true }
     },
     "byte": {
       "name": "byte",
@@ -120,7 +120,7 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties": { "useless": true }
+      "additionalProperties": { "useless": true }
     },
     "toy": {
       "name": "toy",
@@ -132,7 +132,7 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionnalProperties": { "useless": true }
+      "additionalProperties": { "useless": true }
     }
   },
   "vehicles": {
@@ -145,7 +145,7 @@
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": false,
-      "additionnalProperties": { "canSwim": true }
+      "additionalProperties": { "canSwim": true }
     },
     "car": {
       "name": "car",
@@ -156,7 +156,7 @@
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": false,
-      "additionnalProperties": { "canSwim": false, "protects": true }
+      "additionalProperties": { "canSwim": false, "protects": true }
     }
   },
   "other": {
@@ -169,7 +169,18 @@
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": true,
-      "additionnalProperties": { "useless": true }
+      "additionalProperties": { "useless": true }
+    },
+    "goal": {
+      "name": "goal",
+      "verboseName": "Goal Post",
+      "description": "Reach it and win the level!",
+      "editorDescription": "Goal tile. Level has to have at least once or a way to get it.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "additionalProperties": { "wins": true }
     }
   }
 }

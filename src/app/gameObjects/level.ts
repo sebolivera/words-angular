@@ -15,6 +15,7 @@ export default class Level {
   public entities: Array<Entity>;
   public debug: Boolean;
   public levelHistory: Array<Record<string, any>> = [];
+  public won: Boolean = false;
   constructor(initObject: any) {
     this.sizeX = initObject.sizeX;
     this.sizeY = initObject.sizeY;
@@ -59,7 +60,7 @@ export default class Level {
               'assets/images/entities/' + initObject.entities[i].name + '2.png',
               'assets/images/entities/' + initObject.entities[i].name + '3.png',
             ], //frames
-            initObject.entities[i].additionnalProperties,
+            initObject.entities[i].additionalProperties,
             initObject.isCollectible
           )
         );
@@ -79,7 +80,7 @@ export default class Level {
               'assets/images/entities/' + initObject.entities[i].name + '3.png',
             ], //frames
             initObject.entities[i].kills,
-            initObject.entities[i].additionnalProperties,
+            initObject.entities[i].additionalProperties,
             initObject.entities[i]?.ai
           )
         );
@@ -111,13 +112,14 @@ export default class Level {
         initObject.layerValue,
         playerSprites
       );
-    }
-    else
-    {
-      this.player = new Player(Math.floor(this.sizeX/2), Math.floor(this.sizeY/2),
-      1,
-      0,
-      playerSprites)
+    } else {
+      this.player = new Player(
+        Math.floor(this.sizeX / 2),
+        Math.floor(this.sizeY / 2),
+        1,
+        0,
+        playerSprites
+      );
     }
   }
 
@@ -146,8 +148,8 @@ export default class Level {
           e.x === this.player.x &&
           e.y === this.player.y &&
           (e.kills ||
-            (e.additionnalProperties &&
-              e['additionnalProperties']['absoluteDeath']))
+            (e.additionalProperties &&
+              e['additionalProperties']['absoluteDeath']))
       ).length > 0
     );
   };
@@ -271,10 +273,10 @@ export default class Level {
           entity.y += vector[1];
           return true;
         } else if (
-          entity.additionnalProperties &&
-          entity.additionnalProperties['canSwim'] &&
-          e.additionnalProperties &&
-          e.additionnalProperties['isSwimeable']
+          entity.additionalProperties &&
+          entity.additionalProperties['canSwim'] &&
+          e.additionalProperties &&
+          e.additionalProperties['isSwimeable']
         ) {
           entity.x += vector[0];
           entity.y += vector[1];
@@ -421,20 +423,17 @@ export default class Level {
               walkable = false;
             }
           } else if (!entity.isWalkable) {
-            //if cell is occupied by a non-walkable (ex: wall)
-            // console.info('trying to walk into', entity, "with");
-            // console.log(entity.additionnalProperties, entity.additionnalProperties['locked'], this.player.isInInventory('key'))
             if (
-              entity.additionnalProperties &&
-              entity.additionnalProperties['isVehicle'] &&
+              entity.additionalProperties &&
+              entity.additionalProperties['isVehicle'] &&
               !(
-                entity.additionnalProperties['isLocked'] &&
+                entity.additionalProperties['isLocked'] &&
                 !this.player.isInInventory('key')
               )
             ) {
               if (
-                entity.additionnalProperties &&
-                entity.additionnalProperties['isLocked'] &&
+                entity.additionalProperties &&
+                entity.additionalProperties['isLocked'] &&
                 this.player.isInInventory('key')
               ) {
                 this.player.removeFromInventory(
@@ -442,36 +441,39 @@ export default class Level {
                 );
               }
               if (
-                entity.additionnalProperties &&
-                entity.additionnalProperties['canSwim']
+                entity.additionalProperties &&
+                entity.additionalProperties['canSwim']
               ) {
-                if (!this.player.additionnalProperties) {
-                  this.player.additionnalProperties = JSON.parse(
+                if (!this.player.additionalProperties) {
+                  this.player.additionalProperties = JSON.parse(
                     JSON.stringify({ canSwim: true })
                   );
                 } else {
-                  this.player.additionnalProperties['canSwim'] = true;
+                  this.player.additionalProperties['canSwim'] = true;
                 }
               }
               this.player.playerIsInVehicle = entity;
             } else if (
-              entity.additionnalProperties &&
-              entity.additionnalProperties['locked'] &&
+              entity.additionalProperties &&
+              entity.additionalProperties['locked'] &&
               this.player.isInInventory('key') !== null
             ) {
               this.player.removeFromInventory(this.player.isInInventory('key'));
               this.removeFromLevel(entity);
             } else if (
-              this.player.additionnalProperties &&
-              this.player.additionnalProperties['canSwim'] &&
-              entity.additionnalProperties &&
-              entity.additionnalProperties['isSwimeable']
+              this.player.additionalProperties &&
+              this.player.additionalProperties['canSwim'] &&
+              entity.additionalProperties &&
+              entity.additionalProperties['isSwimeable']
             ) {
             } else {
               walkable = false;
             }
           } else if (entity instanceof Collectible) {
             collectibles.push(entity as Collectible);
+          } else if (entity.additionalProperties && entity.additionalProperties['wins']) {
+            this.won = true;
+            console.log('Won!');//TODO: implement win
           }
         }
       }
@@ -533,7 +535,7 @@ export default class Level {
                 obj?.isWalkable,
                 obj?.isPushable,
                 obj?.sprites,
-                obj?.additionnalProperties,
+                obj?.additionalProperties,
                 true
               )
             );
@@ -550,7 +552,7 @@ export default class Level {
                 obj?.isPushable,
                 obj?.sprites,
                 obj?.kills,
-                obj?.additionnalProperties,
+                obj?.additionalProperties,
                 obj?.ai
               )
             );
@@ -568,22 +570,22 @@ export default class Level {
                 obj?.isPushable,
                 obj?.sprites,
                 obj?.kills,
-                obj?.additionnalProperties,
+                obj?.additionalProperties,
                 obj?.ai
               )
             );
           } else if (foundWordsStr[i] in vehicles) {
             obj = vehicles[foundWordsStr[i]];
-            let additionnalProperties: Record<string, any> = {};
-            if (!obj?.additionnalProperties) {
-              additionnalProperties = { isVehicle: true };
-            } else if (!obj?.additionnalProperties['isVehicle']) {
-              additionnalProperties = {
-                ...obj.additionnalProperties,
+            let additionalProperties: Record<string, any> = {};
+            if (!obj?.additionalProperties) {
+              additionalProperties = { isVehicle: true };
+            } else if (!obj?.additionalProperties['isVehicle']) {
+              additionalProperties = {
+                ...obj.additionalProperties,
                 isVehicle: true,
               };
             } else {
-              additionnalProperties = { ...obj.additionnalProperties };
+              additionalProperties = { ...obj.additionalProperties };
             }
             this.entities.push(
               new Entity(
@@ -596,7 +598,7 @@ export default class Level {
                 obj?.isPushable,
                 obj?.sprites,
                 obj?.kills,
-                JSON.parse(JSON.stringify(additionnalProperties)), //not sure why, but Map/Record types are doing some shennanies here
+                JSON.parse(JSON.stringify(additionalProperties)), //not sure why, but Map/Record types are doing some shennanies here
                 obj?.ai
               )
             );
@@ -613,7 +615,7 @@ export default class Level {
                 obj?.isPushable,
                 obj?.sprites,
                 obj?.kills,
-                obj?.additionnalProperties,
+                obj?.additionalProperties,
                 obj?.ai
               )
             );
@@ -628,25 +630,114 @@ export default class Level {
     this.entities.forEach((entity) => entity.aiMove(this));
   }
 
-  public exportAsJSON():Record<string, any>{//export from objects to JSON is not reliable enough
-    let finalJSON:Record<string, any> = {};
+  public levelFromObject(obj: Record<string, any>): void {
+    this.sizeX = obj['sizeX'];
+    this.sizeY = obj['sizeY'];
+    this.name = obj['name'];
+    this.id = obj['id'] ? obj['id'] : getRandomArbitrary(0, 10000);
+    this.debug = obj['debug'];
+    this.letters = [];
+    for (let letter of obj['letters']) {
+      if (letter['sprites'] && letter['sprites'].length > 2) {
+        this.letters.push(
+          new Letter(
+            letter['name'],
+            letter['xPos'],
+            letter['yPos'],
+            letter['cellSize'],
+            letter['layerValue'],
+            letter['isWalkable'],
+            letter['isPushable'],
+            letter['sprites'] && letter['sprites'].length > 2
+              ? letter['sprites']
+              : []
+          )
+        );
+      } else {
+        let letterSprites: Array<string> = [
+          'assets/images/letters/' + letter['name'] + '1.png',
+          'assets/images/letters/' + letter['name'] + '2.png',
+          'assets/images/letters/' + letter['name'] + '3.png',
+        ];
+        this.letters.push(
+          new Letter(
+            letter['name'],
+            letter['xPos'],
+            letter['yPos'],
+            letter['cellSize'],
+            letter['layerValue'],
+            letter['isWalkable'],
+            letter['isPushable'],
+            letterSprites
+          )
+        );
+      }
+    }
+
+    this.entities = [];
+    for (let entity of obj['entities']) {
+      this.entities.push(
+        new Entity(
+          entity['name'],
+          entity['xPos'],
+          entity['yPos'],
+          entity['cellSize'],
+          entity['layerValue'],
+          entity['isWalkable'],
+          entity['isPushable'],
+          entity['sprites'] && entity['sprites'].length > 2
+            ? entity['sprites']
+            : [],
+          entity['kills'],
+          entity['additionalProperties'],
+          entity['aiName']
+        )
+      );
+    }
+
+    if (obj['player']['sprites'] && obj['player']['sprites'].length > 2) {
+      this.player = new Player(
+        obj['player']['xPos'],
+        obj['player']['yPos'],
+        obj['player']['cellSize'],
+        obj['player']['layerValue'],
+        obj['player']['sprites'] && obj['player']['sprites'].length > 2
+          ? obj['player']['sprites']
+          : []
+      );
+    } else {
+      let playerSprites: Array<string> = [
+        'assets/images/player/player1.png',
+        'assets/images/player/player2.png',
+        'assets/images/player/player3.png',
+      ];
+
+      this.player = new Player(
+        obj['player']['xPos'],
+        obj['player']['yPos'],
+        obj['player']['cellSize'],
+        obj['player']['layerValue'],
+        playerSprites
+      );
+    }
+  }
+  public exportAsJSON(): Record<string, any> {
+    //export from objects to JSON is not reliable enough
+    let finalJSON: Record<string, any> = {};
     finalJSON['sizeX'] = this.sizeX;
     finalJSON['sizeY'] = this.sizeY;
     finalJSON['name'] = this.name;
-    finalJSON['id'] = getRandomArbitrary(0, 10000);//idk why this is here in the first place...
+    finalJSON['id'] = getRandomArbitrary(0, 10000); //idk why this is here in the first place...
     finalJSON['debug'] = this.debug;
     finalJSON['letters'] = [];
     finalJSON['entities'] = [];
     finalJSON['player'] = this.player.exportAsJSON();
-    for (let e of this.entities)
-    {
+    for (let e of this.entities) {
       finalJSON['entities'].push(e.exportAsJSON());
     }
-    for (let l of this.letters)
-    {
+    for (let l of this.letters) {
       finalJSON['letters'].push(l.exportAsJSON());
     }
     return finalJSON;
   }
-
 }

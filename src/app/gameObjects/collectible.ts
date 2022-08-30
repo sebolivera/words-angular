@@ -10,7 +10,7 @@ export default class Collectible extends Entity {
     public isWalkable: Boolean = true,
     public isPushable: Boolean = true,
     public sprites: Array<string> = [],
-    public additionnalProperties: Map<string, any> = undefined,
+    public additionalProperties: Map<string, any> = undefined,
     public isCollectible: boolean = true
   ) {
     let tsprites: Array<string> = [];

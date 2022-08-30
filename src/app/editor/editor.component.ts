@@ -76,8 +76,8 @@ export class EditorComponent implements OnInit {
           text: 'Confirm',
           role: 'confirm',
           cssClass: 'confirmAlertButton',
-          handler: () => {
-            this.reset();
+          handler: async () => {
+            await this.reset();
           },
         },
       ],
@@ -85,9 +85,9 @@ export class EditorComponent implements OnInit {
     await alert.present();
   }
 
-  reset() {
+  async reset() {
     this.subscription.unsubscribe();
-    this.ngAfterViewInit();
+    await this.ngAfterViewInit();
   }
 
   animate() {
@@ -103,7 +103,7 @@ export class EditorComponent implements OnInit {
     );
     this.ctx.fill();
     this.drawGrid(); //grid is behind everything else
-    this.animateObjects(this.level.entitiesAndPlayer());
+    this.animateObjects();
   }
   setLevelsizeX(e: EventTarget) {
     this.level.sizeX = e['value'];
@@ -597,7 +597,8 @@ export class EditorComponent implements OnInit {
     this.grabLocalStorageLevels();
   }
 
-  animateObjects(entityArray: Array<Entity>): void {
+  animateObjects(): void {
+    let entityArray: Array<Entity> = this.level.entitiesAndPlayer();
     if (this.selectedEntity && this.imgMap[this.selectedEntity.name]) {
       this.ctx.globalAlpha = 0.4;
       this.ctx.drawImage(
@@ -629,6 +630,9 @@ export class EditorComponent implements OnInit {
     }
     this.ctx.globalAlpha = 1;
     entityArray.forEach((entity) => {
+      if (!entity.frame){
+        entity.frame = 0;
+      }
       if (entity.name === 'player') {
         this.ctx.drawImage(
           this.imgMap['player'][entity.frame],
@@ -691,7 +695,6 @@ export class EditorComponent implements OnInit {
           role: 'confirm',
           cssClass: 'confirmAlertButton',
           handler: () => {
-            let storedLevels: Array<Record<string, any>> = [];
             let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
             if (
               localStorage.getItem('levels') &&
@@ -701,7 +704,7 @@ export class EditorComponent implements OnInit {
               this.savedLevelKeys = [];
               for (let [key, value] of Object.entries(tempStoredLevels)) {
                 if (key !== levelKey) {
-                  this.storedLevels.push(value);
+                  this.storedLevels[key] = value;
                   this.savedLevelKeys.push(key);
                 }
               }
@@ -717,8 +720,15 @@ export class EditorComponent implements OnInit {
     });
     await alert.present();
   }
-  selectLoadedLevel(key: string) {
-    console.log('selected', key);
+  async selectLoadedLevel(key: string) {
+    await this.reset();
+    this.level.levelFromObject(this.storedLevels[key]);
+    this.rangeX.value = this.level.sizeX;
+    this.rangeY.value = this.level.sizeY;
+    this.defaultInput.value = this.level.name;
+    this.validateErrors();
+    this.setupImgMap();
+    console.log('level', this.level)
   }
   importLevel() {}
 
@@ -748,7 +758,7 @@ export class EditorComponent implements OnInit {
       this.savedLevelKeys = [];
       let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
       for (let [key, value] of Object.entries(tempStoredLevels)) {
-        this.storedLevels.push(value);
+        this.storedLevels[key] = value;
         this.savedLevelKeys.push(key);
       }
     }

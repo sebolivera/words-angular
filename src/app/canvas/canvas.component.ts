@@ -322,7 +322,7 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    let levelData = await import('../../assets/level_data/test_level.json');
+    let levelData = await import('../../assets/level_data/Level 1.json');
     this.level = new Level(levelData.default);
     //this.level.showData(); //For debugging only$
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');

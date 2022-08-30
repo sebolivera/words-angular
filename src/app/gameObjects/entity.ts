@@ -6,6 +6,7 @@ export default class Entity {
   //desc etc are only pulled from the recorded entity
   public verboseName:string;
   public description:string;
+  public frame: number = 0;
   constructor(
     public name: string = '',
     public x: number = -1,
@@ -16,9 +17,8 @@ export default class Entity {
     public isPushable: Boolean = true,
     public sprites: Array<string> = [],
     public kills: Boolean = false,
-    public additionnalProperties: Map<string, any> = undefined,
+    public additionalProperties: Map<string, any> = undefined,
     public aiName: string = undefined,
-    public frame: number = 0,
     public active: boolean = true,
     public ai: EntityBehavior = null
   ) {
@@ -45,7 +45,7 @@ export default class Entity {
     this.name = name;
     this.size = size;
     this.layerValue = layerValue;
-    if (sprites && sprites !== null && sprites.length>0) {
+    if (sprites && sprites !== null && sprites.length>2) {
       this.sprites = sprites;
     } else {
       let tsprites = [];
@@ -57,10 +57,9 @@ export default class Entity {
       this.sprites = tsprites;
     }
     this.frame = 0;
-    //this.frame = Math.floor(Math.random() * 2 + 1);//For randomized animation effects. Looks weird, so I disabled it.
     this.isWalkable = isWalkable;
     this.kills = kills;
-    this.additionnalProperties = additionnalProperties;
+    this.additionalProperties = additionalProperties;
     if (
       !aiName || aiName===undefined||
       aiName.length === 0 ||
@@ -136,7 +135,7 @@ export default class Entity {
     finalJSON['isWalkable'] = this.isWalkable;
     finalJSON['isPushable'] = this.isPushable;
     finalJSON['kills'] = this.kills;
-    finalJSON['additionnalProperties'] = this.additionnalProperties;
+    finalJSON['additionalProperties'] = this.additionalProperties;
     return finalJSON;
   }
 }
