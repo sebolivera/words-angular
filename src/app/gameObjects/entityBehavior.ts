@@ -1,4 +1,4 @@
-import { pathFinderAStar, getRandomInt, clamp } from '../misc/utils';
+import { pathFinderAStar, getRandomInt, clamp, heuristic } from '../misc/utils';
 import Entity from './entity';
 import Level from './level';
 import behaviorList from '../../assets/entityData/entityBehaviorMap.json';
@@ -18,7 +18,8 @@ export default class EntityBehavior {
 
   public getNextPos(
     entity: Entity,
-    levelData: Level
+    levelData: Level,
+    targetCoords:[number, number]
   ): [[number, number], number] {
     //returns a set of coordinates, as well as a new layerValue
     let newX: number;
@@ -137,9 +138,10 @@ export default class EntityBehavior {
       case 'roaming':
         break;
       case 'seeking':
+        if (heuristic([entity.x, entity.y], targetCoords))
         path = pathFinderAStar(
           [entity.x, entity.y],
-          [levelData.player.x, levelData.player.y],
+          targetCoords,
           walkableCellsMatrix
         ).reverse();
         [movedToX, movedToY] = path.length > 0 ? path[0] : [null, null];

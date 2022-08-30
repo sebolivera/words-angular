@@ -1,0 +1,43 @@
+{
+  "sizeX": 10,
+  "sizeY": 10,
+  "name": "testCat&rat",
+  "id": 3262.0935689447574,
+  "debug": true,
+  "letters": [],
+  "entities": [
+    {
+      "name": "cat",
+      "xPos": 5,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionalProperties": {
+        "canWalkDiagonnally": true,
+        "seekRadius": 15,
+        "seeks": ["rat", "player"],
+        "canDie": true
+      },
+      "ai":"seeking"
+    },
+    {
+      "name": "rat",
+      "xPos": 9,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": {
+        "canWalkDiagonnally": true,
+        "fearRadius": 10,
+        "flees": ["cat"],
+        "canDie": true
+      },
+      "ai":"fleeing"
+    }
+  ],
+  "player": { "xPos": 0, "yPos": 9, "size": 1, "layerValue": 0 }
+}

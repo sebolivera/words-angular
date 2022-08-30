@@ -161,7 +161,7 @@ export class EditorComponent implements OnInit {
         this.imgMap[this.selectedKey],
         entityParams?.kills,
         entityParams?.additionalProperties,
-        entityParams?.aiName
+        entityParams?.ai
       );
     } else if (entityParams.type === 'collectibles') {
       this.selectedEntity = new Collectible(
@@ -317,7 +317,7 @@ export class EditorComponent implements OnInit {
           ],
           this.selectedEntity?.kills,
           this.selectedEntity['additionalProperties'],
-          this.selectedEntity?.aiName
+          this.selectedEntity?.ai
         );
       }
 
@@ -565,7 +565,7 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  saveToLocalStorage() {
+  saveToLocalStorage() {//TODO: safeguard for levels with the same name
     this.validateErrors();
     if (Object.keys(this.validationErrors).length === 0) {
       if (Object.keys(this.validationErrors).length === 0) {

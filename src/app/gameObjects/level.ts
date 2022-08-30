@@ -635,7 +635,7 @@ export default class Level {
     this.sizeY = obj['sizeY'];
     this.name = obj['name'];
     this.id = obj['id'] ? obj['id'] : getRandomArbitrary(0, 10000);
-    this.debug = obj['debug'];
+    this.debug = obj['debug']?obj['debug']:false;
     this.letters = [];
     for (let letter of obj['letters']) {
       if (letter['sprites'] && letter['sprites'].length > 2) {
@@ -690,7 +690,7 @@ export default class Level {
             : [],
           entity['kills'],
           entity['additionalProperties'],
-          entity['aiName']
+          entity['ai']
         )
       );
     }

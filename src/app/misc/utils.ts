@@ -1,3 +1,12 @@
+export const heuristic = (
+  pos0: [number, number],
+  pos1: [number, number]
+): number => {
+  let d1: number = Math.abs((pos1[0] - pos0[0]));
+  let d2: number = Math.abs((pos1[1] - pos0[1]));
+  return d1 + d2;
+};
+
 // Had to implement my own version as apparently nobody has a decent js one...?
 export const pathFinderAStar = (
   start: [number, number],

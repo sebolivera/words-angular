@@ -457,7 +457,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionalProperties": {"isSwimeable":true}
+      "additionalProperties": { "isSwimeable": true }
     },
     {
       "name": "water",
@@ -468,7 +468,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionalProperties": {"isSwimeable":true}
+      "additionalProperties": { "isSwimeable": true }
     },
     {
       "name": "water",
@@ -479,7 +479,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionalProperties": {"isSwimeable":true}
+      "additionalProperties": { "isSwimeable": true }
     },
     {
       "name": "water",
@@ -490,7 +490,7 @@
       "isWalkable": false,
       "isPushable": false,
       "kills": false,
-      "additionalProperties": {"isSwimeable":true}
+      "additionalProperties": { "isSwimeable": true }
     },
     {
       "name": "skull",
@@ -512,7 +512,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": false,
-      "additionalProperties": { "absoluteDeath": true },
+      "additionalProperties": { "absoluteDeath": true, "canDie": true },
       "ai": "fleeing"
     },
     {
@@ -528,11 +528,11 @@
       "additionalProperties": {
         "isVehicle": true,
         "isLocked": true,
-        "protects" : true
+        "protects": true
       }
     },
     {
-      "name": "lockedDoor",
+      "name": "lockeddoor",
       "xPos": 13,
       "yPos": 16,
       "cellSize": 1,

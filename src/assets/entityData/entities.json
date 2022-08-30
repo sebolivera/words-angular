@@ -12,7 +12,11 @@
       "kills": true,
       "canFly": true,
       "additionalProperties": null,
-      "properties": { "canWalkDiagonnally": true },
+      "properties": {
+        "canWalkDiagonnally": true,
+        "seeks": ["player"],
+        "canDie": true
+      },
       "ai": "seeking"
     },
     "rat": {
@@ -27,10 +31,31 @@
       "kills": false,
       "additionalProperties": {
         "canWalkDiagonnally": true,
-        "fearRadius": 10
+        "fearRadius": 10,
+        "flees": ["cat"],
+        "canDie": true
       },
       "canFly": false,
       "ai": "fleeing"
+    },
+    "cat": {
+      "name": "cat",
+      "verboseName": "Black Cat",
+      "description": "It doesn't seem really friendly. Then again, few cats do.",
+      "editorDescription": "Cat mob. Chases player, mice and rats.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionalProperties": {
+        "canWalkDiagonnally": true,
+        "seekRadius": 15,
+        "seeks": ["rat", "player"],
+        "canDie": true
+      },
+      "canFly": false,
+      "ai": "seeking"
     },
     "skull": {
       "name": "skull",
@@ -42,7 +67,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": true,
-      "additionalProperties": {"absoluteDeath":true}
+      "additionalProperties": { "absoluteDeath": true }
     }
   },
   "obstacles": {
@@ -72,8 +97,8 @@
       "additionalProperties": { "isSwimeable": true },
       "ai": "inert"
     },
-    "lockedDoor": {
-      "name": "lockedDoor",
+    "lockeddoor": {
+      "name": "lockeddoor",
       "verboseName": "Locked Door",
       "description": "A wooden locked door with a keyhole.",
       "editorDescription": "Door obstacle. Blocks the player if they don't have a key.",
@@ -133,6 +158,18 @@
       "isWalkable": true,
       "isCollectible": true,
       "additionalProperties": { "useless": true }
+    },
+    "toe": {
+      "name": "toe",
+      "verboseName": "Severed Toe",
+      "description": "Why would you pick that up? Gross!",
+      "editorDescription": "Severed toe collectible. Useless.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "isCollectible": true,
+      "additionalProperties": { "wins": true }
     }
   },
   "vehicles": {
@@ -176,6 +213,17 @@
       "verboseName": "Goal Post",
       "description": "Reach it and win the level!",
       "editorDescription": "Goal tile. Level has to have at least once or a way to get it.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "additionalProperties": { "wins": true }
+    },
+    "win": {
+      "name": "win",
+      "verboseName": "Win",
+      "description": "Reach it and win the level!",
+      "editorDescription": "Winning tile.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
