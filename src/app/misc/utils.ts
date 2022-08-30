@@ -2,8 +2,8 @@ export const heuristic = (
   pos0: [number, number],
   pos1: [number, number]
 ): number => {
-  let d1: number = Math.abs((pos1[0] - pos0[0]));
-  let d2: number = Math.abs((pos1[1] - pos0[1]));
+  let d1: number = Math.abs(pos1[0] - pos0[0]);
+  let d2: number = Math.abs(pos1[1] - pos0[1]);
   return d1 + d2;
 };
 
@@ -156,19 +156,23 @@ export const pathFinderAStar = (
     path.push([...current]);
     c++;
   }
-  path.pop(); //excludes the starting cell
-  path.unshift(end); //adds the player position that I accidently removed above
-  return path;
+  if (path && path.length >= 1) {
+    path.pop(); //excludes the starting cell
+    path.unshift(end); //adds the player position that I accidently removed above
+    return path;
+  } 
+  else {
+    return [start];
+  }
 };
 
 export const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * max);
 };
 
-export const getRandomArbitrary = (min:number, max:number):number => {
+export const getRandomArbitrary = (min: number, max: number): number => {
   return Math.random() * (max - min) + min;
-}
-
+};
 
 export const clamp = (
   value: number,
@@ -223,9 +227,9 @@ export const roundRect = (
   ctx.closePath();
 };
 
-export const titleCaseWord = (word: string):string=> {
+export const titleCaseWord = (word: string): string => {
   if (!word) {
     return word;
   }
   return word[0].toUpperCase() + word.substring(1).toLowerCase();
-}
+};
