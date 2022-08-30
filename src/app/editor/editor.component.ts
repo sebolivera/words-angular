@@ -728,7 +728,6 @@ export class EditorComponent implements OnInit {
     this.defaultInput.value = this.level.name;
     this.validateErrors();
     this.setupImgMap();
-    console.log('level', this.level)
   }
   importLevel() {}
 
@@ -755,12 +754,13 @@ export class EditorComponent implements OnInit {
       localStorage.getItem('levels') !== 'undefined'
     ) {
       this.storedLevels = [];
-      this.savedLevelKeys = [];
+      let tempSavedLevelKeys:Array<string> = [];
       let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
       for (let [key, value] of Object.entries(tempStoredLevels)) {
         this.storedLevels[key] = value;
-        this.savedLevelKeys.push(key);
+        tempSavedLevelKeys.push(key);
       }
+      this.savedLevelKeys = tempSavedLevelKeys.sort();
     }
     this.checkLocalStorage();
   }

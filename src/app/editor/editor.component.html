@@ -298,9 +298,9 @@
           <ion-item
             class="flexList"
             href="javascript:void(0)"
-            *ngFor="let levelKey of savedLevelKeys"
+            *ngFor="let levelKey of savedLevelKeys"  (click)="selectLoadedLevel(levelKey)"
           >
-            <ion-label (click)="selectLoadedLevel(levelKey)">{{
+            <ion-label>{{
               levelKey
             }}</ion-label
             ><ion-button

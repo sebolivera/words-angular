@@ -10,7 +10,6 @@ export class GameHandlerComponent implements OnInit {
   constructor() { }
   switchTo(location:string)
   {
-    console.log('Clicked!')
     this.currentPage = location;
   }
   ngOnInit() {}
