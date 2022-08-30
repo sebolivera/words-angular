@@ -268,7 +268,7 @@ export class EditorComponent implements OnInit {
       if (this.selectedEntity.name === 'player') {
         this.level.player.x = Math.floor((e['layerX'] - 5) / this.cellSize);
         this.level.player.y = Math.floor(
-          (e['layerY'] - this.cellSize / 2) / this.cellSize
+          (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
         );
         this.selectedEntity = null;
         this.selectedKey = null;
@@ -345,7 +345,7 @@ export class EditorComponent implements OnInit {
         if (
           levelEntity.x === Math.floor((e['layerX'] - 5) / this.cellSize) &&
           levelEntity.y ===
-            Math.floor((e['layerY'] - this.cellSize / 2) / this.cellSize)
+            Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize)
         ) {
           toBeDeletedEntity = levelEntity;
         }
@@ -367,7 +367,7 @@ export class EditorComponent implements OnInit {
       if (
         this.level.player.x === Math.floor((e['layerX'] - 5) / this.cellSize) &&
         this.level.player.y ===
-          Math.floor((e['layerY'] - this.cellSize / 2) / this.cellSize)
+          Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize)
       ) {
         this.selectedEntity = this.level.player;
         this.selectedKey = this.level.player.name;
@@ -383,27 +383,27 @@ export class EditorComponent implements OnInit {
     if (
       this.selectedEntity &&
       Math.floor((e['layerX'] - 5) / this.cellSize) < this.level.sizeX &&
-      Math.floor((e['layerY'] - this.cellSize / 2) / this.cellSize) <
+      Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize) <
         this.level.sizeY
     ) {
       this.selectedEntity.x = Math.floor((e['layerX'] - 5) / this.cellSize);
       this.selectedEntity.y = Math.floor(
-        (e['layerY'] - this.cellSize / 2) / this.cellSize
+        (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
       );
     } else if (
       this.selectedLetter &&
       Math.floor((e['layerX'] - 5) / this.cellSize) < this.level.sizeX &&
-      Math.floor((e['layerY'] - this.cellSize / 2) / this.cellSize) <
+      Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize) <
         this.level.sizeY
     ) {
       this.selectedLetter.x = Math.floor((e['layerX'] - 5) / this.cellSize);
       this.selectedLetter.y = Math.floor(
-        (e['layerY'] - this.cellSize / 2) / this.cellSize
+        (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
       );
     } else if (this.selectedEraser) {
       this.eraserPos = [
         Math.floor((e['layerX'] - 5) / this.cellSize),
-        Math.floor((e['layerY'] - this.cellSize / 2) / this.cellSize),
+        Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize),
       ];
     }
   }
