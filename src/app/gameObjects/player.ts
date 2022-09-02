@@ -6,7 +6,7 @@ export default class Player extends Entity {
   constructor(
     public x: number = 0,
     public y: number = 0,
-    public size: number = 0,
+    public size: number = 1,
     public layerValue: number = 0,
     public sprites: Array<string> = [],
     public inventory: Array<Entity> = [],

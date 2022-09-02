@@ -1,0 +1,25 @@
+{
+    "development": {
+      "username": "user_dev",
+      "password": "",
+      "database": "words_db_dev",
+      "dialect": "sqlite",
+      "storage": "./data_dev.sqlite"
+    },
+    "test": {
+      "username": "postgres",
+      "password": "postgres",
+      "database": "words_db_test",
+      "host": "127.0.0.1",
+      "dialect": "postgres",
+      "storage": "./data_test.sqlite"
+    },
+    "production": {
+      "username": "postgres",
+      "password": "postgres",
+      "database": "words_db_prod",
+      "host": "127.0.0.1",
+      "dialect": "postgres",
+      "storage": "./data_prod.sqlite"
+    }
+  }
