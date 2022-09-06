@@ -2,13 +2,13 @@ import Entity from './entity';
 import Letter from './letter';
 import Player from './player';
 import recordedEntities from '../../assets/entityData/entities.json';
-import Collectible from './collectible';
 import { getRandomArbitrary } from '../misc/utils';
 
 export default class Level {
   public sizeX: number;
   public sizeY: number;
   public name: string;
+  public description: string = '';
   public id: number;
   public player: Player;
   public letters: Array<Letter>;
@@ -45,46 +45,26 @@ export default class Level {
 
     let tentities: Array<Entity> = [];
     for (let i = 0; i < initObject.entities.length; i++) {
-      if (initObject.entities[i]?.isCollectible) {
-        tentities.push(
-          new Collectible(
-            initObject.entities[i].name, //'name' of the letter
-            initObject.entities[i].xPos, //x position
-            initObject.entities[i].yPos, //y position
-            initObject.entities[i].cellSize, //size of the cell (default is 1 for 1x1 cells, can't be any other shape than square)
-            initObject.entities[i].layerValue,
-            initObject.entities[i].isWalkable, //is walkable
-            initObject.entities[i].isPushable, //is pushable
-            [
-              'assets/images/entities/' + initObject.entities[i].name + '1.png',
-              'assets/images/entities/' + initObject.entities[i].name + '2.png',
-              'assets/images/entities/' + initObject.entities[i].name + '3.png',
-            ], //frames
-            initObject.entities[i].additionalProperties,
-            initObject.isCollectible
-          )
-        );
-      } else {
-        tentities.push(
-          new Entity(
-            initObject.entities[i].name, //'name' of the letter
-            initObject.entities[i].xPos, //x position
-            initObject.entities[i].yPos, //y position
-            initObject.entities[i].cellSize, //size of the cell (default is 1 for 1x1 cells, can't be any other shape than square)
-            initObject.entities[i].layerValue,
-            initObject.entities[i].isWalkable, //is walkable
-            initObject.entities[i].isPushable, //is pushable
-            [
-              'assets/images/entities/' + initObject.entities[i].name + '1.png',
-              'assets/images/entities/' + initObject.entities[i].name + '2.png',
-              'assets/images/entities/' + initObject.entities[i].name + '3.png',
-            ], //frames
-            initObject.entities[i].kills,
-            initObject.entities[i].additionalProperties,
-            initObject.entities[i]?.ai
-          )
-        );
-      }
+      tentities.push(
+        new Entity(
+          initObject.entities[i].name, //'name' of the letter
+          initObject.entities[i].xPos, //x position
+          initObject.entities[i].yPos, //y position
+          initObject.entities[i].cellSize, //size of the cell (default is 1 for 1x1 cells, can't be any other shape than square)
+          initObject.entities[i].layerValue,
+          initObject.entities[i].isWalkable, //is walkable
+          initObject.entities[i].isPushable, //is pushable
+          [
+            'assets/images/entities/' + initObject.entities[i].name + '1.png',
+            'assets/images/entities/' + initObject.entities[i].name + '2.png',
+            'assets/images/entities/' + initObject.entities[i].name + '3.png',
+          ], //frames
+          initObject.entities[i]?.kills,
+          initObject.entities[i].additionalProperties,
+          initObject.entities[i]?.ai,
+          initObject.isCollectible
+        )
+      );
     }
     this.entities = tentities;
 
@@ -158,17 +138,15 @@ export default class Level {
     return (
       this.entities.filter(
         (e) =>
-          e.x === this.player.x &&
-          e.y === this.player.y &&
-          e instanceof Collectible
+          e.x === this.player.x && e.y === this.player.y && e['isCollectible']
       ).length > 0
     );
   };
 
-  public collect = (x: number, y: number): Array<Collectible> => {
-    let collectiblesFound: Array<Collectible> = [];
+  public collect = (x: number, y: number): Array<Entity> => {
+    let collectiblesFound: Array<Entity> = [];
     this.entities.forEach((e) => {
-      if (e.x === x && e.y === y && e instanceof Collectible) {
+      if (e.x === x && e.y === y && e.isCollectible) {
         collectiblesFound.push(e);
       }
     });
@@ -203,6 +181,7 @@ export default class Level {
         sprites: this.player.sprites,
         inventory: [...this.player.inventory],
         maxInventorySize: this.player.maxInventorySize,
+        playerIsInVehicle: this.player.playerIsInVehicle,
       },
       entities: clonedEntities,
       letters: clonedLetters,
@@ -215,14 +194,38 @@ export default class Level {
       this.sizeX = this.levelHistory[this.levelHistory.length - 1].sizeX;
       this.sizeY = this.levelHistory[this.levelHistory.length - 1].sizeY;
       this.name = this.levelHistory[this.levelHistory.length - 1].name;
+      this.description =
+        this.levelHistory[this.levelHistory.length - 1].description;
       this.id = this.levelHistory[this.levelHistory.length - 1].id;
+      let vehicle: Entity = null;
       for (let [pKey, pValue] of Object.entries(
         this.levelHistory[this.levelHistory.length - 1].player
       )) {
+        if (pKey === 'playerIsInVehicle') {
+          vehicle = pValue as Entity;
+        }
         this.player[pKey] = pValue;
       }
       this.letters = this.levelHistory[this.levelHistory.length - 1].letters;
-      this.entities = this.levelHistory[this.levelHistory.length - 1].entities;
+      if (vehicle) {
+        let tEntities: Array<Entity> = [];
+        for (let entities of this.levelHistory[this.levelHistory.length - 1]
+          .entities) {
+          if (
+            entities.playerIsIn
+          ) {
+            vehicle.x = this.player.x;
+            vehicle.y = this.player.y;
+            tEntities.push(vehicle);
+          } else {
+            tEntities.push(entities);
+          }
+        }
+        this.entities = tEntities;
+      } else {
+        this.entities =
+          this.levelHistory[this.levelHistory.length - 1].entities;
+      }
       this.debug = this.levelHistory[this.levelHistory.length - 1].debug;
       this.levelHistory.pop();
     }
@@ -232,8 +235,8 @@ export default class Level {
     //creates a matrix of cells. Walkable cells are marked as true, non-walkable ones are marked as false
 
     let matrix: Array<Array<Boolean>> = [];
-    for (let i = 0; i < this.sizeY; i++) {
-      matrix.push(new Array(this.sizeX).fill(true));
+    for (let i = 0; i < this.sizeX; i++) {
+      matrix.push(new Array(this.sizeY).fill(true));
     }
     for (let k = 0; k < this.entities.length; k++) {
       //dont know whether or not this is the most efficient way to do it, but it will do for now
@@ -320,10 +323,15 @@ export default class Level {
         }
       }
     }
-    for (let i = 0; i < this.sizeY; i++) {
+    horizontalReading: for (let i = 0; i < this.sizeY; i++) {
       for (let j = 0; j < this.sizeX; j++) {
         currentReadWordHoz = [];
-        if (letterGrid[i][j]) {
+        if (
+          letterGrid &&
+          letterGrid.length > 0 &&
+          letterGrid[i] &&
+          letterGrid[i][j]
+        ) {
           let ii = i;
           while (ii < this.sizeX && letterGrid[ii][j] instanceof Letter) {
             currentReadWordHoz.push(letterGrid[ii][j]);
@@ -343,16 +351,21 @@ export default class Level {
                 });
               }
               foundWordsStr.push(word);
-              break;
+              break horizontalReading; //I KNEW I was going to be using one of these
             }
           }
         }
       }
     }
-    for (let j = 0; j < this.sizeX; j++) {
+    verticalReading: for (let j = 0; j < this.sizeX; j++) {
       for (let i = 0; i < this.sizeY; i++) {
         currentReadWordVert = [];
-        if (letterGrid[i][j]) {
+        if (
+          letterGrid &&
+          letterGrid.length > 0 &&
+          letterGrid[i] &&
+          letterGrid[i][j]
+        ) {
           let jj = j;
           while (jj < this.sizeY && letterGrid[i][jj] instanceof Letter) {
             currentReadWordVert.push(letterGrid[i][jj]);
@@ -364,6 +377,7 @@ export default class Level {
               .map((e) => e.name)
               .join('');
             if (entityList.includes(word)) {
+              console.log(foundWords, foundWordsStr);
               foundWords.push([]);
               for (let n = 0; n < word.length; n++) {
                 let letter: string = word[n];
@@ -375,7 +389,7 @@ export default class Level {
                       e[Object.keys(e)[0]][1] === currentReadWordVert[n].y
                   ).length === 0
                 )
-                  foundWords[foundWords.length - 1].push({
+                  foundWords[foundWords.length - 1].unshift({
                     [letter]: [
                       currentReadWordVert[n].x,
                       currentReadWordVert[n].y,
@@ -383,7 +397,7 @@ export default class Level {
                   });
               }
               foundWordsStr.push(word);
-              break;
+              break verticalReading;
             }
           }
         }
@@ -405,14 +419,11 @@ export default class Level {
 
   public movePlayer(x: number, y: number): void {
     let walkable: Boolean = true;
-    let collectibles: Array<Collectible> = [];
+    let collectibles: Array<Entity> = [];
     if (x < this.sizeX && y < this.sizeY) {
       for (let entity of this.entitiesMinusPlayer()) {
         if (entity.x === x && entity.y === y) {
-          if (
-            !(entity instanceof Collectible && entity.isCollectible) &&
-            entity.isPushable
-          ) {
+          if (!entity?.isCollectible && entity.isPushable) {
             if (
               !this.pushNextEntity(
                 [x - this.player.x, y - this.player.y],
@@ -453,6 +464,7 @@ export default class Level {
                 }
               }
               this.player.playerIsInVehicle = entity;
+              entity.playerIsIn = true;
             } else if (
               entity.additionalProperties &&
               entity.additionalProperties['locked'] &&
@@ -469,11 +481,14 @@ export default class Level {
             } else {
               walkable = false;
             }
-          } else if (entity instanceof Collectible) {
-            collectibles.push(entity as Collectible);
-          } else if (entity.additionalProperties && entity.additionalProperties['wins']) {
+          } else if (entity?.isCollectible) {
+            collectibles.push(entity);
+          } else if (
+            entity.additionalProperties &&
+            entity.additionalProperties['wins']
+          ) {
             this.won = true;
-            console.log('Won!');//TODO: implement win
+            console.log('Won!'); //TODO: implement win
           }
         }
       }
@@ -501,7 +516,7 @@ export default class Level {
           let lCopy: Array<Letter> = [];
           for (let letter of this.letters) {
             letterHere = false;
-            for (let allFoundLetters of foundWords[i]) {
+            for (let allFoundLetters of foundWords[i].reverse()) {
               if (
                 letter.name === Object.keys(allFoundLetters)[0] &&
                 letter.x ===
@@ -526,7 +541,7 @@ export default class Level {
           if (foundWordsStr[i] in collectibles) {
             obj = collectibles[foundWordsStr[i]];
             this.entities.push(
-              new Collectible(
+              new Entity(
                 foundWordsStr[i],
                 Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
                 Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
@@ -535,12 +550,15 @@ export default class Level {
                 obj?.isWalkable,
                 obj?.isPushable,
                 obj?.sprites,
+                false,
                 obj?.additionalProperties,
+                'inert',
                 true
               )
             );
           } else if (foundWordsStr[i] in mobs) {
             obj = mobs[foundWordsStr[i]];
+            console.log('Creating', obj.name, 'with ai', obj.ai);
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
@@ -634,8 +652,9 @@ export default class Level {
     this.sizeX = obj['sizeX'];
     this.sizeY = obj['sizeY'];
     this.name = obj['name'];
+    this.description = obj['description'];
     this.id = obj['id'] ? obj['id'] : getRandomArbitrary(0, 10000);
-    this.debug = obj['debug']?obj['debug']:false;
+    this.debug = obj['debug'] ? obj['debug'] : false;
     this.letters = [];
     for (let letter of obj['letters']) {
       if (letter['sprites'] && letter['sprites'].length > 2) {
@@ -727,6 +746,7 @@ export default class Level {
     finalJSON['sizeX'] = this.sizeX;
     finalJSON['sizeY'] = this.sizeY;
     finalJSON['name'] = this.name;
+    finalJSON['description'] = this.description;
     finalJSON['id'] = getRandomArbitrary(0, 10000); //idk why this is here in the first place...
     finalJSON['debug'] = this.debug;
     finalJSON['letters'] = [];

@@ -11,8 +11,7 @@
       "isPushable": false,
       "kills": true,
       "canFly": true,
-      "additionalProperties": null,
-      "properties": {
+      "additionalProperties": {
         "canWalkDiagonnally": true,
         "seeks": ["player"],
         "canDie": true
@@ -38,6 +37,25 @@
       "canFly": false,
       "ai": "fleeing"
     },
+    "boa": {
+      "name": "boa",
+      "verboseName": "Boa",
+      "description": "A nasty snake. It'll eat you.",
+      "editorDescription": "Boa mob. Chases player and most non-flying mobs.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionalProperties": {
+        "canWalkDiagonnally": true,
+        "seekRadius": 10,
+        "seeks": ["rat", "player", "cat"],
+        "canDie": true
+      },
+      "canFly": false,
+      "ai": "seeking"
+    },
     "cat": {
       "name": "cat",
       "verboseName": "Black Cat",
@@ -50,7 +68,7 @@
       "kills": true,
       "additionalProperties": {
         "canWalkDiagonnally": true,
-        "seekRadius": 15,
+        "seekRadius": 10,
         "seeks": ["rat", "player"],
         "canDie": true
       },
@@ -68,6 +86,18 @@
       "isPushable": false,
       "kills": true,
       "additionalProperties": { "absoluteDeath": true }
+    },
+    "fire": {
+      "name": "fire",
+      "verboseName": "Fire tile",
+      "description": "Fire. It burns. What did you expect?",
+      "editorDescription": "Fire tile, burns combustible things as well as mobs.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionalProperties": { "burns": true }
     }
   },
   "obstacles": {
@@ -170,6 +200,18 @@
       "isWalkable": true,
       "isCollectible": true,
       "additionalProperties": { "wins": true }
+    },
+    "oat": {
+      "name": "oat",
+      "verboseName": "Common Oat",
+      "description": "A strand of oat, what were you expecting?",
+      "editorDescription": "Oat collectible. Useless.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "isCollectible": true,
+      "additionalProperties": null
     }
   },
   "vehicles": {

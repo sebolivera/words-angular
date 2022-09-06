@@ -1,19 +1,37 @@
 <div style="display: flex">
   <div>
-    <canvas
-      #mainCanvas
-      id="mainCanvas"
-      (click)="doClick($event)"
-      (mousemove)="mouseMove($event)"
-    ></canvas>
+    <canvas #mainCanvas id="mainCanvas" (click)="doClick($event)" (mousemove)="mouseMove($event)"></canvas>
   </div>
 
-  <div style="padding-left: 10px">
-    <h3>Commands:</h3>
-    <ul>
-      <li>Use the arrow buttons to move around</li>
-      <li>Press 'u' to undo</li>
-      <li>Press 'r' to restart the level</li>
-    </ul>
+  <div style="padding-left: 2px; width: 600px">
+    <ion-content>
+      <h3>Commands:</h3>
+      <ion-list class="fullWidth">
+        <ion-item class="flexList">- Use the arrow buttons to move around</ion-item>
+        <ion-item class="flexList">- Press 'u' to undo</ion-item>
+        <ion-item class="flexList">- Press 'r' to restart the level</ion-item>
+      </ion-list>
+      <h3>Available levels:</h3>
+      <ion-item fill="outline">
+        <ion-select placeholder="Select a level" (ionChange)="selectLevel($event)" [(ngModel)]="selectedLevel">
+          <ion-select-option *ngFor="let levelValues of allLevels | keyvalue" [value]="levelValues.key">
+            {{ levelValues.key }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="hoveredEntity!==null" lines="none">
+        <ion-card>
+          <ion-card-header>
+            <ion-img [src]="imgMap[hoveredEntity.name][globalFrame].src" style="width:50px"></ion-img>
+            <ion-card-subtitle>{{hoveredEntity.name|titlecase}}</ion-card-subtitle>
+            <ion-card-title>
+              {{hoveredEntity.name.length>1?recordedEntitiesAsSimpleDict[hoveredEntity.name].verboseName:'The Letter
+              '+hoveredEntity.name|titlecase}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{hoveredEntity.name.length<=1?'Move letters around to form
+              words':recordedEntitiesAsSimpleDict[hoveredEntity.name].description}} </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-content>
   </div>
 </div>

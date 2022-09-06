@@ -1,0 +1,38 @@
+{
+  "sizeX": 19,
+  "sizeY": 19,
+  "name": "Level 6",
+  "description": "Tread carefully",
+  "id": 7852.690056316072,
+  "debug": true,
+  "letters": [],
+  "entities": [
+    {
+      "name": "bat",
+      "xPos": 9,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": true,
+      "additionalProperties": {
+        "canWalkDiagonnally": false,
+        "seeks": ["player"],
+        "seekRadius" : 10,
+        "canDie": true
+      },
+      "ai":"seeking"
+    },
+    {
+      "name": "win",
+      "xPos": 9,
+      "yPos": 17,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "wins": true }
+    }
+  ],
+  "player": { "xPos": 9, "yPos": 1, "size": 1, "layerValue": 0 }
+}

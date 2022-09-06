@@ -1,0 +1,263 @@
+{
+  "sizeX": 14,
+  "sizeY": 14,
+  "name": "Level 7",
+  "description": "Choose wisely",
+  "id": 2566.9280187058807,
+  "debug": true,
+  "letters": [
+    {
+      "name": "a",
+      "xPos": 8,
+      "yPos": 8,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "t",
+      "xPos": 9,
+      "yPos": 8,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "b",
+      "xPos": 3,
+      "yPos": 6,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "r",
+      "xPos": 2,
+      "yPos": 6,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "c",
+      "xPos": 1,
+      "yPos": 6,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    }
+  ],
+  "entities": [
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 7,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 8,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 9,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 10,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 10,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 9,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 8,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "win",
+      "xPos": 10,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "wins": true }
+    }
+  ],
+  "player": { "xPos": 5, "yPos": 5, "size": 1, "layerValue": 0 }
+}

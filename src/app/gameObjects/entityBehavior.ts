@@ -36,7 +36,7 @@ export default class EntityBehavior {
       levelData.sizeX - 1,
       levelData.sizeY - 1,
     ];
-    switch (this.name) {
+    switch (this.name) {//temporary solution for the "fleeing behavior"
       case 'fleeing':
         let [targetX, targetY]: [number, number] = [0, 0];
         let [addX, addY]: number[] = [0, 0];
@@ -142,7 +142,8 @@ export default class EntityBehavior {
         path = pathFinderAStar(
           [entity.x, entity.y],
           targetCoords,
-          walkableCellsMatrix
+          walkableCellsMatrix,
+          entity?.additionalProperties['canWalkDiagonnally']
         ).reverse();
         [movedToX, movedToY] = path && path.length > 0 ? path[0] : [null, null];
         if (movedToX===null || movedToY===null) {//WHY IS 0 FALSY FFS

@@ -1,3 +1,8 @@
-// #mainCanvas{
-//     border: 4px solid black;
-// }
+.fullWidth {
+  width: 100%;
+}
+
+.flexList {
+  display: flex;
+  flex-direction: column;
+}

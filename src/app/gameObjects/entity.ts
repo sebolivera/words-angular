@@ -9,6 +9,7 @@ export default class Entity {
   public description: string;
   public frame: number = 0;
   public aiBehavior: EntityBehavior = null;
+  public playerIsIn:Boolean=false;
   constructor(
     public name: string = '',
     public x: number = -1,
@@ -21,6 +22,7 @@ export default class Entity {
     public kills: Boolean = false,
     public additionalProperties: Map<string, any> = undefined,
     public ai: string = undefined,
+    public isCollectible: boolean=false,
     public active: boolean = true
   ) {
     this.description = '';

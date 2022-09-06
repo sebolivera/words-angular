@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IonInput, IonModal, IonRange } from '@ionic/angular';
 import { Subscription, timer } from 'rxjs';
-import Collectible from '../gameObjects/collectible';
 import Entity from '../gameObjects/entity';
 import Letter from '../gameObjects/letter';
 import Level from '../gameObjects/level';
@@ -16,7 +15,9 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 })
 export class EditorComponent implements OnInit {
   @ViewChild('nameInput')
-  defaultInput: IonInput;
+  defaultInputName: IonInput;
+  @ViewChild('descInput')
+  defaultInputDesc: IonInput;
   @ViewChild(IonModal)
   modal: IonModal;
   @ViewChild('letterModal')
@@ -107,10 +108,23 @@ export class EditorComponent implements OnInit {
   }
   setLevelsizeX(e: EventTarget) {
     this.level.sizeX = e['value'];
+    if (this.level.player.x >= this.level.sizeX) {
+      this.level.player.x = this.level.sizeX - 1;
+    }
     this.refreshCanvas();
   }
+
+  deselectAll() {
+    this.selectedEraser = false;
+    this.selectedEntity = null;
+    this.selectedLetter = null;
+  }
+
   setLevelsizeY(e: EventTarget) {
     this.level.sizeY = e['value'];
+    if (this.level.player.y >= this.level.sizeY) {
+      this.level.player.y = this.level.sizeY - 1;
+    }
     this.refreshCanvas();
   }
 
@@ -149,7 +163,9 @@ export class EditorComponent implements OnInit {
         }
       }
     }
-    if (['mobs', 'other', 'obstacles'].includes(entityParams.type)) {
+    if (
+      ['mobs', 'other', 'obstacles', 'collectibles'].includes(entityParams.type)
+    ) {
       this.selectedEntity = new Entity(
         this.selectedKey,
         -1,
@@ -161,33 +177,22 @@ export class EditorComponent implements OnInit {
         this.imgMap[this.selectedKey],
         entityParams?.kills,
         entityParams?.additionalProperties,
-        entityParams?.ai
-      );
-    } else if (entityParams.type === 'collectibles') {
-      this.selectedEntity = new Collectible(
-        this.selectedKey,
-        -1,
-        -1,
-        entityParams['size'],
-        entityParams['layerValue'],
-        entityParams['isWalkable'],
-        entityParams['isPushable'],
-        this.imgMap[this.selectedKey],
-        entityParams?.additionalProperties,
+        entityParams?.ai,
+        entityParams['isCollectible'],
         true
       );
     }
     this.modal.dismiss(null, 'Confirm');
   }
   refreshCanvas() {
-    this.reCalculateTableDimensions();
+    this.recalculateTableDimensions();
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.drawGrid();
   }
 
   ngOnInit(): void {}
 
-  reCalculateTableDimensions() {
+  recalculateTableDimensions() {
     let cellHeight: number = this.initCellSize;
     let safetyCounter: number = 0;
     // Optimization for the grid size, not strictly needed but eh, looks cool
@@ -231,7 +236,7 @@ export class EditorComponent implements OnInit {
   pinFormatterY(value: number) {
     return `${value}`;
   }
-  reCalculateCanvasSize() {
+  recalculateCanvasSize() {
     let cellHeight: number = this.initCellSize;
     let safetyCounter: number = 0;
     // Optimization for the grid size, not strictly needed but eh, looks cool
@@ -259,16 +264,21 @@ export class EditorComponent implements OnInit {
 
     this.drawGrid();
   }
+  setDesc(e: EventTarget) {
+    this.level.description = e['value'];
+  }
+
   setName(e: EventTarget) {
     this.level.name = e['value'];
   }
 
   doClick(e: Event) {
+    let rect = this.ctx.canvas.getBoundingClientRect();
     if (this.selectedEntity) {
       if (this.selectedEntity.name === 'player') {
-        this.level.player.x = Math.floor((e['layerX'] - 5) / this.cellSize);
+        this.level.player.x = Math.floor((e['clientX'] - rect.left) / this.cellSize);
         this.level.player.y = Math.floor(
-          (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
+          (e['clientY'] - rect.top) / this.cellSize
         );
         this.selectedEntity = null;
         this.selectedKey = null;
@@ -284,42 +294,25 @@ export class EditorComponent implements OnInit {
         }
       }
       let createdEntity: Entity = null;
-      if (this.selectedEntity['isCollectible']) {
-        createdEntity = new Collectible(
-          this.selectedEntity.name,
-          this.selectedEntity.x,
-          this.selectedEntity.y,
-          this.selectedEntity['size'],
-          this.selectedEntity['layerValue'],
-          this.selectedEntity['isWalkable'],
-          this.selectedEntity['isPushable'],
-          [
-            'assets/images/entities/' + this.selectedEntity.name + '1.png',
-            'assets/images/entities/' + this.selectedEntity.name + '2.png',
-            'assets/images/entities/' + this.selectedEntity.name + '3.png',
-          ],
-          this.selectedEntity['additionalProperties'],
-          true
-        );
-      } else {
-        createdEntity = new Entity(
-          this.selectedEntity.name,
-          this.selectedEntity.x,
-          this.selectedEntity.y,
-          this.selectedEntity['size'],
-          this.selectedEntity['layerValue'],
-          this.selectedEntity['isWalkable'],
-          this.selectedEntity['isPushable'],
-          [
-            'assets/images/entities/' + this.selectedEntity.name + '1.png',
-            'assets/images/entities/' + this.selectedEntity.name + '2.png',
-            'assets/images/entities/' + this.selectedEntity.name + '3.png',
-          ],
-          this.selectedEntity?.kills,
-          this.selectedEntity['additionalProperties'],
-          this.selectedEntity?.ai
-        );
-      }
+      createdEntity = new Entity(
+        this.selectedEntity.name,
+        this.selectedEntity.x,
+        this.selectedEntity.y,
+        this.selectedEntity['size'],
+        this.selectedEntity['layerValue'],
+        this.selectedEntity['isWalkable'],
+        this.selectedEntity['isPushable'],
+        [
+          'assets/images/entities/' + this.selectedEntity.name + '1.png',
+          'assets/images/entities/' + this.selectedEntity.name + '2.png',
+          'assets/images/entities/' + this.selectedEntity.name + '3.png',
+        ],
+        this.selectedEntity?.kills,
+        this.selectedEntity['additionalProperties'],
+        this.selectedEntity?.ai,
+        this.selectedEntity['isCollectible'],
+        true
+      );
 
       this.level.entities.push(createdEntity);
     } else if (this.selectedLetter) {
@@ -343,9 +336,9 @@ export class EditorComponent implements OnInit {
       let toBeDeletedEntity: Entity = null;
       for (let levelEntity of this.level.entitiesMinusPlayer()) {
         if (
-          levelEntity.x === Math.floor((e['layerX'] - 5) / this.cellSize) &&
+          levelEntity.x === Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
           levelEntity.y ===
-            Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize)
+            Math.floor((e['clientY'] - rect.top) / this.cellSize)
         ) {
           toBeDeletedEntity = levelEntity;
         }
@@ -365,9 +358,9 @@ export class EditorComponent implements OnInit {
       }
     } else {
       if (
-        this.level.player.x === Math.floor((e['layerX'] - 5) / this.cellSize) &&
+        this.level.player.x === Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
         this.level.player.y ===
-          Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize)
+          Math.floor((e['clientY'] - rect.top) / this.cellSize)
       ) {
         this.selectedEntity = this.level.player;
         this.selectedKey = this.level.player.name;
@@ -379,31 +372,32 @@ export class EditorComponent implements OnInit {
   }
 
   mouseMove(e: Event) {
-    //item selection, not yet implemented
+    let rect = this.ctx.canvas.getBoundingClientRect();
     if (
       this.selectedEntity &&
-      Math.floor((e['layerX'] - 5) / this.cellSize) < this.level.sizeX &&
-      Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize) <
-        this.level.sizeY
+      Math.floor((e['clientX'] - rect.left) / this.cellSize) <
+        this.level.sizeX &&
+      Math.floor((e['clientY'] - rect.top) / this.cellSize) < this.level.sizeY
     ) {
-      this.selectedEntity.x = Math.floor((e['layerX'] - 5) / this.cellSize);
+      this.selectedEntity.x = Math.floor(
+        (e['clientX'] - rect.left) / this.cellSize
+      );
       this.selectedEntity.y = Math.floor(
-        (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
+        (e['clientY'] - rect.top) / this.cellSize
       );
     } else if (
       this.selectedLetter &&
-      Math.floor((e['layerX'] - 5) / this.cellSize) < this.level.sizeX &&
-      Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize) <
-        this.level.sizeY
+      Math.floor(e['clientX'] - rect.left) < this.level.sizeX &&
+      Math.floor((e['clientY'] - rect.top) / this.cellSize) < this.level.sizeY
     ) {
-      this.selectedLetter.x = Math.floor((e['layerX'] - 5) / this.cellSize);
+      this.selectedLetter.x = Math.floor((e['clientX'] - rect.left) / this.cellSize);
       this.selectedLetter.y = Math.floor(
-        (e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize
+        (e['clientY'] - rect.top) / this.cellSize
       );
     } else if (this.selectedEraser) {
       this.eraserPos = [
-        Math.floor((e['layerX'] - 5) / this.cellSize),
-        Math.floor((e['layerY'] - (this.cellSize/2 + 15)) / this.cellSize),
+        Math.floor((e['clientX'] - rect.left) / this.cellSize),
+        Math.floor((e['clientY'] - rect.top) / this.cellSize),
       ];
     }
   }
@@ -565,7 +559,8 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  saveToLocalStorage() {//TODO: safeguard for levels with the same name
+  saveToLocalStorage() {
+    //TODO: safeguard for levels with the same name
     this.validateErrors();
     if (Object.keys(this.validationErrors).length === 0) {
       if (Object.keys(this.validationErrors).length === 0) {
@@ -630,7 +625,7 @@ export class EditorComponent implements OnInit {
     }
     this.ctx.globalAlpha = 1;
     entityArray.forEach((entity) => {
-      if (!entity.frame){
+      if (!entity.frame) {
         entity.frame = 0;
       }
       if (entity.name === 'player') {
@@ -725,23 +720,44 @@ export class EditorComponent implements OnInit {
     this.level.levelFromObject(this.storedLevels[key]);
     this.rangeX.value = this.level.sizeX;
     this.rangeY.value = this.level.sizeY;
-    this.defaultInput.value = this.level.name;
+    this.defaultInputName.value = this.level.name;
+    this.defaultInputDesc.value = this.level.description;
     this.validateErrors();
     this.setupImgMap();
   }
-  importLevel() {}
 
-  checkLocalStorage(){
+  importLevelFromJSON(JSONData: JSON) {
+    this.level.levelFromObject(JSONData);
+    this.rangeX.value = this.level.sizeX;
+    this.rangeY.value = this.level.sizeY;
+    this.defaultInputName.value = this.level.name;
+    this.defaultInputDesc.value = this.level.description;
+    this.recalculateCanvasSize();
+  }
+
+  importLevel(eTarget: EventTarget) {
+    if (eTarget['files'].length > 0) {
+      const fileReader = new FileReader();
+      fileReader.readAsText(eTarget['files'][0], 'UTF-8');
+      fileReader.onload = () => {
+        this.importLevelFromJSON(JSON.parse(fileReader.result as string));
+      };
+      fileReader.onerror = (error) => {
+        console.error('Level was imporperly uploaded. Is the file too large?');
+      };
+    }
+  }
+
+  checkLocalStorage() {
     if (
-      !localStorage.getItem('levels') || localStorage.getItem('levels').length===0 ||
+      !localStorage.getItem('levels') ||
+      localStorage.getItem('levels').length === 0 ||
       localStorage.getItem('levels') === 'undefined' ||
       localStorage.getItem('levels') === '{}'
     ) {
       localStorage.removeItem('levels');
       this.localStorageLevelAvailable = false;
-    }
-    else
-    {
+    } else {
       this.localStorageLevelAvailable = true;
     }
   }
@@ -754,7 +770,7 @@ export class EditorComponent implements OnInit {
       localStorage.getItem('levels') !== 'undefined'
     ) {
       this.storedLevels = [];
-      let tempSavedLevelKeys:Array<string> = [];
+      let tempSavedLevelKeys: Array<string> = [];
       let tempStoredLevels = JSON.parse(localStorage.getItem('levels'));
       for (let [key, value] of Object.entries(tempStoredLevels)) {
         this.storedLevels[key] = value;
@@ -766,7 +782,8 @@ export class EditorComponent implements OnInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.defaultInput.value = '';
+    this.defaultInputName.value = '';
+    this.defaultInputDesc.value = '';
     this.imgMap = new Map<string, Array<HTMLImageElement>>();
     this.letterImgMap = new Map<string, Array<HTMLImageElement>>();
     this.eraserPos = [-1, -1];
@@ -784,7 +801,7 @@ export class EditorComponent implements OnInit {
     this.ctx = this.editorCanvas.nativeElement.getContext('2d');
     this.level = new Level(levelData.default);
 
-    this.reCalculateCanvasSize();
+    this.recalculateCanvasSize();
     this.subscription = timer(0, this.clockTick)
       .pipe()
       .subscribe(() => {

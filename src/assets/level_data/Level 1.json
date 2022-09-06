@@ -1,1 +1,42 @@
-{"sizeX":10,"sizeY":10,"name":"Level 1","id":1244.9998878680747,"debug":true,"letters":[{"name":"w","xPos":4,"yPos":2,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false},{"name":"i","xPos":5,"yPos":4,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false},{"name":"n","xPos":5,"yPos":5,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false}],"entities":[],"player":{"xPos":1,"yPos":5,"size":0,"layerValue":0}}
+{
+  "sizeX": 10,
+  "sizeY": 10,
+  "name": "Level 1",
+  "description":"Write something meaningful",
+  "id": 1244.9998878680747,
+  "debug": true,
+  "letters": [
+    {
+      "name": "w",
+      "xPos": 4,
+      "yPos": 2,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "i",
+      "xPos": 5,
+      "yPos": 4,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "n",
+      "xPos": 5,
+      "yPos": 5,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    }
+  ],
+  "entities": [],
+  "player": { "xPos": 1, "yPos": 5, "size": 0, "layerValue": 0 }
+}

@@ -18,18 +18,55 @@ export class CanvasComponent implements AfterViewInit {
   private cellSize: number = 100;
   private ctx: CanvasRenderingContext2D;
   private level: Level;
+  public recordedEntitiesAsSimpleDict: Record<string, any> = {};
   private missingTexturesImg: HTMLImageElement = new Image();
   private clockTick: number = 150; //arbitrary af
   private inventoryHeight: number = 200;
+  private initCellSize: number = 200;
+  public hoveredEntity: Entity = null;
+  public globalFrame: number = 0;
+  private debug: Boolean = true; //get rid of it later
   private arrayIndexInventoryItems: Array<[number, number, number, number]> =
     []; //shitty way to keep the indexes of the inventory item boxes "dynamically"
-  private imgMap: Map<string, Array<HTMLImageElement>> = new Map<
+  public imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>
   >();
+  public selectedLevel: string = 'Level 1';
+  public allLevels: Record<string, any> = {};
   constructor() {
     this.missingTexturesImg.src =
       '../assets/images/entities/missingTextures.png';
+  }
+
+  recalculateCanvasSize() {
+    let cellHeight: number = this.initCellSize;
+    let safetyCounter: number = 0;
+    // Optimization for the grid size, not strictly needed but eh, looks cool
+    while (
+      safetyCounter < 100 &&
+      cellHeight * this.level.sizeY >
+        window.innerHeight - cellHeight * 2 - this.inventoryHeight
+    ) {
+      cellHeight *= 0.9; //somehow giving this more precision makes the grid overflow to to the bottom...?
+      safetyCounter += 1;
+    }
+    let cellWidth = Math.floor(cellHeight);
+    safetyCounter = 0;
+    while (
+      safetyCounter < 100 &&
+      cellWidth * this.level.sizeX > window.innerWidth
+    ) {
+      cellWidth *= 0.9;
+      safetyCounter += 1;
+    }
+    this.cellSize = Math.floor(cellWidth < cellHeight ? cellWidth : cellHeight);
+    let theight = this.cellSize * this.level.sizeY + this.inventoryHeight;
+    let twidth = this.cellSize * this.level.sizeX;
+    this.ctx.canvas.height = theight; //canvas overflows a little bit to the bottom because of the titles etc. TODO: change how that works
+    this.ctx.canvas.width = twidth;
+
+    this.drawGrid();
   }
   mouseMove(e: Event) {
     //item selection, not yet implemented
@@ -48,8 +85,28 @@ export class CanvasComponent implements AfterViewInit {
         // console.log('No item selected');
       }
     }
+
+    //entity hover
+    let hovered: Boolean = false;
+    let rect = this.ctx.canvas.getBoundingClientRect();
+    // console.log('Cellsize:', this.cellSize);
+    // console.log(e['clientX'] - rect.left);
+    for (let entity of this.level.entitiesAndPlayer()) {
+      if (
+        Math.floor((e['clientX'] - rect.left) / this.cellSize) === entity.x &&
+        Math.floor((e['clientY'] - rect.top) / this.cellSize) === entity.y
+      ) {
+        hovered = true;
+        this.hoveredEntity = entity;
+        break;
+      }
+    }
+    if (!hovered) {
+      this.hoveredEntity = null;
+    }
   }
   doClick(e: Event) {
+    let rect = this.ctx.canvas.getBoundingClientRect();
     let selected: Boolean = false;
     if (
       this.arrayIndexInventoryItems.length ===
@@ -57,10 +114,10 @@ export class CanvasComponent implements AfterViewInit {
     ) {
       for (let i = 0; i < this.arrayIndexInventoryItems.length; i++) {
         if (
-          e['layerX'] >= this.arrayIndexInventoryItems[i][0] &&
-          e['layerX'] <= this.arrayIndexInventoryItems[i][2] &&
-          e['layerY'] >= this.arrayIndexInventoryItems[i][1] &&
-          e['layerY'] <= this.arrayIndexInventoryItems[i][3]
+          e['clientX']-rect.left >= this.arrayIndexInventoryItems[i][0] &&
+          e['clientX']-rect.left <= this.arrayIndexInventoryItems[i][2] &&
+          e['clientY']-rect.top >= this.arrayIndexInventoryItems[i][1] &&
+          e['clientY']-rect.top <= this.arrayIndexInventoryItems[i][3]
         ) {
           if (this.level.player.selectedInventoryItem !== i) {
             this.level.player.selectedInventoryItem = i;
@@ -93,10 +150,7 @@ export class CanvasComponent implements AfterViewInit {
       }
       this.ctx.moveTo(i, 0);
       this.ctx.strokeStyle = '#cccccc';
-      this.ctx.lineTo(
-        i,
-        this.mainCanvas.nativeElement.height - this.inventoryHeight * 0.9
-      );
+      this.ctx.lineTo(i, this.cellSize * this.level.sizeY);
     }
     for (
       let i = 0;
@@ -120,7 +174,7 @@ export class CanvasComponent implements AfterViewInit {
       if (this.level.player.selectedInventoryItem === i) {
         roundRect(
           this.ctx,
-          50 + (i * this.inventoryHeight) / 2,
+          1 + (i * this.inventoryHeight) / 2,
           this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
           this.inventoryHeight / 2 - 10,
           this.inventoryHeight / 2 - 10,
@@ -130,7 +184,7 @@ export class CanvasComponent implements AfterViewInit {
       } else {
         roundRect(
           this.ctx,
-          50 + (i * this.inventoryHeight) / 2,
+          10 + (i * this.inventoryHeight) / 2,
           this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
           this.inventoryHeight / 2 - 10,
           this.inventoryHeight / 2 - 10,
@@ -180,7 +234,8 @@ export class CanvasComponent implements AfterViewInit {
         entity.updateFrame();
       } else if (
         entity === this.level.player.playerIsInVehicle ||
-        (entity.x !== this.level.player.x || entity.y !== this.level.player.y)
+        entity.x !== this.level.player.x ||
+        entity.y !== this.level.player.y
       ) {
         try {
           this.ctx.drawImage(
@@ -206,6 +261,8 @@ export class CanvasComponent implements AfterViewInit {
 
   restart() {
     this.subscription.unsubscribe();
+
+    this.recalculateCanvasSize();
     this.ngAfterViewInit();
   }
 
@@ -319,37 +376,69 @@ export class CanvasComponent implements AfterViewInit {
     this.ctx.fill();
     this.drawGrid(); //grid is behind everything else
     this.animateObjects(this.level.entitiesAndPlayer());
+    this.globalFrame = (this.globalFrame + 1) % 3;
+  }
+
+  loadAllLevels = async () => {
+    let levelRecord: Record<string, any> = {};
+    let i: number = 1;
+    let tmpLevelData = null;
+    while (1) {
+      try {
+        await import('../../assets/level_data/Level ' + i + '.json')
+          .then((data) => {
+            tmpLevelData = data;
+          })
+          .catch(() => {
+            throw 'NotFoundError';
+          });
+      } catch {
+        break;
+      }
+      levelRecord[tmpLevelData.name] = tmpLevelData.default;
+      i++;
+    }
+    if (this.debug) {
+      console.info('Debug mode on.');
+      let additionalLevel: any = null;
+      for (let names of ['test_level', 'testCat&rat']) {
+        additionalLevel = await import(
+          '../../assets/level_data/' + names + '.json'
+        );
+        levelRecord[additionalLevel.name] = additionalLevel.default;
+      }
+    }
+    return levelRecord;
+  };
+
+  selectLevel(event: Event) {
+    this.selectedLevel = event.target['value'];
+    this.restart();
   }
 
   async ngAfterViewInit(): Promise<void> {
-    let levelData = await import('../../assets/level_data/testCat&rat.json');
-    this.level = new Level(levelData.default);
-    //this.level.showData(); //For debugging only$
+    for (let entityOfTypes of Object.values(recordedEntities)) {
+      for (let [name, entity] of Object.entries(entityOfTypes)) {
+        this.recordedEntitiesAsSimpleDict[name] = entity;
+      }
+    }
+    this.recordedEntitiesAsSimpleDict['player'] = {
+      name: 'Player',
+      verboseName: 'You',
+      description: "That's you, the player. You look good ;)",
+    };
+    this.allLevels = await this.loadAllLevels();
     this.ctx = this.mainCanvas.nativeElement.getContext('2d');
-    let cellHeight: number = this.cellSize;
-    let safetyCounter: number = 0;
-    // Optimization for the grid size, not strictly needed but eh, looks cool
-    while (
-      safetyCounter < 100 &&
-      cellHeight * this.level.sizeY > window.innerHeight - this.inventoryHeight
-    ) {
-      cellHeight *= 0.9; //somehow giving this more precision makes the grid overflow to to the bottom...?
-      safetyCounter += 1;
+
+    let levelData: any = null;
+    if (!this.selectedLevel) {
+      levelData = this.allLevels['Level 1'];
+    } else {
+      levelData = this.allLevels[this.selectedLevel];
     }
-    let cellWidth = Math.floor(cellHeight);
-    safetyCounter = 0;
-    while (
-      safetyCounter < 100 &&
-      cellWidth * this.level.sizeX > window.innerWidth
-    ) {
-      cellWidth *= 0.9;
-      safetyCounter += 1;
-    }
-    this.cellSize = Math.floor(cellWidth);
-    let theight = this.cellSize * this.level.sizeY;
-    let twidth = this.cellSize * this.level.sizeX;
-    this.ctx.canvas.height = theight + this.inventoryHeight * 0.9; //TODO : find a better fix for the height & width issue
-    this.ctx.canvas.width = twidth;
+    this.level = new Level(levelData);
+    this.recalculateCanvasSize();
+
     this.drawGrid();
 
     this.ctx.fill();

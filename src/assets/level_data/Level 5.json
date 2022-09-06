@@ -1,0 +1,753 @@
+{
+  "sizeX": 14,
+  "sizeY": 14,
+  "name": "Level 5",
+  "id": 8584.967330799336,
+  "description":"Make a boat",
+  "debug": true,
+  "letters": [
+    {
+      "name": "b",
+      "xPos": 2,
+      "yPos": 5,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "o",
+      "xPos": 4,
+      "yPos": 5,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "a",
+      "xPos": 6,
+      "yPos": 5,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "t",
+      "xPos": 8,
+      "yPos": 5,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    }
+  ],
+  "entities": [
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 9,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 10,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 11,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "win",
+      "xPos": 12,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "wins": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 6,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 2,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 1,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 0,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 7,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 8,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 9,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 10,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 11,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 12,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 13,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    },
+    {
+      "name": "water",
+      "xPos": 12,
+      "yPos": 13,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "isSwimeable": true }
+    }
+  ],
+  "player": { "xPos": 0, "yPos": 5, "size": 1, "layerValue": 0 }
+}

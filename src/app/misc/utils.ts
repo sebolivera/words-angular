@@ -12,6 +12,7 @@ export const pathFinderAStar = (
   start: [number, number],
   end: [number, number],
   inputGrid: any,
+  canWalkDiagonnally: Boolean = false,
   maxIterations: number = 10000
 ): Array<[number, number]> => {
   let path: Array<[number, number]> = [];
@@ -44,7 +45,10 @@ export const pathFinderAStar = (
         j <= (pos[1] < grid[0].length - 1 ? pos[1] + 1 : grid[0].length - 1);
         j++
       ) {
-        if (i !== pos[0] || j !== pos[1]) {
+        if (
+          (i !== pos[0] || j !== pos[1]) &&
+          (canWalkDiagonnally || pos[0] === i || pos[1] === j)
+        ) {
           grid[i][j].g = heuristicTimesTen([i, j], start);
           grid[i][j].h = heuristicTimesTen([i, j], end);
           grid[i][j].f = grid[i][j].h + grid[i][j].g;
@@ -120,7 +124,8 @@ export const pathFinderAStar = (
         if (
           (i !== current[0] || j !== current[1]) &&
           grid[i][j].walkable &&
-          !closedSet.has([i, j].toString())
+          !closedSet.has([i, j].toString()) &&
+          (canWalkDiagonnally || current[0] === i || current[1] === j)
         ) {
           if (
             !openSet.has([i, j].toString()) &&
@@ -160,8 +165,7 @@ export const pathFinderAStar = (
     path.pop(); //excludes the starting cell
     path.unshift(end); //adds the player position that I accidently removed above
     return path;
-  } 
-  else {
+  } else {
     return [start];
   }
 };

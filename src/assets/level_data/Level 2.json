@@ -1,1 +1,143 @@
-{"sizeX":10,"sizeY":10,"name":"Level 2","id":1266.8973555859443,"debug":true,"letters":[{"name":"g","xPos":2,"yPos":1,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false},{"name":"l","xPos":3,"yPos":1,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false},{"name":"o","xPos":1,"yPos":2,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false},{"name":"a","xPos":1,"yPos":1,"cellSize":1,"layerValue":1,"isWalkable":false,"isPushable":true,"kills":false}],"entities":[{"name":"wall","xPos":4,"yPos":4,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":4,"yPos":3,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":6,"yPos":3,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":5,"yPos":3,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":6,"yPos":4,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":6,"yPos":5,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":5,"yPos":5,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"wall","xPos":4,"yPos":5,"layerValue":0,"isWalkable":false,"isPushable":false,"kills":false,"additionalProperties":null},{"name":"win","xPos":5,"yPos":4,"layerValue":0,"isWalkable":true,"isPushable":false,"kills":false,"additionalProperties":{"wins":true}}],"player":{"xPos":1,"yPos":6,"size":1,"layerValue":0}}
+{
+  "sizeX": 10,
+  "sizeY": 10,
+  "name": "Level 2",
+  "id": 1266.8973555859443,
+  "description":"Think different",
+  "debug": true,
+  "letters": [
+    {
+      "name": "g",
+      "xPos": 2,
+      "yPos": 1,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "l",
+      "xPos": 3,
+      "yPos": 1,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "o",
+      "xPos": 1,
+      "yPos": 2,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    },
+    {
+      "name": "a",
+      "xPos": 1,
+      "yPos": 1,
+      "cellSize": 1,
+      "layerValue": 1,
+      "isWalkable": false,
+      "isPushable": true,
+      "kills": false
+    }
+  ],
+  "entities": [
+    {
+      "name": "wall",
+      "xPos": 4,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 4,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 6,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 5,
+      "yPos": 3,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 6,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 6,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 5,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "wall",
+      "xPos": 4,
+      "yPos": 5,
+      "layerValue": 0,
+      "isWalkable": false,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": null
+    },
+    {
+      "name": "win",
+      "xPos": 5,
+      "yPos": 4,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "additionalProperties": { "wins": true }
+    }
+  ],
+  "player": { "xPos": 1, "yPos": 6, "size": 1, "layerValue": 0 }
+}
