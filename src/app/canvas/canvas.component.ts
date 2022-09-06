@@ -311,7 +311,7 @@ export class CanvasComponent implements AfterViewInit {
     let x = this.level.player.x;
     let y = this.level.player.y;
     switch (event.key) {
-      case 'ArrowUp': //TODO: fix player clipping through moving entities
+      case 'ArrowUp':
         y--;
         this.level.addToHistory();
         this.level.moveAIs();
@@ -343,7 +343,6 @@ export class CanvasComponent implements AfterViewInit {
     if (this.level.checkPlayerDeath()) {
       this.restart();
     }
-    //TODO: Fix this part so that multiple objects can be pushed. Also, make it legible.
     if (
       x >= 0 &&
       y >= 0 &&

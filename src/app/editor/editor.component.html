@@ -148,15 +148,17 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content *ngIf="recordedEntities" class="ion-padding">
+    
+    <ion-content *ngIf="searchSafeRecordedEntities" class="ion-padding">
+      <ion-searchbar showCancelButton="never" (ionChange)="setSearchTerm($event.target)"></ion-searchbar>
       <ion-list>
-        <ion-item *ngFor="let entityGroup of recordedEntities.default | keyvalue">
+        <ion-item *ngFor="let entityGroup of searchSafeRecordedEntities | keyvalue">
           <div style="display: flex; flex-direction: column">
             <h2>{{ titleCaseWord(entityGroup.key) }}</h2>
             <ion-grid col-4>
               <ion-row>
                 <ion-col size="4" *ngFor="let entity of entityGroup.value | keyvalue">
-                  <span [class]="{
+                  <span *ngIf="searchTerm==='' || ((entity.key|lowercase).startsWith(searchTerm))" [class]="{
                       clickable: entity.key !== selectedKey,
                       clicked: entity.key === selectedKey
                     }" style="display: flex; flex-direction: column" (click)="selectEntity(entity.key)">

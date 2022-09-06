@@ -37,7 +37,9 @@ export class EditorComponent implements OnInit {
   private initCellSize: number = 200;
   public selectedEraser: Boolean = false;
   private cellSize: number = 100;
+  public searchTerm: string = '';
   public recordedEntities: any = null;
+  public searchSafeRecordedEntities: any = null;
   private ctx: CanvasRenderingContext2D;
   public defaultName: string;
   public currentFrame: number = 0;
@@ -276,7 +278,9 @@ export class EditorComponent implements OnInit {
     let rect = this.ctx.canvas.getBoundingClientRect();
     if (this.selectedEntity) {
       if (this.selectedEntity.name === 'player') {
-        this.level.player.x = Math.floor((e['clientX'] - rect.left) / this.cellSize);
+        this.level.player.x = Math.floor(
+          (e['clientX'] - rect.left) / this.cellSize
+        );
         this.level.player.y = Math.floor(
           (e['clientY'] - rect.top) / this.cellSize
         );
@@ -336,7 +340,8 @@ export class EditorComponent implements OnInit {
       let toBeDeletedEntity: Entity = null;
       for (let levelEntity of this.level.entitiesMinusPlayer()) {
         if (
-          levelEntity.x === Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
+          levelEntity.x ===
+            Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
           levelEntity.y ===
             Math.floor((e['clientY'] - rect.top) / this.cellSize)
         ) {
@@ -358,7 +363,8 @@ export class EditorComponent implements OnInit {
       }
     } else {
       if (
-        this.level.player.x === Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
+        this.level.player.x ===
+          Math.floor((e['clientX'] - rect.left) / this.cellSize) &&
         this.level.player.y ===
           Math.floor((e['clientY'] - rect.top) / this.cellSize)
       ) {
@@ -390,7 +396,9 @@ export class EditorComponent implements OnInit {
       Math.floor(e['clientX'] - rect.left) < this.level.sizeX &&
       Math.floor((e['clientY'] - rect.top) / this.cellSize) < this.level.sizeY
     ) {
-      this.selectedLetter.x = Math.floor((e['clientX'] - rect.left) / this.cellSize);
+      this.selectedLetter.x = Math.floor(
+        (e['clientX'] - rect.left) / this.cellSize
+      );
       this.selectedLetter.y = Math.floor(
         (e['clientY'] - rect.top) / this.cellSize
       );
@@ -725,7 +733,32 @@ export class EditorComponent implements OnInit {
     this.validateErrors();
     this.setupImgMap();
   }
-
+  setSearchTerm(t: EventTarget) {
+    this.searchSafeRecordedEntities = {};
+    for (let [keyCat, valueCat] of Object.entries(this.recordedEntities.default)) {
+      if (keyCat.includes(t['value'])) {
+        this.searchSafeRecordedEntities[keyCat] = valueCat;
+      } else {
+        for (let [key, value] of Object.entries(valueCat)) {
+          if (
+            key.includes(t['value']) ||
+            (value['verboseName'] &&
+              value['verboseName'].includes(t['value'])) ||
+            (value['description'] && value['description'].includes(t['value']))
+          ) {
+            if (keyCat in this.searchSafeRecordedEntities) {
+              this.searchSafeRecordedEntities[keyCat][key] = value;
+            }
+            else
+            {
+              this.searchSafeRecordedEntities[keyCat] = {};
+              this.searchSafeRecordedEntities[keyCat][key] = value;
+            }
+          }
+        }
+      }
+    }
+  }
   importLevelFromJSON(JSONData: JSON) {
     this.level.levelFromObject(JSONData);
     this.rangeX.value = this.level.sizeX;
@@ -797,6 +830,7 @@ export class EditorComponent implements OnInit {
     this.recordedEntities = await import(
       '../../assets/entityData/entities.json'
     );
+    this.searchSafeRecordedEntities = { ...this.recordedEntities.default };
     this.setupImgMap();
     this.ctx = this.editorCanvas.nativeElement.getContext('2d');
     this.level = new Level(levelData.default);
