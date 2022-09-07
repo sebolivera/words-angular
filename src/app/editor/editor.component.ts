@@ -166,7 +166,7 @@ export class EditorComponent implements OnInit {
       }
     }
     if (
-      ['mobs', 'other', 'obstacles', 'collectibles'].includes(entityParams.type)
+      ['mobs', 'other', 'obstacles', 'collectibles', 'vehicles'].includes(entityParams.type)
     ) {
       this.selectedEntity = new Entity(
         this.selectedKey,

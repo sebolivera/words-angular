@@ -138,21 +138,21 @@
       "isPushable": false,
       "kills": false,
       "additionalProperties": { "locked": true }
+    },
+    "log":{
+      "name":"log",
+      "verboseName":"Wood log",
+      "description" : "A wooden log. It looks too heavy to carry.",
+      "editorDescription" : "Wood log. Is pushable and flammable.",
+      "cellSize": 1,
+      "layerValue" : 0,
+      "isPushable":true,
+      "isWalkable":false,
+      "isCollectible" :false,
+      "additionalProperties" : {"flammable":true}
     }
   },
   "collectibles": {
-    "key": {
-      "name": "key",
-      "verboseName": "Common Key",
-      "description": "A key. Who knows what it could unlock.",
-      "editorDescription": "Key collectible. Can open locked doors and vehicles.",
-      "cellSize": 1,
-      "layerValue": 0,
-      "isWalkable": true,
-      "isPushable": true,
-      "isCollectible": true,
-      "additionalProperties": null
-    },
     "beak": {
       "name": "beak",
       "verboseName": "Bird Beak",
@@ -177,17 +177,29 @@
       "isCollectible": true,
       "additionalProperties": { "useless": true }
     },
-    "toy": {
-      "name": "toy",
-      "verboseName": "Toy",
-      "description": "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
-      "editorDescription": "Toy collectible. Distracts seeking enemies if placed closer than the player to them.",
+    "key": {
+      "name": "key",
+      "verboseName": "Common Key",
+      "description": "A key. You can unlock locked tiles by walking on them while holding it or using the key from your inventory.",
+      "editorDescription": "Key collectible. Can open locked doors and vehicles.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "isCollectible": true,
+      "additionalProperties": null
+    },
+    "oat": {
+      "name": "oat",
+      "verboseName": "Common Oat",
+      "description": "A strand of oat, what were you expecting?",
+      "editorDescription": "Oat collectible. Useless.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": { "useless": true }
+      "additionalProperties": null
     },
     "toe": {
       "name": "toe",
@@ -201,17 +213,29 @@
       "isCollectible": true,
       "additionalProperties": { "wins": true }
     },
-    "oat": {
-      "name": "oat",
-      "verboseName": "Common Oat",
-      "description": "A strand of oat, what were you expecting?",
-      "editorDescription": "Oat collectible. Useless.",
+    "toy": {
+      "name": "toy",
+      "verboseName": "Toy",
+      "description": "This kind of looks like a stuffed bear, but you can't seem to shake the impression that it follows your movements with its gaze.",
+      "editorDescription": "Toy collectible. Distracts seeking enemies if placed closer than the player to them.",
       "cellSize": 1,
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": null
+      "additionalProperties": { "useless": true }
+    },
+    "match": {
+      "name": "match",
+      "verboseName": "Match",
+      "description": "Some would just watch the whole world burn. But not you, you're going to have to be satisfied with just this match.",
+      "editorDescription": "Match collectible. Can burn burnable tiles.",
+      "cellSize": 1,
+      "layerValue": 0,
+      "isPushable": false,
+      "isWalkable": true,
+      "isCollectible": true,
+      "additionalProperties": { "burns":true }
     }
   },
   "vehicles": {

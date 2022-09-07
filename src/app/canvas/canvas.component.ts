@@ -24,7 +24,7 @@ export class CanvasComponent implements AfterViewInit {
   private clockTick: number = 150; //arbitrary af
   private inventoryHeight: number = 200;
   private initCellSize: number = 200;
-  public hoveredEntity: Entity = null;
+  public displayEntity: Entity = null;
   public globalFrame: number = 0;
   private winCondImage: Array<HTMLImageElement> = [];
   private debug: Boolean = true; //get rid of it later
@@ -114,18 +114,29 @@ export class CanvasComponent implements AfterViewInit {
           Math.floor((e['clientY'] - rect.top) / this.cellSize) === entity.y
         ) {
           hovered = true;
-          this.hoveredEntity = entity;
+          if (this.level.player.selectedInventoryItem === -1) {
+            this.displayEntity = entity;
+          }
           break;
         }
       }
-      if (!hovered) {
-        this.hoveredEntity = null;
+      if (!hovered && this.level.player.selectedInventoryItem === -1) {
+        this.displayEntity = null;
       }
     }
   }
   doClick(e: Event) {
     let rect = this.ctx.canvas.getBoundingClientRect();
     let selected: Boolean = false;
+    console.log(
+      Math.floor(e['clientX'] - rect.left),
+      Math.floor(e['clientY'] - rect.top),
+      'rect:',
+      this.arrayIndexInventoryItems[0][0],
+      this.arrayIndexInventoryItems[0][2],
+      Math.floor(this.arrayIndexInventoryItems[0][1]),
+      Math.floor(this.arrayIndexInventoryItems[0][3])
+    );
     if (
       this.arrayIndexInventoryItems.length ===
       this.level.player.maxInventorySize
@@ -140,13 +151,33 @@ export class CanvasComponent implements AfterViewInit {
           if (this.level.player.selectedInventoryItem !== i) {
             this.level.player.selectedInventoryItem = i;
             selected = true;
+            // console.log(this.level.player.selectedInventoryItem)
+
+            if (
+              this.level.player.inventory[
+                this.level.player.selectedInventoryItem
+              ]
+            ) {
+              this.displayEntity =
+                this.level.player.inventory[
+                  this.level.player.selectedInventoryItem
+                ];
+            }
           } else {
             this.level.player.selectedInventoryItem = -1;
+            this.displayEntity = null;
           }
           break;
         }
       }
     }
+    // if (!this.level.player.inventory[
+    //   this.level.player.selectedInventoryItem
+    // ])
+    // {
+    //   selected = false;
+    //   this.displayEntity=null;
+    // }
     if (!selected) {
       this.level.player.selectedInventoryItem = -1;
     }
@@ -169,13 +200,12 @@ export class CanvasComponent implements AfterViewInit {
       let winSentence: Array<string> = 'Press n to go to the next level'
         .toLowerCase()
         .split('');
-      let sentenceLength = winSentence.length*10;
+      let sentenceLength = winSentence.length * 10;
       for (let i = 0; i < winSentence.length; i++) {
         if (winSentence[i] !== ' ') {
           this.ctx.drawImage(
             this.letterImgMap[winSentence[i]][this.globalFrame],
-            (this.ctx.canvas.width-sentenceLength)/2 +
-              (i * 10),//I am crap at math
+            (this.ctx.canvas.width - sentenceLength) / 2 + i * 10, //I am crap at math
             ((this.level.sizeY - 1) / 2) * this.cellSize + 150,
             10,
             10
@@ -242,18 +272,23 @@ export class CanvasComponent implements AfterViewInit {
             '#7777DD'
           );
         }
+        // console.log("Rect format:",
+        //   10 + (i * this.inventoryHeight) / 2,
+        //   this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+        //   this.inventoryHeight / 2 - 10,
+        //   this.inventoryHeight / 2 - 10)
         if (
           this.arrayIndexInventoryItems.length <
           this.level.player.maxInventorySize
         ) {
           this.arrayIndexInventoryItems.push([
-            50 + (i * this.inventoryHeight) / 2,
+            10 + (i * this.inventoryHeight) / 2,
             this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-            this.inventoryHeight / 2 - 10 + 50 + (i * this.inventoryHeight) / 2,
-            this.inventoryHeight / 2 -
-              10 +
-              this.mainCanvas.nativeElement.height -
-              this.inventoryHeight / 1.5,
+            10 + (i * this.inventoryHeight) / 2 + this.inventoryHeight / 2 - 10,
+            this.mainCanvas.nativeElement.height -
+              this.inventoryHeight / 1.5 +
+              this.inventoryHeight / 2 -
+              10,
           ]);
         }
 
@@ -266,6 +301,12 @@ export class CanvasComponent implements AfterViewInit {
             this.inventoryHeight / 2 - 10,
             this.inventoryHeight / 2 - 10
           );
+
+          // console.log("IMG format:",
+          //   10 + (i * this.inventoryHeight) / 2,
+          //   this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+          //   this.inventoryHeight / 2 - 10,
+          //   this.inventoryHeight / 2 - 10)
           inventoryItem.updateFrame();
         }
       }
@@ -482,7 +523,7 @@ export class CanvasComponent implements AfterViewInit {
     if (this.debug) {
       console.info('Debug mode on.');
       let additionalLevel: any = null;
-      for (let names of ['test_level', 'testCat&rat']) {
+      for (let names of ['test_level', 'testCat&rat', 'caca']) {
         additionalLevel = await import(
           '../../assets/level_data/' + names + '.json'
         );

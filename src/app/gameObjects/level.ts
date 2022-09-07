@@ -211,9 +211,7 @@ export default class Level {
         let tEntities: Array<Entity> = [];
         for (let entities of this.levelHistory[this.levelHistory.length - 1]
           .entities) {
-          if (
-            entities.playerIsIn
-          ) {
+          if (entities.playerIsIn) {
             vehicle.x = this.player.x;
             vehicle.y = this.player.y;
             tEntities.push(vehicle);

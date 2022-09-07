@@ -24,16 +24,16 @@
         {{moveAmount}}
       </ion-item>
 
-      <ion-item *ngIf="hoveredEntity!==null" lines="none" class="off-the-top">
+      <ion-item *ngIf="displayEntity!==null" lines="none" class="off-the-top">
         <ion-card>
           <ion-card-header>
-            <ion-img [src]="imgMap[hoveredEntity.name][globalFrame].src" style="width:50px"></ion-img>
-            <ion-card-subtitle>{{hoveredEntity.name|titlecase}}</ion-card-subtitle>
+            <ion-img [src]="imgMap[displayEntity.name][globalFrame].src" style="width:50px"></ion-img>
+            <ion-card-subtitle>{{displayEntity.name|titlecase}}</ion-card-subtitle>
             <ion-card-title>
-              {{hoveredEntity.name.length>1?recordedEntitiesAsSimpleDict[hoveredEntity.name].verboseName:'The Letter '+hoveredEntity.name|titlecase}}</ion-card-title>
+              {{displayEntity.name.length>1?recordedEntitiesAsSimpleDict[displayEntity.name].verboseName:'The Letter '+displayEntity.name|titlecase}}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>{{hoveredEntity.name.length<=1?'Move letters around to form words':
-              recordedEntitiesAsSimpleDict[hoveredEntity.name].description}} </ion-card-content>
+          <ion-card-content>{{displayEntity.name.length<=1?'Move letters around to form words':
+              recordedEntitiesAsSimpleDict[displayEntity.name].description}} </ion-card-content>
         </ion-card>
       </ion-item>
     </ion-content>
