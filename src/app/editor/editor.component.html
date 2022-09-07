@@ -148,9 +148,11 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    
-    <ion-content *ngIf="searchSafeRecordedEntities" class="ion-padding">
-      <ion-searchbar showCancelButton="never" (ionChange)="setSearchTerm($event.target)"></ion-searchbar>
+
+    <ion-content *ngIf="searchSafeRecordedEntities" class="ion-padding off-the-top">
+      <ion-item lines="none" class="stickySearch">
+        <ion-searchbar showCancelButton="never" (ionChange)="setSearchTerm($event.target)" sticky></ion-searchbar>
+      </ion-item>
       <ion-list>
         <ion-item *ngFor="let entityGroup of searchSafeRecordedEntities | keyvalue">
           <div style="display: flex; flex-direction: column">

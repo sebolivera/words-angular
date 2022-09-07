@@ -21,12 +21,24 @@
   }
 }
 
-.fullWidth{
-  width:100%;
+.fullWidth {
+  width: 100%;
 }
 
-.flexList
-{
-  display:flex;
+.flexList {
+  display: flex;
   flex-direction: column;
+}
+
+.stickySearch {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  top: 3.5rem;
+  background-color: --ion-color-primary-contrast-rgb;
+}
+.off-the-top
+{
+  top:2rem;
 }

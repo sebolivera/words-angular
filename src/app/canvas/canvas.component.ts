@@ -16,6 +16,7 @@ export class CanvasComponent implements AfterViewInit {
   private mainCanvas: ElementRef = {} as ElementRef;
   private subscription: Subscription;
   private cellSize: number = 100;
+  public moveAmount: number = 0;
   private ctx: CanvasRenderingContext2D;
   private level: Level;
   public recordedEntitiesAsSimpleDict: Record<string, any> = {};
@@ -25,6 +26,7 @@ export class CanvasComponent implements AfterViewInit {
   private initCellSize: number = 200;
   public hoveredEntity: Entity = null;
   public globalFrame: number = 0;
+  private winCondImage: Array<HTMLImageElement> = [];
   private debug: Boolean = true; //get rid of it later
   private arrayIndexInventoryItems: Array<[number, number, number, number]> =
     []; //shitty way to keep the indexes of the inventory item boxes "dynamically"
@@ -34,9 +36,23 @@ export class CanvasComponent implements AfterViewInit {
   >();
   public selectedLevel: string = 'Level 1';
   public allLevels: Record<string, any> = {};
+  public letterImgMap: Record<string, Array<HTMLImageElement>> = {}; //only for text display
   constructor() {
     this.missingTexturesImg.src =
       '../assets/images/entities/missingTextures.png';
+    for (let i = 1; i <= 3; i++) {
+      this.winCondImage.push(new Image());
+      this.winCondImage[this.winCondImage.length - 1].src =
+        '/assets/images/entities/WinCond' + i + '.png';
+    }
+    for (let letter of 'abcdefghijklmnopqrstuvwxyz'.split('')) {
+      this.letterImgMap[letter] = [];
+      for (let i = 1; i <= 3; i++) {
+        this.letterImgMap[letter].push(new Image());
+        this.letterImgMap[letter][i - 1].src =
+          'assets/images/letters/' + letter + i + '.png';
+      }
+    }
   }
 
   recalculateCanvasSize() {
@@ -86,23 +102,25 @@ export class CanvasComponent implements AfterViewInit {
       }
     }
 
-    //entity hover
-    let hovered: Boolean = false;
-    let rect = this.ctx.canvas.getBoundingClientRect();
-    // console.log('Cellsize:', this.cellSize);
-    // console.log(e['clientX'] - rect.left);
-    for (let entity of this.level.entitiesAndPlayer()) {
-      if (
-        Math.floor((e['clientX'] - rect.left) / this.cellSize) === entity.x &&
-        Math.floor((e['clientY'] - rect.top) / this.cellSize) === entity.y
-      ) {
-        hovered = true;
-        this.hoveredEntity = entity;
-        break;
+    if (!this.level || !this.level.won) {
+      //entity hover
+      let hovered: Boolean = false;
+      let rect = this.ctx.canvas.getBoundingClientRect();
+      // console.log('Cellsize:', this.cellSize);
+      // console.log(e['clientX'] - rect.left);
+      for (let entity of this.level.entitiesAndPlayer()) {
+        if (
+          Math.floor((e['clientX'] - rect.left) / this.cellSize) === entity.x &&
+          Math.floor((e['clientY'] - rect.top) / this.cellSize) === entity.y
+        ) {
+          hovered = true;
+          this.hoveredEntity = entity;
+          break;
+        }
       }
-    }
-    if (!hovered) {
-      this.hoveredEntity = null;
+      if (!hovered) {
+        this.hoveredEntity = null;
+      }
     }
   }
   doClick(e: Event) {
@@ -114,10 +132,10 @@ export class CanvasComponent implements AfterViewInit {
     ) {
       for (let i = 0; i < this.arrayIndexInventoryItems.length; i++) {
         if (
-          e['clientX']-rect.left >= this.arrayIndexInventoryItems[i][0] &&
-          e['clientX']-rect.left <= this.arrayIndexInventoryItems[i][2] &&
-          e['clientY']-rect.top >= this.arrayIndexInventoryItems[i][1] &&
-          e['clientY']-rect.top <= this.arrayIndexInventoryItems[i][3]
+          e['clientX'] - rect.left >= this.arrayIndexInventoryItems[i][0] &&
+          e['clientX'] - rect.left <= this.arrayIndexInventoryItems[i][2] &&
+          e['clientY'] - rect.top >= this.arrayIndexInventoryItems[i][1] &&
+          e['clientY'] - rect.top <= this.arrayIndexInventoryItems[i][3]
         ) {
           if (this.level.player.selectedInventoryItem !== i) {
             this.level.player.selectedInventoryItem = i;
@@ -135,109 +153,129 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   drawGrid(): void {
-    this.ctx.beginPath();
-    this.ctx.lineWidth = 2;
-    this.ctx.strokeStyle = '#cccccc';
-    this.ctx.font = '10px serif';
-    for (
-      let i = 0;
-      i <= this.mainCanvas.nativeElement.width;
-      i += this.cellSize
-    ) {
-      if (this.level?.debug && i < this.mainCanvas.nativeElement.width) {
-        this.ctx.fillStyle = 'blue';
-        this.ctx.fillText((i / this.cellSize).toString(), i, 10);
-      }
-      this.ctx.moveTo(i, 0);
-      this.ctx.strokeStyle = '#cccccc';
-      this.ctx.lineTo(i, this.cellSize * this.level.sizeY);
-    }
-    for (
-      let i = 0;
-      i <= this.mainCanvas.nativeElement.height - this.inventoryHeight * 0.9;
-      i += this.cellSize
-    ) {
-      if (
-        this.level?.debug &&
-        i < this.mainCanvas.nativeElement.height - this.inventoryHeight
-      ) {
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
-      }
-      this.ctx.moveTo(0, i);
-      this.ctx.strokeStyle = '#cccccc';
-      this.ctx.lineTo(this.mainCanvas.nativeElement.width, i);
-    }
-    this.ctx.stroke();
-    this.ctx.closePath();
-    for (let i = 0; i < this.level.player.maxInventorySize; i++) {
-      if (this.level.player.selectedInventoryItem === i) {
-        roundRect(
-          this.ctx,
-          1 + (i * this.inventoryHeight) / 2,
-          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-          this.inventoryHeight / 2 - 10,
-          this.inventoryHeight / 2 - 10,
-          10,
-          '#DDDD77'
-        );
-      } else {
-        roundRect(
-          this.ctx,
-          10 + (i * this.inventoryHeight) / 2,
-          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-          this.inventoryHeight / 2 - 10,
-          this.inventoryHeight / 2 - 10,
-          10,
-          '#7777DD'
-        );
-      }
-      if (
-        this.arrayIndexInventoryItems.length <
-        this.level.player.maxInventorySize
-      ) {
-        this.arrayIndexInventoryItems.push([
-          50 + (i * this.inventoryHeight) / 2,
-          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-          this.inventoryHeight / 2 - 10 + 50 + (i * this.inventoryHeight) / 2,
-          this.inventoryHeight / 2 -
-            10 +
-            this.mainCanvas.nativeElement.height -
-            this.inventoryHeight / 1.5,
-        ]);
-      }
+    if (this.level && this.level.won) {
+      this.ctx.beginPath();
+      this.ctx.drawImage(
+        this.winCondImage[this.globalFrame],
+        Math.floor(((this.level.sizeX - 1) / 2) * this.cellSize),
+        Math.floor(((this.level.sizeY - 1) / 2) * this.cellSize),
+        100,
+        100
+      );
 
-      if (i < this.level.player.inventory.length) {
-        let inventoryItem: Entity = this.level.player.inventory[i];
-        this.ctx.drawImage(
-          this.imgMap[inventoryItem.name][inventoryItem.frame],
-          50 + (i * this.inventoryHeight) / 2,
-          this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-          this.inventoryHeight / 2 - 10,
-          this.inventoryHeight / 2 - 10
-        );
-        inventoryItem.updateFrame();
+      this.ctx.fillStyle = 'black';
+      this.ctx.font = "30px 'Brush Script MT', cursive";
+
+      let winSentence: Array<string> = 'Press n to go to the next level'
+        .toLowerCase()
+        .split('');
+      let sentenceLength = winSentence.length*10;
+      for (let i = 0; i < winSentence.length; i++) {
+        if (winSentence[i] !== ' ') {
+          this.ctx.drawImage(
+            this.letterImgMap[winSentence[i]][this.globalFrame],
+            (this.ctx.canvas.width-sentenceLength)/2 +
+              (i * 10),//I am crap at math
+            ((this.level.sizeY - 1) / 2) * this.cellSize + 150,
+            10,
+            10
+          );
+        }
+      }
+      this.ctx.closePath();
+    } else {
+      this.ctx.font = '10px Arial';
+      this.ctx.beginPath();
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeStyle = '#cccccc';
+      this.ctx.font = '10px serif';
+      for (
+        let i = 0;
+        i <= this.mainCanvas.nativeElement.width;
+        i += this.cellSize
+      ) {
+        if (this.level?.debug && i < this.mainCanvas.nativeElement.width) {
+          this.ctx.fillStyle = 'blue';
+          this.ctx.fillText((i / this.cellSize).toString(), i, 10);
+        }
+        this.ctx.moveTo(i, 0);
+        this.ctx.strokeStyle = '#cccccc';
+        this.ctx.lineTo(i, this.cellSize * this.level.sizeY);
+      }
+      for (
+        let i = 0;
+        i <= this.mainCanvas.nativeElement.height - this.inventoryHeight * 0.9;
+        i += this.cellSize
+      ) {
+        if (
+          this.level?.debug &&
+          i < this.mainCanvas.nativeElement.height - this.inventoryHeight
+        ) {
+          this.ctx.fillStyle = 'red';
+          this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
+        }
+        this.ctx.moveTo(0, i);
+        this.ctx.strokeStyle = '#cccccc';
+        this.ctx.lineTo(this.mainCanvas.nativeElement.width, i);
+      }
+      this.ctx.stroke();
+      this.ctx.closePath();
+      for (let i = 0; i < this.level.player.maxInventorySize; i++) {
+        if (this.level.player.selectedInventoryItem === i) {
+          roundRect(
+            this.ctx,
+            10 + (i * this.inventoryHeight) / 2,
+            this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+            this.inventoryHeight / 2 - 10,
+            this.inventoryHeight / 2 - 10,
+            10,
+            '#DDDD77'
+          );
+        } else {
+          roundRect(
+            this.ctx,
+            10 + (i * this.inventoryHeight) / 2,
+            this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+            this.inventoryHeight / 2 - 10,
+            this.inventoryHeight / 2 - 10,
+            10,
+            '#7777DD'
+          );
+        }
+        if (
+          this.arrayIndexInventoryItems.length <
+          this.level.player.maxInventorySize
+        ) {
+          this.arrayIndexInventoryItems.push([
+            50 + (i * this.inventoryHeight) / 2,
+            this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+            this.inventoryHeight / 2 - 10 + 50 + (i * this.inventoryHeight) / 2,
+            this.inventoryHeight / 2 -
+              10 +
+              this.mainCanvas.nativeElement.height -
+              this.inventoryHeight / 1.5,
+          ]);
+        }
+
+        if (i < this.level.player.inventory.length) {
+          let inventoryItem: Entity = this.level.player.inventory[i];
+          this.ctx.drawImage(
+            this.imgMap[inventoryItem.name][inventoryItem.frame],
+            10 + (i * this.inventoryHeight) / 2,
+            this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
+            this.inventoryHeight / 2 - 10,
+            this.inventoryHeight / 2 - 10
+          );
+          inventoryItem.updateFrame();
+        }
       }
     }
   }
 
   animateObjects(entityArray: Array<Entity>): void {
-    entityArray.forEach((entity) => {
-      if (entity.name === 'player') {
-        this.ctx.drawImage(
-          this.imgMap[entity.name][entity.frame],
-          entity.x * this.cellSize,
-          entity.y * this.cellSize,
-          this.cellSize,
-          this.cellSize
-        );
-        entity.updateFrame();
-      } else if (
-        entity === this.level.player.playerIsInVehicle ||
-        entity.x !== this.level.player.x ||
-        entity.y !== this.level.player.y
-      ) {
-        try {
+    if (!this.level || !this.level.won) {
+      entityArray.forEach((entity) => {
+        if (entity.name === 'player') {
           this.ctx.drawImage(
             this.imgMap[entity.name][entity.frame],
             entity.x * this.cellSize,
@@ -245,23 +283,38 @@ export class CanvasComponent implements AfterViewInit {
             this.cellSize,
             this.cellSize
           );
-        } catch (e: any) {
-          this.ctx.drawImage(
-            this.missingTexturesImg,
-            entity.x * this.cellSize,
-            entity.y * this.cellSize,
-            this.cellSize,
-            this.cellSize
-          );
+          entity.updateFrame();
+        } else if (
+          entity === this.level.player.playerIsInVehicle ||
+          entity.x !== this.level.player.x ||
+          entity.y !== this.level.player.y
+        ) {
+          try {
+            this.ctx.drawImage(
+              this.imgMap[entity.name][entity.frame],
+              entity.x * this.cellSize,
+              entity.y * this.cellSize,
+              this.cellSize,
+              this.cellSize
+            );
+          } catch (e: any) {
+            this.ctx.drawImage(
+              this.missingTexturesImg,
+              entity.x * this.cellSize,
+              entity.y * this.cellSize,
+              this.cellSize,
+              this.cellSize
+            );
+          }
+          entity.updateFrame();
         }
-        entity.updateFrame();
-      }
-    });
+      });
+    }
   }
 
   restart() {
     this.subscription.unsubscribe();
-
+    this.moveAmount = 0;
     this.recalculateCanvasSize();
     this.ngAfterViewInit();
   }
@@ -312,30 +365,59 @@ export class CanvasComponent implements AfterViewInit {
     let y = this.level.player.y;
     switch (event.key) {
       case 'ArrowUp':
-        y--;
-        this.level.addToHistory();
-        this.level.moveAIs();
+        if (!this.level || !this.level.won) {
+          y--;
+          this.level.addToHistory();
+          this.level.moveAIs();
+          this.moveAmount++;
+        }
         break;
       case 'ArrowDown':
-        y++;
-        this.level.addToHistory();
-        this.level.moveAIs();
+        if (!this.level || !this.level.won) {
+          y++;
+          this.level.addToHistory();
+          this.level.moveAIs();
+          this.moveAmount++;
+        }
         break;
       case 'ArrowLeft':
-        x--;
-        this.level.addToHistory();
-        this.level.moveAIs();
+        if (!this.level || !this.level.won) {
+          x--;
+          this.level.addToHistory();
+          this.level.moveAIs();
+          this.moveAmount++;
+        }
         break;
       case 'ArrowRight':
-        x++;
-        this.level.addToHistory();
-        this.level.moveAIs();
+        if (!this.level || !this.level.won) {
+          x++;
+          this.level.addToHistory();
+          this.level.moveAIs();
+          this.moveAmount++;
+        }
         break;
       case 'u':
-        this.level.undo();
-        return;
+        if (!this.level || !this.level.won) {
+          this.level.undo();
+          this.moveAmount--;
+          return;
+        }
+        break;
       case 'r':
         this.restart();
+        return;
+      case 'n':
+        if (this.level.won) {
+          let levelKeys: Array<string> = Object.keys(this.allLevels);
+          if (
+            levelKeys.indexOf(this.level.name) < levelKeys.length - 1 &&
+            levelKeys.indexOf(this.level.name) !== -1
+          ) {
+            this.selectedLevel =
+              levelKeys[levelKeys.indexOf(this.level.name) + 1];
+            this.restart();
+          }
+        }
         return;
       default:
         break;

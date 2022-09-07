@@ -19,17 +19,21 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item *ngIf="hoveredEntity!==null" lines="none">
+      <h3>Amount of moves:</h3>
+      <ion-item>
+        {{moveAmount}}
+      </ion-item>
+
+      <ion-item *ngIf="hoveredEntity!==null" lines="none" class="off-the-top">
         <ion-card>
           <ion-card-header>
             <ion-img [src]="imgMap[hoveredEntity.name][globalFrame].src" style="width:50px"></ion-img>
             <ion-card-subtitle>{{hoveredEntity.name|titlecase}}</ion-card-subtitle>
             <ion-card-title>
-              {{hoveredEntity.name.length>1?recordedEntitiesAsSimpleDict[hoveredEntity.name].verboseName:'The Letter
-              '+hoveredEntity.name|titlecase}}</ion-card-title>
+              {{hoveredEntity.name.length>1?recordedEntitiesAsSimpleDict[hoveredEntity.name].verboseName:'The Letter '+hoveredEntity.name|titlecase}}</ion-card-title>
           </ion-card-header>
-          <ion-card-content>{{hoveredEntity.name.length<=1?'Move letters around to form
-              words':recordedEntitiesAsSimpleDict[hoveredEntity.name].description}} </ion-card-content>
+          <ion-card-content>{{hoveredEntity.name.length<=1?'Move letters around to form words':
+              recordedEntitiesAsSimpleDict[hoveredEntity.name].description}} </ion-card-content>
         </ion-card>
       </ion-item>
     </ion-content>

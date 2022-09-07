@@ -377,7 +377,6 @@ export default class Level {
               .map((e) => e.name)
               .join('');
             if (entityList.includes(word)) {
-              console.log(foundWords, foundWordsStr);
               foundWords.push([]);
               for (let n = 0; n < word.length; n++) {
                 let letter: string = word[n];
@@ -488,7 +487,6 @@ export default class Level {
             entity.additionalProperties['wins']
           ) {
             this.won = true;
-            console.log('Won!'); //TODO: implement win
           }
         }
       }
@@ -558,7 +556,6 @@ export default class Level {
             );
           } else if (foundWordsStr[i] in mobs) {
             obj = mobs[foundWordsStr[i]];
-            console.log('Creating', obj.name, 'with ai', obj.ai);
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
