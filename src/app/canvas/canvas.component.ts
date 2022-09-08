@@ -523,7 +523,7 @@ export class CanvasComponent implements AfterViewInit {
     if (this.debug) {
       console.info('Debug mode on.');
       let additionalLevel: any = null;
-      for (let names of ['test_level', 'testCat&rat', 'caca']) {
+      for (let names of ['test_level', 'testCat&rat']) {
         additionalLevel = await import(
           '../../assets/level_data/' + names + '.json'
         );
