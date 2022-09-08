@@ -79,7 +79,7 @@
       "name": "hog",
       "verboseName": "Confused hog",
       "description": "A pig that isn't quite sure how it ended up here. It doesn't seem to want to move.",
-      "editorDescription": "Hog mob. Doesn't move unless food is present.",
+      "editorDescription": "Hog mob. Doesn't move unless isFood is present.",
       "size": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -88,7 +88,7 @@
       "additionalProperties": {
         "canWalkDiagonnally": false,
         "seekRadius": 10,
-        "seeks": ["food"],
+        "seeks": ["isFood"],
         "canDie": true
       },
       "canFly": false,
@@ -98,7 +98,7 @@
       "name": "pig",
       "verboseName": "Confused pig",
       "description": "A pig that isn't quite sure how it ended up here. It doesn't seem to want to move.",
-      "editorDescription": "Hog mob. Doesn't move unless food is present.",
+      "editorDescription": "Hog mob. Doesn't move unless isFood is present.",
       "size": 1,
       "layerValue": 0,
       "isWalkable": false,
@@ -107,7 +107,7 @@
       "additionalProperties": {
         "canWalkDiagonnally": false,
         "seekRadius": 10,
-        "seeks": ["food"],
+        "seeks": ["isFood"],
         "canDie": true
       },
       "canFly": false,
@@ -135,7 +135,7 @@
       "isWalkable": true,
       "isPushable": false,
       "kills": true,
-      "additionalProperties": { "burns": true }
+      "additionalProperties": { "isFlammable": true }
     }
   },
   "obstacles": {
@@ -238,17 +238,29 @@
       "isCollectible": true,
       "additionalProperties": {"unlocks": true}
     },
+    "malt":{
+      "name":"malt",
+      "verboseName": "Cereal Malt",
+      "description" : "Fermented grains from an unknown origin. One could make wonderful things with these.",
+      "editorDescription" : "Malt collectible. Food source.",
+      "size":1,
+      "layerValue":0,
+      "isPushable": false,
+      "isWalkable" :true,
+      "isCollectible" :true,
+      "additionalProperties": {"isFood":true, "isFlammable": true}
+    },
     "oat": {
       "name": "oat",
       "verboseName": "Common Oat",
-      "description": "A strand of oat, what were you expecting?",
-      "editorDescription": "Oat collectible. Useless.",
+      "description": "A strand of oat. You're not exactly sure how it got here, seeing as there is no grass on the ground.",
+      "editorDescription": "Oat collectible. Food source.",
       "size": 1,
       "layerValue": 0,
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": {"food":true}
+      "additionalProperties": {"isFood":true, "isFlammable": true}
     },
     "toe": {
       "name": "toe",
@@ -260,7 +272,7 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": { "wins": true }
+      "additionalProperties": { "useless": true }
     },
     "toy": {
       "name": "toy",
@@ -284,12 +296,12 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": { "burns":true }
+      "additionalProperties": { "isFlammable":true }
     },
     "latch": {
       "name": "latch",
       "verboseName": "Detached Door Latch",
-      "description": "A door latch, it seems to be missing its door.",
+      "description": "A door latch, though it seems to be missing the door part.",
       "editorDescription": "Door latch collectible. Locks unlocked doors when placed on them (basically useless).",
       "size": 1,
       "layerValue": 0,
@@ -314,7 +326,7 @@
     "car": {
       "name": "car",
       "verboseName": "Regular Car",
-      "description": "A car. Too bad you don't can't drive.",
+      "description": "A car. Thankfully it's a manual transmission.",
       "editorDescription": "Car vehicle. Protects the player from basic enemies.",
       "size": 1,
       "layerValue": 0,
@@ -339,7 +351,7 @@
       "name": "goal",
       "verboseName": "Goal Post",
       "description": "Reach it and win the level!",
-      "editorDescription": "Goal tile. Level has to have at least once or a way to get it.",
+      "editorDescription": "Goal tile. Same as winning tile.",
       "size": 1,
       "layerValue": 0,
       "isPushable": false,
@@ -350,7 +362,7 @@
       "name": "win",
       "verboseName": "Win",
       "description": "Reach it and win the level!",
-      "editorDescription": "Winning tile.",
+      "editorDescription": "Winning tile. Same as goal tile.",
       "size": 1,
       "layerValue": 0,
       "isPushable": false,

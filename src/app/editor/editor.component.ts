@@ -183,6 +183,7 @@ export class EditorComponent implements OnInit {
         entityParams?.additionalProperties,
         entityParams?.ai,
         entityParams['isCollectible'],
+        null,
         true
       );
     }
@@ -317,6 +318,7 @@ export class EditorComponent implements OnInit {
         this.selectedEntity['additionalProperties'],
         this.selectedEntity?.ai,
         this.selectedEntity['isCollectible'],
+        null,
         true
       );
 

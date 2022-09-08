@@ -29,7 +29,7 @@ export class GameComponent implements AfterViewInit {
   private winCondImage: Array<HTMLImageElement> = [];
   private debug: Boolean = false; //get rid of it later
   private arrayIndexInventoryItems: Array<[number, number, number, number]> =
-    []; //shitty way to keep the indexes of the inventory item boxes "dynamically"
+    []; //shitty way to keep the indexes of the inventory item boxes "dynamically". I have no idea why I did it that way
   public imgMap: Map<string, Array<HTMLImageElement>> = new Map<
     string,
     Array<HTMLImageElement>

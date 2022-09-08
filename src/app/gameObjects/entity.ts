@@ -23,6 +23,7 @@ export default class Entity {
     public additionalProperties: Map<string, any> = undefined,
     public ai: string = undefined,
     public isCollectible: boolean = false,
+    public statusEffect: [string, number] = ['', 0],
     public active: boolean = true
   ) {
     this.description = '';
@@ -35,6 +36,10 @@ export default class Entity {
           break;
         }
       }
+    }
+    if (statusEffect)
+    {
+      this.statusEffect = statusEffect;
     }
     if (entityParams) {
       this.description = entityParams.description;
@@ -73,7 +78,9 @@ export default class Entity {
         console.info(
           `Behavior '${ai}' was not included in [${behaviorList.behaviors.moving.join(
             ', '
-          )}] or [${behaviorList.behaviors.immobile.join(', ')}], setting inert behavior by default.`
+          )}] or [${behaviorList.behaviors.immobile.join(
+            ', '
+          )}], setting inert behavior by default.`
         );
       this.aiBehavior = new EntityBehavior('inert');
     } else {
@@ -86,8 +93,14 @@ export default class Entity {
     this.layerValue = coords[2];
   }
   public moveEntity(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+    if (!this.statusEffect[0] || (this.statusEffect[0].length < 1)||this.statusEffect[1]<1) {//if the target has either: no status effects attached, or an empty status effect, or no turns left for it to move, it doest move
+      this.x = x;
+      this.y = y;
+    }
+    else if (this.statusEffect&& this.statusEffect[0].length>0 && this.statusEffect[1]>0)
+    {
+      this.statusEffect[1]--;//if the target is affect by some status effect, it decreases by 1. Ex: ['sleep', 2] => ['sleep', 1]
+    }
   }
 
   public getFrame(frame: number): string {
@@ -127,8 +140,9 @@ export default class Entity {
             this.additionalProperties &&
             this.additionalProperties['seeks'] &&
             this.additionalProperties['seeks'].includes(entity.name)) ||
-          (this.additionalProperties['seeks'] && this.additionalProperties['seeks'].includes('food') &&
-            this.additionalProperties['food'])
+          (this.additionalProperties['seeks'] &&
+            this.additionalProperties['seeks'].includes('isFood') &&
+            this.additionalProperties['isFood'])
         ) {
           if (
             !this.additionalProperties['seekRadius'] ||

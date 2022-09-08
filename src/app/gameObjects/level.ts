@@ -62,7 +62,8 @@ export default class Level {
           initObject.entities[i]?.kills,
           initObject.entities[i].additionalProperties,
           initObject.entities[i]?.ai,
-          initObject.entities[i]?.isCollectible
+          initObject.entities[i]?.isCollectible,
+          initObject.entities[i]?.statusEffect
         )
       );
     }
@@ -230,22 +231,23 @@ export default class Level {
 
   public useInventoryItem(x: number, y: number, itemIdx: number): void {
     let foundI: number = null;
+    let isEmptyTile: boolean = true;
     for (let i = 0; i < this.entities.length; i++) {
       if (this.entities[i].x === x && this.entities[i].y === y) {
+        isEmptyTile = false;
         if (this.player.inventory[itemIdx]) {
           if (
-            this.player.inventory[itemIdx].name === 'key' ||
-            (this.player.inventory[itemIdx].additionalProperties['unlocks'] &&
-              this.entities[i].additionalProperties['isLocked'])
+            (this.player.inventory[itemIdx].name === 'key' ||
+              (this.entities[i].additionalProperties && this.player.inventory[itemIdx].additionalProperties['unlocks'])) &&
+              this.entities[i].additionalProperties && this.entities[i].additionalProperties['isLocked']
           ) {
             foundI = i;
             break;
           }
           if (this.player.inventory[itemIdx].additionalProperties) {
             if (
-              this.player.inventory[itemIdx].additionalProperties['burns'] &&
-              this.entities[i].additionalProperties &&
-              this.entities[i].additionalProperties['isFlammable']
+              this.entities[itemIdx].additionalProperties &&
+              this.entities[itemIdx].additionalProperties['isFlammable']
             ) {
               foundI = i;
               break;
@@ -254,8 +256,21 @@ export default class Level {
         }
       }
     }
+    if (isEmptyTile) {
+      for (let i = 0; i < this.letters.length; i++) {
+        if (this.letters[i].x === x && this.letters[i].y === y) {
+          isEmptyTile = false;
+        }
+      }
+    }
+
     if (foundI) {
       this.entities.splice(foundI, 1);
+      this.player.removeFromInventory(this.player.inventory[itemIdx]);
+    } else if (isEmptyTile) {
+      this.player.inventory[itemIdx].x = x;
+      this.player.inventory[itemIdx].y = y;
+      this.entities.push(this.player.inventory[itemIdx]);
       this.player.removeFromInventory(this.player.inventory[itemIdx]);
     }
   }
@@ -560,7 +575,8 @@ export default class Level {
                       allFoundLetters[Object.keys(allFoundLetters)[0]][1],
                     ]
                   ) > heuristic([this.player.x, this.player.y], spawnPosition)
-                ) {//checks which letter is most further away from the player and places the entity there. Allows two things: not creating enemies right next to the player, and allows consistency when creating blocking obstacles
+                ) {
+                  //checks which letter is most further away from the player and places the entity there. Allows two things: not creating enemies right next to the player, and allows consistency when creating blocking obstacles
                   spawnPosition = [
                     allFoundLetters[Object.keys(allFoundLetters)[0]][0],
                     allFoundLetters[Object.keys(allFoundLetters)[0]][1],
@@ -596,7 +612,8 @@ export default class Level {
                 false,
                 obj?.additionalProperties,
                 'inert',
-                true
+                true,
+                obj?.statusEffect
               )
             );
           } else if (foundWordsStr[i] in mobs) {
@@ -613,7 +630,9 @@ export default class Level {
                 obj?.sprites,
                 obj?.kills,
                 obj?.additionalProperties,
-                obj?.ai
+                obj?.ai,
+                false,
+                ['stunned', 1] //all mobs spawned from letters get stunned for 1 turn by default
               )
             );
             obj = mobs[foundWordsStr[i]];
@@ -631,7 +650,9 @@ export default class Level {
                 obj?.sprites,
                 obj?.kills,
                 obj?.additionalProperties,
-                obj?.ai
+                obj?.ai,
+                false,
+                obj?.statusEffect
               )
             );
           } else if (foundWordsStr[i] in vehicles) {
@@ -659,7 +680,9 @@ export default class Level {
                 obj?.sprites,
                 obj?.kills,
                 JSON.parse(JSON.stringify(additionalProperties)), //not sure why, but Map/Record types are doing some shennanies here
-                obj?.ai
+                obj?.ai,
+                false,
+                obj?.statusEffect
               )
             );
           } else if (foundWordsStr[i] in other) {
@@ -676,7 +699,9 @@ export default class Level {
                 obj?.sprites,
                 obj?.kills,
                 obj?.additionalProperties,
-                obj?.ai
+                obj?.ai,
+                false,
+                obj?.statusEffect
               )
             );
           } else {
@@ -751,7 +776,9 @@ export default class Level {
             : [],
           entity['kills'],
           entity['additionalProperties'],
-          entity['ai']
+          entity['ai'],
+          entity?.isCollectible,
+          entity?.statusEffect
         )
       );
     }
