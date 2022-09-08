@@ -2,7 +2,7 @@ import Entity from './entity';
 import Letter from './letter';
 import Player from './player';
 import recordedEntities from '../../assets/entityData/entities.json';
-import { getRandomArbitrary } from '../misc/utils';
+import { getRandomArbitrary, heuristic } from '../misc/utils';
 
 export default class Level {
   public sizeX: number;
@@ -45,6 +45,7 @@ export default class Level {
 
     let tentities: Array<Entity> = [];
     for (let i = 0; i < initObject.entities.length; i++) {
+      console.log("Creating with:", initObject.entities[i].additionalProperties);
       tentities.push(
         new Entity(
           initObject.entities[i].name, //'name' of the letter
@@ -62,7 +63,7 @@ export default class Level {
           initObject.entities[i]?.kills,
           initObject.entities[i].additionalProperties,
           initObject.entities[i]?.ai,
-          initObject.isCollectible
+          initObject.entities[i]?.isCollectible
         )
       );
     }
@@ -113,7 +114,14 @@ export default class Level {
       letterGrid.push(row);
     }
     this.letters.forEach((e) => {
-      if (e instanceof Letter) {
+      if (
+        e &&
+        e instanceof Letter &&
+        e.x < this.sizeX &&
+        e.y < this.sizeY &&
+        e.x >= 0 &&
+        e.y >= 0
+      ) {
         //old check, not in use anymore, but might use it in the future
         letterGrid[e.x][e.y] = e;
       }
@@ -134,15 +142,6 @@ export default class Level {
     );
   };
 
-  public canCollect = (): Boolean => {
-    return (
-      this.entities.filter(
-        (e) =>
-          e.x === this.player.x && e.y === this.player.y && e['isCollectible']
-      ).length > 0
-    );
-  };
-
   public collect = (x: number, y: number): Array<Entity> => {
     let collectiblesFound: Array<Entity> = [];
     this.entities.forEach((e) => {
@@ -152,6 +151,7 @@ export default class Level {
     });
     return collectiblesFound;
   };
+
   private clone<T>(instance: T): T {
     const copy = new (instance.constructor as { new (): T })();
     Object.assign(copy, instance);
@@ -226,6 +226,38 @@ export default class Level {
       }
       this.debug = this.levelHistory[this.levelHistory.length - 1].debug;
       this.levelHistory.pop();
+    }
+  }
+
+  public useInventoryItem(x: number, y: number, itemIdx: number): void {
+    let foundI: number = null;
+    for (let i = 0; i < this.entities.length; i++) {
+      if (this.entities[i].x === x && this.entities[i].y === y) {
+        if (this.player.inventory[itemIdx]) {
+          if (
+            this.player.inventory[itemIdx].name === 'key' ||
+            (this.player.inventory[itemIdx].additionalProperties['unlocks'] &&
+              this.entities[i].additionalProperties['isLocked'])
+          ) {
+            foundI = i;
+            break;
+          }
+          if (this.player.inventory[itemIdx].additionalProperties) {
+            if (
+              this.player.inventory[itemIdx].additionalProperties['burns'] &&
+              this.entities[i].additionalProperties &&
+              this.entities[i].additionalProperties['isFlammable']
+            ) {
+              foundI = i;
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (foundI) {
+      this.entities.splice(foundI, 1);
+      this.player.removeFromInventory(this.player.inventory[itemIdx]);
     }
   }
 
@@ -464,7 +496,7 @@ export default class Level {
               entity.playerIsIn = true;
             } else if (
               entity.additionalProperties &&
-              entity.additionalProperties['locked'] &&
+              entity.additionalProperties['isLocked'] &&
               this.player.isInInventory('key') !== null
             ) {
               this.player.removeFromInventory(this.player.isInInventory('key'));
@@ -508,17 +540,33 @@ export default class Level {
           Array<Array<Record<string, [number, number]>>>
         ] = this.foundWords();
         let letterHere: Boolean = false;
+
+        let spawnPosition: [number, number] = [this.player.x, this.player.y];
         for (let i = 0; i < foundWordsStr.length; i++) {
           let lCopy: Array<Letter> = [];
           for (let letter of this.letters) {
             letterHere = false;
-            for (let allFoundLetters of foundWords[i].reverse()) {
+            for (let allFoundLetters of foundWords[i]) {
               if (
                 letter.name === Object.keys(allFoundLetters)[0] &&
                 letter.x ===
                   allFoundLetters[Object.keys(allFoundLetters)[0]][0] &&
                 letter.y === allFoundLetters[Object.keys(allFoundLetters)[0]][1]
               ) {
+                if (
+                  heuristic(
+                    [this.player.x, this.player.y],
+                    [
+                      allFoundLetters[Object.keys(allFoundLetters)[0]][0],
+                      allFoundLetters[Object.keys(allFoundLetters)[0]][1],
+                    ]
+                  ) > heuristic([this.player.x, this.player.y], spawnPosition)
+                ) {
+                  spawnPosition = [
+                    allFoundLetters[Object.keys(allFoundLetters)[0]][0],
+                    allFoundLetters[Object.keys(allFoundLetters)[0]][1],
+                  ];
+                }
                 letterHere = true;
                 break;
               }
@@ -539,8 +587,8 @@ export default class Level {
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                spawnPosition[0],
+                spawnPosition[1],
                 obj.cellSize,
                 obj?.layerValue,
                 obj?.isWalkable,
@@ -557,8 +605,8 @@ export default class Level {
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                spawnPosition[0],
+                spawnPosition[1],
                 obj.cellSize,
                 obj?.layerValue,
                 obj?.isWalkable,
@@ -575,8 +623,8 @@ export default class Level {
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                spawnPosition[0],
+                spawnPosition[1],
                 obj.cellSize,
                 obj?.layerValue,
                 obj?.isWalkable,
@@ -603,8 +651,8 @@ export default class Level {
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                spawnPosition[0],
+                spawnPosition[1],
                 obj.cellSize,
                 obj?.layerValue,
                 obj?.isWalkable,
@@ -620,8 +668,8 @@ export default class Level {
             this.entities.push(
               new Entity(
                 foundWordsStr[i],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][0],
-                Object.values(foundWords[i][foundWords[i].length - 1])[0][1],
+                spawnPosition[0],
+                spawnPosition[1],
                 obj.cellSize,
                 obj?.layerValue,
                 obj?.isWalkable,
@@ -658,7 +706,7 @@ export default class Level {
             letter['name'],
             letter['xPos'],
             letter['yPos'],
-            letter['cellSize'],
+            letter['size'],
             letter['layerValue'],
             letter['isWalkable'],
             letter['isPushable'],
@@ -678,7 +726,7 @@ export default class Level {
             letter['name'],
             letter['xPos'],
             letter['yPos'],
-            letter['cellSize'],
+            letter['size'],
             letter['layerValue'],
             letter['isWalkable'],
             letter['isPushable'],
@@ -695,7 +743,7 @@ export default class Level {
           entity['name'],
           entity['xPos'],
           entity['yPos'],
-          entity['cellSize'],
+          entity['size'],
           entity['layerValue'],
           entity['isWalkable'],
           entity['isPushable'],
@@ -713,7 +761,7 @@ export default class Level {
       this.player = new Player(
         obj['player']['xPos'],
         obj['player']['yPos'],
-        obj['player']['cellSize'],
+        obj['player']['size'],
         obj['player']['layerValue'],
         obj['player']['sprites'] && obj['player']['sprites'].length > 2
           ? obj['player']['sprites']
@@ -729,7 +777,7 @@ export default class Level {
       this.player = new Player(
         obj['player']['xPos'],
         obj['player']['yPos'],
-        obj['player']['cellSize'],
+        obj['player']['size'],
         obj['player']['layerValue'],
         playerSprites
       );
@@ -748,10 +796,25 @@ export default class Level {
     finalJSON['entities'] = [];
     finalJSON['player'] = this.player.exportAsJSON();
     for (let e of this.entities) {
-      finalJSON['entities'].push(e.exportAsJSON());
+      if (
+        e.x >= 0 &&
+        e.x < finalJSON['sizeX'] &&
+        e.y >= 0 &&
+        e.y < finalJSON['sizeY']
+      ) {
+        //some entities apparently get displaced outside of bounds somehow?
+        finalJSON['entities'].push(e.exportAsJSON());
+      }
     }
     for (let l of this.letters) {
-      finalJSON['letters'].push(l.exportAsJSON());
+      if (
+        l.x >= 0 &&
+        l.x < finalJSON['sizeX'] &&
+        l.y >= 0 &&
+        l.y < finalJSON['sizeY']
+      ) {
+        finalJSON['letters'].push(l.exportAsJSON());
+      }
     }
     return finalJSON;
   }

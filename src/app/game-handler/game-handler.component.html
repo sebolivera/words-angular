@@ -10,9 +10,9 @@
   </button></ng-template
 >
 <div style="display: flex">
-  <div *ngIf="currentPage == 'level'; then canvasBlock; else editorBlock"></div>
+  <div *ngIf="currentPage == 'level'; then gameBlock; else editorBlock"></div>
 
-  <ng-template #canvasBlock>
+  <ng-template #gameBlock>
     <game-component></game-component>
   </ng-template>
   <ng-template #editorBlock>

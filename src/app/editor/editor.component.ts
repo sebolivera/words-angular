@@ -166,7 +166,9 @@ export class EditorComponent implements OnInit {
       }
     }
     if (
-      ['mobs', 'other', 'obstacles', 'collectibles', 'vehicles'].includes(entityParams.type)
+      ['mobs', 'other', 'obstacles', 'collectibles', 'vehicles'].includes(
+        entityParams.type
+      )
     ) {
       this.selectedEntity = new Entity(
         this.selectedKey,
@@ -393,7 +395,7 @@ export class EditorComponent implements OnInit {
       );
     } else if (
       this.selectedLetter &&
-      Math.floor(e['clientX'] - rect.left) < this.level.sizeX &&
+      Math.floor((e['clientX'] - rect.left)/this.cellSize) < this.level.sizeX &&
       Math.floor((e['clientY'] - rect.top) / this.cellSize) < this.level.sizeY
     ) {
       this.selectedLetter.x = Math.floor(
@@ -735,7 +737,9 @@ export class EditorComponent implements OnInit {
   }
   setSearchTerm(t: EventTarget) {
     this.searchSafeRecordedEntities = {};
-    for (let [keyCat, valueCat] of Object.entries(this.recordedEntities.default)) {
+    for (let [keyCat, valueCat] of Object.entries(
+      this.recordedEntities.default
+    )) {
       if (keyCat.includes(t['value'])) {
         this.searchSafeRecordedEntities[keyCat] = valueCat;
       } else {
@@ -748,9 +752,7 @@ export class EditorComponent implements OnInit {
           ) {
             if (keyCat in this.searchSafeRecordedEntities) {
               this.searchSafeRecordedEntities[keyCat][key] = value;
-            }
-            else
-            {
+            } else {
               this.searchSafeRecordedEntities[keyCat] = {};
               this.searchSafeRecordedEntities[keyCat][key] = value;
             }

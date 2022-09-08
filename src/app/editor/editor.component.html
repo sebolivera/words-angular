@@ -112,7 +112,7 @@
               <ion-item lines="none">
                 <ion-button fill="outline" (click)="f.click()">
                   <ion-icon lazy="true" slot="start" name="image"></ion-icon>
-                  <ion-label>Upload from file</ion-label>
+                  <ion-label>Upload from JSON</ion-label>
                 </ion-button>
                 <input class="ion-hide" #f type="file" (change)="importLevel($event.target)" id="file-input"
                   accept=".json">
@@ -178,7 +178,7 @@
   </ng-template>
 </ion-modal>
 <!-- TODO: add letter & entity search filter for convenience -->
-<ion-modal #letterModal trigger="letter-modal" (willDismiss)="onWillDismissLetter($event)">
+<ion-modal trigger="letter-modal" (willDismiss)="onWillDismissLetter($event)">
   <ng-template>
     <ion-header>
       <ion-toolbar>

@@ -9,7 +9,7 @@ export default class Entity {
   public description: string;
   public frame: number = 0;
   public aiBehavior: EntityBehavior = null;
-  public playerIsIn:Boolean=false;
+  public playerIsIn: Boolean = false;
   constructor(
     public name: string = '',
     public x: number = -1,
@@ -22,7 +22,7 @@ export default class Entity {
     public kills: Boolean = false,
     public additionalProperties: Map<string, any> = undefined,
     public ai: string = undefined,
-    public isCollectible: boolean=false,
+    public isCollectible: boolean = false,
     public active: boolean = true
   ) {
     this.description = '';
@@ -43,8 +43,10 @@ export default class Entity {
     this.x = x;
     this.y = y;
     this.name = name;
-    this.size = size;
-    this.layerValue = layerValue;
+    if (size) this.size = size;
+    else this.size = 1;
+    if (layerValue) this.layerValue = layerValue;
+    else this.layerValue = 1;
     if (sprites && sprites !== null && sprites.length > 2) {
       this.sprites = sprites;
     } else {
@@ -120,11 +122,14 @@ export default class Entity {
       let minHeuristic: number = levelData.sizeX + levelData.sizeY; //unreachable
       let targetPos: [number, number] = [this.x, this.y];
       for (let entity of levelData.entitiesAndPlayer()) {
+        console.log(entity);
         if (
-          this.ai === 'seeking' &&
-          this.additionalProperties &&
-          this.additionalProperties['seeks'] &&
-          this.additionalProperties['seeks'].includes(entity.name)
+          (this.ai === 'seeking' &&
+            this.additionalProperties &&
+            this.additionalProperties['seeks'] &&
+            this.additionalProperties['seeks'].includes(entity.name)) ||
+          (this.additionalProperties['seeks'] && this.additionalProperties['seeks'].includes('food') &&
+            this.additionalProperties['food'])
         ) {
           if (
             !this.additionalProperties['seekRadius'] ||
@@ -167,7 +172,9 @@ export default class Entity {
           this.kills
         ) {
           levelData.removeFromLevel(entity);
-          this.additionalProperties['seeks'] = [];
+          if (this.additionalProperties) {
+            this.additionalProperties['seeks'] = [];
+          }
         }
       }
 
@@ -195,10 +202,13 @@ export default class Entity {
     finalJSON['name'] = this.name;
     finalJSON['xPos'] = this.x;
     finalJSON['yPos'] = this.y;
-    finalJSON['cellSize'] = this.size;
+    finalJSON['size'] = this.size;
     finalJSON['layerValue'] = this.layerValue;
     finalJSON['isWalkable'] = this.isWalkable;
     finalJSON['isPushable'] = this.isPushable;
+    if (finalJSON['isCollectible']) {
+      finalJSON['isCollectible'] = this.isCollectible;
+    }
     finalJSON['kills'] = this.kills;
     finalJSON['additionalProperties'] = this.additionalProperties;
     return finalJSON;

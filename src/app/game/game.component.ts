@@ -9,7 +9,7 @@ import recordedEntities from '../../assets/entityData/entities.json';
 @Component({
   selector: 'game-component',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss'], 
+  styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements AfterViewInit {
   @ViewChild('mainCanvas')
@@ -27,7 +27,7 @@ export class GameComponent implements AfterViewInit {
   public displayEntity: Entity = null;
   public globalFrame: number = 0;
   private winCondImage: Array<HTMLImageElement> = [];
-  private debug: Boolean = true; //get rid of it later
+  private debug: Boolean = false; //get rid of it later
   private arrayIndexInventoryItems: Array<[number, number, number, number]> =
     []; //shitty way to keep the indexes of the inventory item boxes "dynamically"
   public imgMap: Map<string, Array<HTMLImageElement>> = new Map<
@@ -128,19 +128,11 @@ export class GameComponent implements AfterViewInit {
   doClick(e: Event) {
     let rect = this.ctx.canvas.getBoundingClientRect();
     let selected: Boolean = false;
-    console.log(
-      Math.floor(e['clientX'] - rect.left),
-      Math.floor(e['clientY'] - rect.top),
-      'rect:',
-      this.arrayIndexInventoryItems[0][0],
-      this.arrayIndexInventoryItems[0][2],
-      Math.floor(this.arrayIndexInventoryItems[0][1]),
-      Math.floor(this.arrayIndexInventoryItems[0][3])
-    );
     if (
       this.arrayIndexInventoryItems.length ===
       this.level.player.maxInventorySize
     ) {
+      //inventory item selection
       for (let i = 0; i < this.arrayIndexInventoryItems.length; i++) {
         if (
           e['clientX'] - rect.left >= this.arrayIndexInventoryItems[i][0] &&
@@ -149,15 +141,11 @@ export class GameComponent implements AfterViewInit {
           e['clientY'] - rect.top <= this.arrayIndexInventoryItems[i][3]
         ) {
           if (this.level.player.selectedInventoryItem !== i) {
-            this.level.player.selectedInventoryItem = i;
-            selected = true;
             // console.log(this.level.player.selectedInventoryItem)
 
-            if (
-              this.level.player.inventory[
-                this.level.player.selectedInventoryItem
-              ]
-            ) {
+            if (this.level.player.inventory[i]) {
+              this.level.player.selectedInventoryItem = i;
+              selected = true;
               this.displayEntity =
                 this.level.player.inventory[
                   this.level.player.selectedInventoryItem
@@ -166,8 +154,25 @@ export class GameComponent implements AfterViewInit {
           } else {
             this.level.player.selectedInventoryItem = -1;
             this.displayEntity = null;
+            selected = false;
           }
           break;
+        }
+      }
+      //action on cell (near the player)
+      if (this.level.player.selectedInventoryItem !== -1) {
+        let tinyX: number = Math.floor(
+          (e['clientX'] - rect.left) / this.cellSize
+        );
+        let tinyY: number = Math.floor(
+          (e['clientY'] - rect.top) / this.cellSize
+        );
+        if (
+          Math.abs(tinyX - this.level.player.x) < 2 &&
+          Math.abs(tinyY - this.level.player.y) < 2 &&
+          (tinyX !== this.level.player.x || tinyY !== this.level.player.y)
+        ) {
+          this.level.useInventoryItem(tinyX, tinyY, this.level.player.selectedInventoryItem);
         }
       }
     }
@@ -261,6 +266,53 @@ export class GameComponent implements AfterViewInit {
             10,
             '#DDDD77'
           );
+          for (
+            let ii = Math.max(0, this.level.player.y - 1);
+            ii <= Math.min(this.level.sizeY - 1, this.level.player.y + 1);
+            ii++
+          ) {
+            for (
+              let jj = Math.max(0, this.level.player.x - 1);
+              jj <= Math.min(this.level.sizeX - 1, this.level.player.x + 1);
+              jj++
+            ) {
+              if (
+                ii === this.level.player.y
+                  ? jj !== this.level.player.x
+                  : jj === this.level.player.x
+              ) {
+                //XOR
+                let fillStyle = this.ctx.fillStyle;
+                this.ctx.fillStyle = '#DDDD77';
+                //highlights the cells next to the player
+                this.ctx.fillRect(
+                  jj * this.cellSize,
+                  ii * this.cellSize,
+                  this.cellSize,
+                  this.cellSize
+                );
+                this.ctx.globalAlpha = 0.4;
+                this.ctx.fillStyle = fillStyle;
+                //draws a phantom version of the item on the cells
+                this.ctx.drawImage(
+                  this.imgMap[
+                    this.level.player.inventory[
+                      this.level.player.selectedInventoryItem
+                    ].name
+                  ][
+                    this.level.player.inventory[
+                      this.level.player.selectedInventoryItem
+                    ].frame
+                  ],
+                  jj * this.cellSize,
+                  ii * this.cellSize,
+                  this.cellSize,
+                  this.cellSize
+                );
+                this.ctx.globalAlpha = 1;
+              }
+            }
+          }
         } else {
           roundRect(
             this.ctx,
@@ -270,7 +322,7 @@ export class GameComponent implements AfterViewInit {
             this.inventoryHeight / 2 - 10,
             10,
             '#7777DD'
-          );
+          ); //draws the selected inventory border in blue
         }
         // console.log("Rect format:",
         //   10 + (i * this.inventoryHeight) / 2,
@@ -440,7 +492,9 @@ export class GameComponent implements AfterViewInit {
       case 'u':
         if (!this.level || !this.level.won) {
           this.level.undo();
-          this.moveAmount--;
+          if (this.moveAmount > 0) {
+            this.moveAmount--;
+          }
           return;
         }
         break;

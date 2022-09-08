@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { GameComponent } from './canvas.component';
+import { GameComponent } from './game.component';
 
 describe('GameComponent', () => {
   let component: GameComponent;
