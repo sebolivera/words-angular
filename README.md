@@ -13,6 +13,8 @@
 - Run `ionic serve` to start the app in browser
 <sub><sub><sub><sub><sub>If you want to play this on your phone or in a phone emulator... Good luck.</sub></sub></sub></sub></sub>
 
+>Note: Node backend not yet implemented.
+
 ## How to play
 
 - Move the character using the arrow keys

@@ -7,11 +7,11 @@ import Entity from '../gameObjects/entity';
 import Level from '../gameObjects/level';
 import recordedEntities from '../../assets/entityData/entities.json';
 @Component({
-  selector: 'canvas-component',
-  templateUrl: './canvas.component.html',
-  styleUrls: ['./canvas.component.scss'],
+  selector: 'game-component',
+  templateUrl: './game.component.html',
+  styleUrls: ['./game.component.scss'], 
 })
-export class CanvasComponent implements AfterViewInit {
+export class GameComponent implements AfterViewInit {
   @ViewChild('mainCanvas')
   private mainCanvas: ElementRef = {} as ElementRef;
   private subscription: Subscription;

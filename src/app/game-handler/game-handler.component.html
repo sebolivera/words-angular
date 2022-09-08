@@ -13,7 +13,7 @@
   <div *ngIf="currentPage == 'level'; then canvasBlock; else editorBlock"></div>
 
   <ng-template #canvasBlock>
-    <canvas-component></canvas-component>
+    <game-component></game-component>
   </ng-template>
   <ng-template #editorBlock>
     <editor-component></editor-component>
