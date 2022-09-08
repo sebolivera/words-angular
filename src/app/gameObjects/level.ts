@@ -560,7 +560,7 @@ export default class Level {
                       allFoundLetters[Object.keys(allFoundLetters)[0]][1],
                     ]
                   ) > heuristic([this.player.x, this.player.y], spawnPosition)
-                ) {
+                ) {//checks which letter is most further away from the player and places the entity there. Allows two things: not creating enemies right next to the player, and allows consistency when creating blocking obstacles
                   spawnPosition = [
                     allFoundLetters[Object.keys(allFoundLetters)[0]][0],
                     allFoundLetters[Object.keys(allFoundLetters)[0]][1],

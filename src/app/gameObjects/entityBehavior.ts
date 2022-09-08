@@ -144,7 +144,7 @@ export default class EntityBehavior {
           targetCoords,
           walkableCellsMatrix,
           entity?.additionalProperties['canWalkDiagonnally']
-        ).reverse();
+        ).reverse();//path given is given reverse because I'm dumb
         [movedToX, movedToY] = path && path.length > 0 ? path[0] : [null, null];
         if (movedToX===null || movedToY===null) {//WHY IS 0 FALSY FFS
           newX = entity.x;
