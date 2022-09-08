@@ -18,6 +18,25 @@
       },
       "ai": "seeking"
     },
+    "bird": {
+      "name": "bird",
+      "verboseName": "Bird",
+      "description": "It's a plane, it's superman... No, it's just a stupid ugly bird. A really ugly bird.",
+      "editorDescription": "Bird mob. flies and flees from the player and from cats.",
+      "size": 1,
+      "layerValue": 0,
+      "isWalkable": true,
+      "isPushable": false,
+      "kills": false,
+      "canFly": true,
+      "additionalProperties": {
+        "canWalkDiagonnally": true,
+        "flees": ["player", "cat"],
+        "canDie": true,
+        "drops":"beak"
+      },
+      "ai": "fleeing"
+    },
     "rat": {
       "name": "rat",
       "verboseName": "Scared Rat",
@@ -69,7 +88,7 @@
       "additionalProperties": {
         "canWalkDiagonnally": true,
         "seekRadius": 10,
-        "seeks": ["rat", "player"],
+        "seeks": ["rat", "player", "bird"],
         "canDie": true
       },
       "canFly": false,
@@ -301,7 +320,7 @@
     "latch": {
       "name": "latch",
       "verboseName": "Detached Door Latch",
-      "description": "A door latch, though it seems to be missing the door part.",
+      "description": "A door latch, although it seems to be missing the door part.",
       "editorDescription": "Door latch collectible. Locks unlocked doors when placed on them (basically useless).",
       "size": 1,
       "layerValue": 0,
