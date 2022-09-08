@@ -73,7 +73,7 @@ export default class Entity {
         console.info(
           `Behavior '${ai}' was not included in [${behaviorList.behaviors.moving.join(
             ', '
-          )}] or [${behaviorList.behaviors.immobile.join(', ')}]`
+          )}] or [${behaviorList.behaviors.immobile.join(', ')}], setting inert behavior by default.`
         );
       this.aiBehavior = new EntityBehavior('inert');
     } else {
@@ -122,7 +122,6 @@ export default class Entity {
       let minHeuristic: number = levelData.sizeX + levelData.sizeY; //unreachable
       let targetPos: [number, number] = [this.x, this.y];
       for (let entity of levelData.entitiesAndPlayer()) {
-        console.log(entity);
         if (
           (this.ai === 'seeking' &&
             this.additionalProperties &&

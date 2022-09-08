@@ -45,7 +45,6 @@ export default class Level {
 
     let tentities: Array<Entity> = [];
     for (let i = 0; i < initObject.entities.length; i++) {
-      console.log("Creating with:", initObject.entities[i].additionalProperties);
       tentities.push(
         new Entity(
           initObject.entities[i].name, //'name' of the letter

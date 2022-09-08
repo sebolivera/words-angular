@@ -38,7 +38,6 @@ export default class EntityBehavior {
     ];
     switch (this.name) {//temporary solution for the "fleeing behavior"
       case 'fleeing':
-        console.log('Rat?', entity.name)
         let [targetX, targetY]: [number, number] = [0, 0];
         let [addX, addY]: number[] = [0, 0];
         if (px < ex) {

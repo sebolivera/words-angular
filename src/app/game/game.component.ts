@@ -85,29 +85,10 @@ export class GameComponent implements AfterViewInit {
     this.drawGrid();
   }
   mouseMove(e: Event) {
-    //item selection, not yet implemented
-    if (
-      this.level.player.selectedInventoryItem >= 0 &&
-      this.level.player.selectedInventoryItem <
-        this.level.player.maxInventorySize
-    ) {
-      if (
-        this.level.player.inventory[this.level.player.selectedInventoryItem]
-      ) {
-        // console.log(
-        //   this.level.player.inventory[this.level.player.selectedInventoryItem]
-        // );
-      } else {
-        // console.log('No item selected');
-      }
-    }
-
     if (!this.level || !this.level.won) {
       //entity hover
       let hovered: Boolean = false;
       let rect = this.ctx.canvas.getBoundingClientRect();
-      // console.log('Cellsize:', this.cellSize);
-      // console.log(e['clientX'] - rect.left);
       for (let entity of this.level.entitiesAndPlayer()) {
         if (
           Math.floor((e['clientX'] - rect.left) / this.cellSize) === entity.x &&
@@ -141,8 +122,6 @@ export class GameComponent implements AfterViewInit {
           e['clientY'] - rect.top <= this.arrayIndexInventoryItems[i][3]
         ) {
           if (this.level.player.selectedInventoryItem !== i) {
-            // console.log(this.level.player.selectedInventoryItem)
-
             if (this.level.player.inventory[i]) {
               this.level.player.selectedInventoryItem = i;
               selected = true;
@@ -324,11 +303,6 @@ export class GameComponent implements AfterViewInit {
             '#7777DD'
           ); //draws the selected inventory border in blue
         }
-        // console.log("Rect format:",
-        //   10 + (i * this.inventoryHeight) / 2,
-        //   this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-        //   this.inventoryHeight / 2 - 10,
-        //   this.inventoryHeight / 2 - 10)
         if (
           this.arrayIndexInventoryItems.length <
           this.level.player.maxInventorySize
@@ -353,12 +327,6 @@ export class GameComponent implements AfterViewInit {
             this.inventoryHeight / 2 - 10,
             this.inventoryHeight / 2 - 10
           );
-
-          // console.log("IMG format:",
-          //   10 + (i * this.inventoryHeight) / 2,
-          //   this.mainCanvas.nativeElement.height - this.inventoryHeight / 1.5,
-          //   this.inventoryHeight / 2 - 10,
-          //   this.inventoryHeight / 2 - 10)
           inventoryItem.updateFrame();
         }
       }
