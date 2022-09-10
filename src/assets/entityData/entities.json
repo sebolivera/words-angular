@@ -315,7 +315,7 @@
       "isPushable": false,
       "isWalkable": true,
       "isCollectible": true,
-      "additionalProperties": { "isFlammable":true }
+      "additionalProperties": { "isFlammable":true, "burns":true }
     },
     "latch": {
       "name": "latch",
