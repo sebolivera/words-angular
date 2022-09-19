@@ -178,7 +178,7 @@
   </ng-template>
 </ion-modal>
 <!-- TODO: add letter & entity search filter for convenience -->
-<ion-modal trigger="letter-modal" (willDismiss)="onWillDismissLetter($event)">
+<ion-modal #letterModal trigger="letter-modal" (willDismiss)="onWillDismissLetter($event)">
   <ng-template>
     <ion-header>
       <ion-toolbar>

@@ -200,20 +200,19 @@ export class EditorComponent implements OnInit {
   recalculateTableDimensions() {
     let cellHeight: number = this.initCellSize;
     let safetyCounter: number = 0;
-    // Optimization for the grid size, not strictly needed but eh, looks cool
 
     while (
       safetyCounter < 100 &&
       cellHeight * this.level.sizeY < this.ctx.canvas.height
     ) {
-      cellHeight *= 1.1; //somehow giving this more precision makes the grid overflow to to the bottom...?
+      cellHeight *= 1.1;
       safetyCounter += 1;
     }
     while (
       safetyCounter < 100 &&
       cellHeight * this.level.sizeY > this.ctx.canvas.height
     ) {
-      cellHeight *= 0.9; //somehow giving this more precision makes the grid overflow to to the bottom...?
+      cellHeight *= 0.9;
       safetyCounter += 1;
     }
     let cellWidth = Math.floor(cellHeight);
@@ -244,12 +243,11 @@ export class EditorComponent implements OnInit {
   recalculateCanvasSize() {
     let cellHeight: number = this.initCellSize;
     let safetyCounter: number = 0;
-    // Optimization for the grid size, not strictly needed but eh, looks cool
     while (
       safetyCounter < 100 &&
       cellHeight * this.level.sizeY > window.innerHeight - cellHeight * 2
     ) {
-      cellHeight *= 0.9; //somehow giving this more precision makes the grid overflow to to the bottom...?
+      cellHeight *= 0.9;
       safetyCounter += 1;
     }
     let cellWidth = Math.floor(cellHeight);
@@ -264,7 +262,7 @@ export class EditorComponent implements OnInit {
     this.cellSize = Math.floor(cellWidth < cellHeight ? cellWidth : cellHeight);
     let theight = this.cellSize * this.level.sizeY;
     let twidth = this.cellSize * this.level.sizeX;
-    this.ctx.canvas.height = theight; //canvas overflows a little bit to the bottom because of the titles etc. TODO: change how that works
+    this.ctx.canvas.height = theight;
     this.ctx.canvas.width = twidth;
 
     this.drawGrid();
@@ -572,7 +570,7 @@ export class EditorComponent implements OnInit {
   }
 
   saveToLocalStorage() {
-    //TODO: safeguard for levels with the same name
+    //TODO: safeguard for levels with the same name?
     this.validateErrors();
     if (Object.keys(this.validationErrors).length === 0) {
       if (Object.keys(this.validationErrors).length === 0) {

@@ -152,7 +152,7 @@ export default class Level {
     return collectiblesFound;
   };
 
-  private clone<T>(instance: T): T {
+  private clone<T>(instance: T): T {//fuck that function
     const copy = new (instance.constructor as { new (): T })();
     Object.assign(copy, instance);
     return copy;
@@ -244,10 +244,10 @@ export default class Level {
             foundI = i;
             break;
           }
-          if (this.player.inventory[itemIdx].additionalProperties) {
+          if (this.player.inventory[itemIdx].additionalProperties && this.player.inventory[itemIdx].additionalProperties['burns']) {
             if (
-              this.entities[itemIdx].additionalProperties &&
-              this.entities[itemIdx].additionalProperties['isFlammable']
+              this.entities[i].additionalProperties &&
+              this.entities[i].additionalProperties['isFlammable']
             ) {
               foundI = i;
               break;

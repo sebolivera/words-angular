@@ -37,8 +37,7 @@ export default class Entity {
         }
       }
     }
-    if (statusEffect)
-    {
+    if (statusEffect) {
       this.statusEffect = statusEffect;
     }
     if (entityParams) {
@@ -93,13 +92,22 @@ export default class Entity {
     this.layerValue = coords[2];
   }
   public moveEntity(x: number, y: number): void {
-    if (!this.statusEffect[0] || (this.statusEffect[0].length < 1)||this.statusEffect[1]<1) {//if the target has either: no status effects attached, or an empty status effect, or no turns left for it to move, it doest move
+    if (
+      !this.statusEffect[0] ||
+      this.statusEffect[0].length < 1 ||
+      this.statusEffect[1] < 1
+    ) {
+      //if the target has either: no status effects attached, or an empty status effect and no turns left for it to move, it doest move
       this.x = x;
       this.y = y;
-    }
-    else if (this.statusEffect&& this.statusEffect[0].length>0 && this.statusEffect[1]>0)
-    {
-      this.statusEffect[1]--;//if the target is affect by some status effect, it decreases by 1. Ex: ['sleep', 2] => ['sleep', 1]
+    } else if (this.statusEffect && this.statusEffect[0].length > 0) {
+      if (this.statusEffect[1] > 0) {
+        this.statusEffect[1]--; //if the target is affected by some status effect, it decreases by 1. Ex: ['sleep', 2] => ['sleep', 1]
+      }
+      if(this.statusEffect[1]<=0)
+      {
+        this.statusEffect = ['', 0];
+      }
     }
   }
 

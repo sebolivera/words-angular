@@ -79,7 +79,7 @@ export class GameComponent implements AfterViewInit {
     this.cellSize = Math.floor(cellWidth < cellHeight ? cellWidth : cellHeight);
     let theight = this.cellSize * this.level.sizeY + this.inventoryHeight;
     let twidth = this.cellSize * this.level.sizeX;
-    this.ctx.canvas.height = theight; //canvas overflows a little bit to the bottom because of the titles etc. TODO: change how that works
+    this.ctx.canvas.height = theight;
     this.ctx.canvas.width = twidth;
 
     this.drawGrid();
@@ -177,9 +177,6 @@ export class GameComponent implements AfterViewInit {
         100,
         100
       );
-
-      this.ctx.fillStyle = 'black';
-      this.ctx.font = "30px 'Brush Script MT', cursive";
 
       let winSentence: Array<string> = 'Press n to go to the next level'
         .toLowerCase()
@@ -301,7 +298,7 @@ export class GameComponent implements AfterViewInit {
             this.inventoryHeight / 2 - 10,
             10,
             '#7777DD'
-          ); //draws the selected inventory border in blue
+          ); //draws the de-selected inventory slots in blue
         }
         if (
           this.arrayIndexInventoryItems.length <
