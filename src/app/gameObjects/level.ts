@@ -233,13 +233,18 @@ export default class Level {
     let foundI: number = null;
     let isEmptyTile: boolean = true;
     for (let i = 0; i < this.entities.length; i++) {
+      console.log()
       if (this.entities[i].x === x && this.entities[i].y === y) {
         isEmptyTile = false;
         if (this.player.inventory[itemIdx]) {
           if (
             (this.player.inventory[itemIdx].name === 'key' ||
-              (this.entities[i].additionalProperties && this.player.inventory[itemIdx].additionalProperties['unlocks'])) &&
-              this.entities[i].additionalProperties && this.entities[i].additionalProperties['isLocked']
+              (this.entities[i].additionalProperties &&
+                this.player.inventory[itemIdx].additionalProperties[
+                  'unlocks'
+                ])) &&
+            this.entities[i].additionalProperties &&
+            this.entities[i].additionalProperties['isLocked']
           ) {
             foundI = i;
             break;
