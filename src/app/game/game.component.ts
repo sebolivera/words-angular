@@ -224,6 +224,8 @@ export class GameComponent implements AfterViewInit {
         ) {
           this.ctx.fillStyle = 'red';
           this.ctx.fillText((i / this.cellSize).toString(), 0, i + 10);
+          
+          this.ctx.fillStyle = null;
         }
         this.ctx.moveTo(0, i);
         this.ctx.strokeStyle = '#cccccc';
@@ -290,6 +292,9 @@ export class GameComponent implements AfterViewInit {
             }
           }
         } else {
+          if (this.ctx.fillStyle==='#ff0000'){
+          this.ctx.fillStyle = 'white';//sometimes doesn't update on time for the last cell. Is fillStyle asynchronous for some reason...?
+        }
           roundRect(
             this.ctx,
             10 + (i * this.inventoryHeight) / 2,

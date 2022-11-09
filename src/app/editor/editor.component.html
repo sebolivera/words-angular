@@ -1,139 +1,153 @@
-<div style="display: flex">
+<div style="display: flex" id="editor-content">
   <div>
     <canvas #editorCanvas id="editorCanvas" (click)="doClick($event)" (mousemove)="mouseMove($event)"></canvas>
   </div>
 
-  <div style="padding-left: 2px; width: 600px">
-    <ion-content>
-      <h3>Instructions:</h3>
-      <ion-list>
-        <ion-item style="padding-bottom: 5px; width: 100%">
-          <ion-grid>
-            <ion-row>
-              <ion-col style="margin: auto 0px auto" size="3">
-                <!-- by god this is cursed -->
-                <ion-label [color]="validationErrors['name'] ? 'danger' : 'default'">Level Name</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-input #nameInput type="text" [color]="validationErrors['name'] ? 'danger' : 'default'"
-                  style="width: 100%" placeholder="Enter a name here (it can't be empty)"
-                  (ionChange)="setName($event.target)"></ion-input>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
+</div>
+<ion-menu contentId="editor-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Editor mode</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <span class="verticalMenuContent">
+      <span>
+        <h3>Instructions:</h3>
+        <ion-list>
+          <ion-item style="padding-bottom: 5px; width: 100%">
+            <ion-grid>
+              <ion-row>
+                <ion-col style="margin: auto 0px auto" size="3">
+                  <!-- by god this is cursed -->
+                  <ion-label [color]="validationErrors['name'] ? 'danger' : 'default'">Level Name</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input #nameInput type="text" [color]="validationErrors['name'] ? 'danger' : 'default'"
+                    style="width: 100%" placeholder="Enter a name here (it can't be empty)"
+                    (ionChange)="setName($event.target)"></ion-input>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
 
 
-        <ion-item style="padding-bottom: 5px; width: 100%">
-          <ion-grid>
-            <ion-row>
-              <ion-col style="margin: auto 0px auto" size="3">
-                <!-- by god this is cursed -->
-                <ion-label>Level Description</ion-label>
-              </ion-col>
-              <ion-col>
-                <ion-input #descInput type="text" style="width: 100%" placeholder="Level description (optionnal)"
-                  (ionChange)="setDesc($event.target)"></ion-input>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-item>
-          <ion-label>Level Width:
-            {{
-            this.level && this.level.sizeX ? this.level.sizeX : "?"
-            }}</ion-label>
-          <ion-range #rangeX [pin]="true" [pinFormatter]="pinFormatterX" value="10" min="4" max="50"
-            (ionChange)="setLevelsizeX($event.target)"></ion-range>
-        </ion-item>
-        <ion-item>
-          <ion-label>Level Height:
-            {{
-            this.level && this.level.sizeY ? this.level.sizeY : "?"
-            }}</ion-label>
-          <ion-range #rangeY [pin]="true" [pinFormatter]="pinFormatterY" value="10" min="4" max="50"
-            (ionChange)="setLevelsizeY($event.target)"></ion-range>
-        </ion-item>
+          <ion-item style="padding-bottom: 5px; width: 100%">
+            <ion-grid>
+              <ion-row>
+                <ion-col style="margin: auto 0px auto" size="3">
+                  <!-- by god this is cursed -->
+                  <ion-label>Level Description</ion-label>
+                </ion-col>
+                <ion-col>
+                  <ion-input #descInput type="text" style="width: 100%" placeholder="Level description (optionnal)"
+                    (ionChange)="setDesc($event.target)"></ion-input>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item>
+            <ion-label>Level Width:
+              {{
+              this.level && this.level.sizeX ? this.level.sizeX : "?"
+              }}</ion-label>
+            <ion-range #rangeX [pin]="true" [pinFormatter]="pinFormatterX" value="10" min="4" max="50"
+              (ionChange)="setLevelsizeX($event.target)"></ion-range>
+          </ion-item>
+          <ion-item>
+            <ion-label>Level Height:
+              {{
+              this.level && this.level.sizeY ? this.level.sizeY : "?"
+              }}</ion-label>
+            <ion-range #rangeY [pin]="true" [pinFormatter]="pinFormatterY" value="10" min="4" max="50"
+              (ionChange)="setLevelsizeY($event.target)"></ion-range>
+          </ion-item>
 
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-button [color]="validationErrors['entities'] ? 'danger' : 'primary'" id="entity-modal"
-                  expand="block">
-                  <ion-icon name="add-circle"></ion-icon>
-                  <ion-label style="margin-left: 5px">Add an entity</ion-label>
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button [color]="validationErrors['entities'] ? 'danger' : 'primary'" id="letter-modal"
-                  expand="block">
-                  <ion-icon name="add-circle"></ion-icon>
-                  <ion-label style="margin-left: 5px">Add a letter</ion-label>
-                </ion-button>
-              </ion-col>
-              <ion-col size="3">
-                <ion-button (click)="selectEraser()" id="eraser-button" expand="block"
-                  [fill]="selectedEraser ? 'solid' : 'clear'" [color]="selectedEraser ? 'warning' : 'dark'">
-                  <ion-icon [name]="
-                      selectedEraser ? 'remove-circle' : 'remove-circle-outline'
-                    "></ion-icon>
-                  <ion-label style="margin-left: 5px">Erase</ion-label>
-                </ion-button>
-              </ion-col>
-              <span *ngIf="selectedEraser || selectedEntity || selectedLetter">
-                <ion-col size="4">
-                  <ion-button (click)="deselectAll()" id="deselect-button" expand="block"
-                    [fill]="selectedEraser ? 'solid' : 'clear'" color="danger">
-                    <ion-icon name="close-outline"></ion-icon>
-                    <ion-label style="margin-left: 5px">De-select</ion-label>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button [color]="validationErrors['entities'] ? 'danger' : 'primary'" id="entity-modal"
+                    expand="block">
+                    <ion-icon name="add-circle"></ion-icon>
+                    <ion-label style="margin-left: 5px">Add an entity</ion-label>
                   </ion-button>
                 </ion-col>
-              </span>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-button expand="block" color="success" (click)="exportLevel()">Export level data</ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button expand="block" color="tertiary" (click)="saveToLocalStorage()">Save level data (local
-                  storage)</ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-item lines="none">
-                <ion-button fill="outline" (click)="f.click()">
-                  <ion-icon lazy="true" slot="start" name="image"></ion-icon>
-                  <ion-label>Upload from JSON</ion-label>
-                </ion-button>
-                <input class="ion-hide" #f type="file" (change)="importLevel($event.target)" id="file-input"
-                  accept=".json">
-              </ion-item>
-              <ion-col>
-                <ion-button expand="block" fill="outline" [disabled]="!localStorageLevelAvailable" color="tertiary"
-                  id="level-modal" expand="block">Load local level (local storage)</ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-item>
-          <ion-button (click)="resetEditor()" style="margin-left: 12px" color="danger" fill="outline">
-            <ion-icon name="trash-outline"></ion-icon>
-            <ion-label>Reset</ion-label>
-          </ion-button>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </div>
-</div>
+                <ion-col>
+                  <ion-button [color]="validationErrors['entities'] ? 'danger' : 'primary'" id="letter-modal"
+                    expand="block">
+                    <ion-icon name="add-circle"></ion-icon>
+                    <ion-label style="margin-left: 5px">Add a letter</ion-label>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button (click)="selectEraser()" id="eraser-button" expand="block"
+                    [fill]="selectedEraser ? 'solid' : 'clear'" [color]="selectedEraser ? 'warning' : 'dark'">
+                    <ion-icon [name]="
+                      selectedEraser ? 'remove-circle' : 'remove-circle-outline'
+                    "></ion-icon>
+                    <ion-label style="margin-left: 5px">Erase</ion-label>
+                  </ion-button>
+                </ion-col>
+                <span *ngIf="selectedEraser || selectedEntity || selectedLetter">
+                  <ion-col size="4">
+                    <ion-button (click)="deselectAll()" id="deselect-button" expand="block"
+                      [fill]="selectedEraser ? 'solid' : 'clear'" color="danger">
+                      <ion-icon name="close-outline"></ion-icon>
+                      <ion-label style="margin-left: 5px">De-select</ion-label>
+                    </ion-button>
+                  </ion-col>
+                </span>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button expand="block" color="success" (click)="exportLevel()">Export level data</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button expand="block" color="tertiary" (click)="saveToLocalStorage()">Save level data (local
+                    storage)</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-item lines="none">
+                  <ion-button fill="outline" (click)="f.click()">
+                    <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+                    <ion-label>Upload from JSON</ion-label>
+                  </ion-button>
+                  <input class="ion-hide" #f type="file" (change)="importLevel($event.target)" id="file-input"
+                    accept=".json">
+                </ion-item>
+                <ion-col>
+                  <ion-button expand="block" fill="outline" [disabled]="!localStorageLevelAvailable" color="tertiary"
+                    id="level-modal" expand="block">Load local level (local storage)</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item>
+            <ion-button (click)="resetEditor()" style="margin-left: 12px" color="danger" fill="outline">
+              <ion-icon name="trash-outline"></ion-icon>
+              <ion-label>Reset</ion-label>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+      </span>
+      <span>
+        <ion-menu-toggle>
+          <ion-button color="danger"><ion-icon name="close-outline"></ion-icon><ion-label>Close</ion-label></ion-button>
+        </ion-menu-toggle>
+      </span>
+    </span>
+  </ion-content>
+</ion-menu>
 
 <ion-modal trigger="entity-modal" (willDismiss)="onWillDismiss($event)">
   <ng-template>

@@ -814,7 +814,7 @@ export default class Level {
       );
     }
   }
-  public exportAsJSON(): Record<string, any> {
+  public JSONSerialize(): Record<string, any> {
     //export from objects to JSON is not reliable enough
     let finalJSON: Record<string, any> = {};
     finalJSON['sizeX'] = this.sizeX;
@@ -825,7 +825,7 @@ export default class Level {
     finalJSON['debug'] = this.debug;
     finalJSON['letters'] = [];
     finalJSON['entities'] = [];
-    finalJSON['player'] = this.player.exportAsJSON();
+    finalJSON['player'] = this.player.JSONSerialize();
     for (let e of this.entities) {
       if (
         e.x >= 0 &&
@@ -834,7 +834,7 @@ export default class Level {
         e.y < finalJSON['sizeY']
       ) {
         //some entities apparently get displaced outside of bounds somehow?
-        finalJSON['entities'].push(e.exportAsJSON());
+        finalJSON['entities'].push(e.JSONSerialize());
       }
     }
     for (let l of this.letters) {
@@ -844,7 +844,7 @@ export default class Level {
         l.y >= 0 &&
         l.y < finalJSON['sizeY']
       ) {
-        finalJSON['letters'].push(l.exportAsJSON());
+        finalJSON['letters'].push(l.JSONSerialize());
       }
     }
     return finalJSON;

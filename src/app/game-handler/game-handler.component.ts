@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class GameHandlerComponent implements OnInit {
-  public currentPage:string = "editor";
+  public currentPage:string = "level";
   constructor() { }
   switchTo(location:string)
   {

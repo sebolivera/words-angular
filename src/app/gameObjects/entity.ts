@@ -218,7 +218,7 @@ export default class Entity {
       // }
     }
   }
-  public exportAsJSON(): Record<string, any> {
+  public JSONSerialize(): Record<string, any> {
     let finalJSON: Record<string, any> = {};
     finalJSON['name'] = this.name;
     finalJSON['xPos'] = this.x;

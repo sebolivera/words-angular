@@ -1,41 +1,55 @@
-<div style="display: flex">
+<div style="display: flex" id="play-content">
   <div>
     <canvas #mainCanvas id="mainCanvas" (click)="doClick($event)" (mousemove)="mouseMove($event)"></canvas>
   </div>
 
-  <div style="padding-left: 2px; width: 600px">
-    <ion-content>
-      <h3>Commands:</h3>
-      <ion-list class="fullWidth">
-        <ion-item class="flexList">- Use the arrow buttons to move around</ion-item>
-        <ion-item class="flexList">- Press 'u' to undo</ion-item>
-        <ion-item class="flexList">- Press 'r' to restart the level</ion-item>
-      </ion-list>
-      <h3>Available levels:</h3>
-      <ion-item fill="outline">
-        <ion-select placeholder="Select a level" (ionChange)="selectLevel($event)" [(ngModel)]="selectedLevel">
-          <ion-select-option *ngFor="let levelValues of allLevels | keyvalue" [value]="levelValues.key">
-            {{ levelValues.key }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <h3>Amount of moves:</h3>
-      <ion-item>
-        {{moveAmount}}
-      </ion-item>
-
-      <ion-item *ngIf="displayEntity!==null" lines="none" class="off-the-top">
-        <ion-card>
-          <ion-card-header>
-            <ion-img [src]="imgMap[displayEntity.name][globalFrame].src" style="width:50px"></ion-img>
-            <ion-card-subtitle>{{displayEntity.name|titlecase}}</ion-card-subtitle>
-            <ion-card-title>
-              {{displayEntity.name.length>1?recordedEntitiesAsSimpleDict[displayEntity.name].verboseName:'The Letter '+displayEntity.name|titlecase}}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>{{displayEntity.name.length<=1?'Move letters around to form words':
-              recordedEntitiesAsSimpleDict[displayEntity.name].description}} </ion-card-content>
-        </ion-card>
-      </ion-item>
-    </ion-content>
-  </div>
 </div>
+<ion-menu contentId="play-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Editor mode</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <span class="verticalMenuContent">
+      <span>
+        <h3>Commands:</h3>
+        <ion-list class="fullWidth">
+          <ion-item class="flexList">- Use the arrow buttons to move around</ion-item>
+          <ion-item class="flexList">- Press 'u' to undo</ion-item>
+          <ion-item class="flexList">- Press 'r' to restart the level</ion-item>
+        </ion-list>
+        <h3>Available levels:</h3>
+        <ion-item fill="outline">
+          <ion-select placeholder="Select a level" (ionChange)="selectLevel($event)" [(ngModel)]="selectedLevel">
+            <ion-select-option *ngFor="let levelValues of allLevels | keyvalue" [value]="levelValues.key">
+              {{ levelValues.key }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <h3>Amount of moves:</h3>
+        <ion-item>
+          {{moveAmount}}
+        </ion-item>
+
+        <ion-item *ngIf="displayEntity!==null" lines="none" class="off-the-top">
+          <ion-card>
+            <ion-card-header>
+              <ion-img [src]="imgMap[displayEntity.name][globalFrame].src" style="width:50px"></ion-img>
+              <ion-card-subtitle>{{displayEntity.name|titlecase}}</ion-card-subtitle>
+              <ion-card-title>
+                {{displayEntity.name.length>1?recordedEntitiesAsSimpleDict[displayEntity.name].verboseName:'The Letter '+displayEntity.name|titlecase}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>{{displayEntity.name.length<=1?'Move letters around to form words':
+                recordedEntitiesAsSimpleDict[displayEntity.name].description}} </ion-card-content>
+          </ion-card>
+        </ion-item>
+      </span>
+      <span>
+        <ion-menu-toggle>
+          <ion-button color="danger"><ion-icon name="close-outline"></ion-icon><ion-label>Close</ion-label></ion-button>
+        </ion-menu-toggle>
+      </span>
+    </span>
+  </ion-content>
+</ion-menu>

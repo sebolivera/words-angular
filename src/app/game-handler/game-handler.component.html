@@ -1,14 +1,24 @@
 <div *ngIf="currentPage == 'level'; then thenBlock; else elseBlock"></div>
 <ng-template #thenBlock>
-  <button ion-button (click)="this.switchTo('editor')">
-    <ion-button>Go to Editor</ion-button>
-  </button>
+  <ion-button (click)="this.switchTo('editor')" color="warning">Go to Editor</ion-button>
+
+  <ion-menu-toggle>
+    <ion-button color="secondary">
+      <ion-icon slot="start" name="menu-outline"></ion-icon>
+      Open menu
+    </ion-button>
+  </ion-menu-toggle>
 </ng-template>
-<ng-template #elseBlock
-  ><button ion-button (click)="this.switchTo('level')">
-    <ion-button>Go to Level</ion-button>
-  </button></ng-template
->
+<ng-template #elseBlock>
+  <ion-button ion-button (click)="this.switchTo('level')" color="success">Go to Level</ion-button>
+
+  <ion-menu-toggle>
+    <ion-button color="secondary">
+      <ion-icon slot="start" name="cog-outline"></ion-icon>
+      Open editor menu
+    </ion-button>
+  </ion-menu-toggle>
+</ng-template>
 <div style="display: flex">
   <div *ngIf="currentPage == 'level'; then gameBlock; else editorBlock"></div>
 

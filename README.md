@@ -1,3 +1,50 @@
+
+# Words (FR) (English below)
+
+
+## Description
+
+"Words" est un projet de jeu pas terminé dont je me suis servi pour (ré)apprendre à utiliser Ionic, Angular et TypeScript, après des années sans pratique. Il y a à l'heure actuelle assez peu de fonctionnalités, mais j'en ajouterai au fur et à mesure.
+
+**Note** : Je suis conscient qu'Angular n'est pas le meilleur langage pour coder un jeu vidéo, mais je n'ai pas pour prétention de le publier sur quelconque plateforme. J'ai ajouté Ionic afin de mettre en place une future version mobile.
+
+
+## Installation (desktop uniquement)
+
+- Installez Ionic avec `npm install -g @ionic-cli` (vous aurez peut-être besoin d'utiliser la commande `sudo` sur les systèmes UNIX)
+- Lancez la commande `npm install` à la racine du projet
+- Lancez la commande `ionic serve` pour lancer l'app dans un navigateur
+<sub><sub><sub><sub><sub>Si vous essayez de lancer ce jeu sur téléphone ou sur un émulateur de téléphone... Bonne chance.</sub></sub></sub></sub></sub>
+
+>Note: il existe un Back-End en Node qui servira au futur enregistrement des niveaux, mais je ne l'ai pas encore implémenté
+
+## Comment jouer
+
+- Cliquez sur le bouton bleu en haut pour basculer de l'éditeur de niveau à la partie jeu. Les autres instructions sont situées dans le bandeau de droite.
+
+### Mode édition
+
+- Déplacez le personnage en cliquant dessus. Veuillez noter que vous ne pouvez pas supprimer ou dupliquer le personnage (pour l'instant...).
+- Ajustez la taille de la grille via les sliders 'height' et 'width'. Attention: les entités hors de la grille disparaîtront lorsque vous la réduirez.
+- Vous pouvez sélectionner des entités ou des lettres à placer depuis leurs menus respectifs.
+- Vous pouvez charger et sauvegarder des niveaux en local sur votre navigateurs, ou en fichiers JSON (la partie Back-End est encore à implémenter).
+
+### Mode jeu
+
+- Utilisez les flèches du clavier pour déplacer le personnage.
+- Utilisez la souris pour sélectionner des items dans votre inventaire, puis cliquez sur une case si vous souhaitez déposer ces objets.
+- Poussez les lettres pour former des mots (en anglais uniquement).
+- Atteignez la case 'Win' ou 'Goal' afin de finir un niveau.
+- (Certains) mots vous permettrons de créer des objets utiles.
+- Certains objets ne peuvent pas être poussés.
+- Certains objets peuvent vous tuer.
+- Certains objets peuvent être ramassés.
+- Certaines entités vous suivront, d'autres vous fuiront.
+- Appuyez sur 'u' pour annuler une action.
+- Appuyez sur 'r' pour recommencer un niveau.
+- Une fois un niveau fini, appuyez sur 'n' pour passer au suivant.
+- Vous pouvez sélectionner un niveau directement en utilisant le menu latéral.
+
 # Words (EN)
 
 
@@ -44,49 +91,3 @@
 - Once a level is won, press 'n' to go to the next one.
 - You can select levels directly by using the side menu.
 
-
-# Words (FR)
-
-
-## Description
-
-"Words" est un projet de jeu pas terminé dont je me suis servi pour (ré)apprendre à utiliser Ionic, Angular et TypeScript, après des années sans pratique. Il y a à l'heure actuelle assez peu de fonctionnalités, mais j'en ajouterai au fur et à mesure.
-
-**Note**: Je suis conscient qu'Angular n'est pas le meilleur langage pour coder un jeu vidéo, mais je n'ai pas pour prétention de le publier sur quelconque plateforme. J'ai ajouté Ionic afin de mettre en place une future version mobile.
-
-
-## Installation (desktop uniquement)
-
-- Installez Ionic avec `npm install -g @ionic-cli` (vous aurez peut-être besoin d'utiliser la commande `sudo` sur les systèmes UNIX)
-- Lancez la commande `npm install` à la racine du projet
-- Lancez la commande `ionic serve` pour lancer l'app dans un navigateur
-<sub><sub><sub><sub><sub>Si vous essayez de lancer ce jeu sur téléphone ou sur un émulateur de téléphone... Bonne chance.</sub></sub></sub></sub></sub>
-
->Note: il existe un Back-End en Node qui servira au futur enregistrement des niveaux, mais je ne l'ai pas encore implémenté
-
-## Comment jouer
-
-- Cliquez sur le bouton bleu en haut pour basculer de l'éditeur de niveau à la partie jeu. Les autres instructions sont situées dans le bandeau de droite.
-
-### Mode édition
-
-- Déplacez le personnage en cliquant dessus. Veuillez noter que vous ne pouvez pas supprimer ou dupliquer le personnage (pour l'instant...).
-- Ajustez la taille de la grille via les sliders 'height' et 'width'. Attention: les entités hors de la grille disparaîtront lorsque vous la réduirez.
-- Vous pouvez sélectionner des entités ou des lettres à placer depuis leurs menus respectifs.
-- Vous pouvez charger et sauvegarder des niveaux en local sur votre navigateurs, ou en fichiers JSON (la partie Back-End est encore à implémenter).
-
-### Mode jeu
-
-- Utilisez les flèches du clavier pour déplacer le personnage.
-- Utilisez la souris pour sélectionner des items dans votre inventaire, puis cliquez sur une case si vous souhaitez déposer ces objets.
-- Poussez les lettres pour former des mots (en anglais uniquement).
-- Atteignez la case 'Win' ou 'Goal' afin de finir un niveau.
-- (Certains) mots vous permettrons de créer des objets utiles.
-- Certains objets ne peuvent pas être poussés.
-- Certains objets peuvent vous tuer.
-- Certains objets peuvent être ramassés.
-- Certaines entités vous suivront, d'autres vous fuiront.
-- Appuyez sur 'u' pour annuler une action.
-- Appuyez sur 'r' pour recommencer un niveau.
-- Une fois un niveau fini, appuyez sur 'n' pour passer au suivant.
-- Vous pouvez sélectionner un niveau directement en utilisant le menu latéral.

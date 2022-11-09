@@ -41,6 +41,7 @@ export class EditorComponent implements OnInit {
   public recordedEntities: any = null;
   public searchSafeRecordedEntities: any = null;
   private ctx: CanvasRenderingContext2D;
+  private firstLoad: Boolean = true;
   public defaultName: string;
   public currentFrame: number = 0;
   private missingTexturesImg: HTMLImageElement = new Image();
@@ -422,7 +423,8 @@ export class EditorComponent implements OnInit {
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
     this.ctx.strokeStyle = '#cccccc';
-    this.ctx.font = '10px serif';
+    if (!this.firstLoad){
+    this.ctx.font = 'regular 10px serif';}
     if (this.cellSize > 0) {
       for (
         let i = 0;
@@ -432,7 +434,7 @@ export class EditorComponent implements OnInit {
         this.ctx.moveTo(i, 0);
         this.ctx.strokeStyle = '#cccccc';
         if (
-          this.level?.debug &&
+          this.level?.debug && !this.firstLoad &&
           (this.level.sizeX - 1) * this.cellSize &&
           i <= (this.level.sizeX - 1) * this.cellSize
         ) {
@@ -447,7 +449,7 @@ export class EditorComponent implements OnInit {
         i += this.cellSize
       ) {
         if (
-          this.level?.debug &&
+          this.level?.debug && !this.firstLoad && 
           (this.level.sizeY - 1) * this.cellSize &&
           i <= (this.level.sizeY - 1) * this.cellSize
         ) {
@@ -562,7 +564,7 @@ export class EditorComponent implements OnInit {
   exportLevel() {
     this.validateErrors();
     if (Object.keys(this.validationErrors).length === 0) {
-      var blob = new Blob([JSON.stringify(this.level.exportAsJSON())], {
+      var blob = new Blob([JSON.stringify(this.level.JSONSerialize())], {
         type: 'text/json;charset=utf-8',
       });
       saveAs(blob, this.level.name + '.json');
@@ -591,9 +593,9 @@ export class EditorComponent implements OnInit {
           localStorage.getItem('levels') !== 'undefined'
         ) {
           levels = JSON.parse(localStorage.getItem('levels'));
-          levels[this.level.name] = this.level.exportAsJSON();
+          levels[this.level.name] = this.level.JSONSerialize();
         } else {
-          levels = { [this.level.name]: this.level.exportAsJSON() };
+          levels = { [this.level.name]: this.level.JSONSerialize() };
         }
         localStorage.setItem('levels', JSON.stringify(levels));
         this.localStorageLevelAvailable = true;
@@ -847,6 +849,7 @@ export class EditorComponent implements OnInit {
       (key) => delete this.validationErrors[key]
     );
     this.grabLocalStorageLevels();
+    this.firstLoad = false;
   }
   ngOnDestroy() {
     if (this.subscription) {

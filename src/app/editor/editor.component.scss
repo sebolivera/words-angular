@@ -42,3 +42,15 @@
 {
   top:2rem;
 }
+
+ion-menu{
+  --min-width: 90%;
+}
+
+.verticalMenuContent
+{
+  display:flex;
+  flex-direction: column;
+  height:90%;
+  justify-content: space-between;
+}
