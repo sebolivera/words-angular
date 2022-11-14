@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IonInput, IonModal, IonRange } from '@ionic/angular';
+import { IonInput, IonModal, IonRange, MenuController } from '@ionic/angular';
 import { Subscription, timer } from 'rxjs';
 import Entity from '../gameObjects/entity';
 import Letter from '../gameObjects/letter';
@@ -54,7 +54,7 @@ export class EditorComponent implements OnInit {
   public imgMap: Map<string, Array<HTMLImageElement>>;
   public letterImgMap: Map<string, Array<HTMLImageElement>>;
   public savedLevelKeys: Array<string> = [];
-  constructor(private alertController: AlertController) {
+  constructor(private alertController: AlertController,   public menuCtrl: MenuController) {
     defineCustomElements(window);
     this.missingTexturesImg.src =
       '../assets/images/entities/missingTextures.png';
@@ -146,6 +146,7 @@ export class EditorComponent implements OnInit {
       this.letterImgMap[letter]
     );
     this.letterModal.dismiss(null, 'Confirm');
+    this.menuCtrl.close();
   }
 
   selectEntity(entityKey: string) {
@@ -189,6 +190,7 @@ export class EditorComponent implements OnInit {
       );
     }
     this.modal.dismiss(null, 'Confirm');
+    this.menuCtrl.close();
   }
   refreshCanvas() {
     this.recalculateTableDimensions();
@@ -471,8 +473,9 @@ export class EditorComponent implements OnInit {
   }
 
   confirm() {
-    //to complete for entity selection
+    //entity selection
     this.modal.dismiss(null, 'Confirm');
+    this.menuCtrl.close();
   }
   cancelLetters() {
     this.letterModal.dismiss('letterModal', 'cancel');
@@ -484,8 +487,9 @@ export class EditorComponent implements OnInit {
   cancelLevel() {}
 
   confirmLetters() {
-    //to complete for entity selection
+    //letter selection
     this.letterModal.dismiss(null, 'Confirm');
+    this.menuCtrl.close();
   }
   onWillDismissLetter(event: Event) {
     //to complete for entity deselection

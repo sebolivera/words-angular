@@ -80,7 +80,7 @@
                     <ion-label style="margin-left: 5px">Add a letter</ion-label>
                   </ion-button>
                 </ion-col>
-                <ion-col size="3">
+                <ion-col>
                   <ion-button (click)="selectEraser()" id="eraser-button" expand="block"
                     [fill]="selectedEraser ? 'solid' : 'clear'" [color]="selectedEraser ? 'warning' : 'dark'">
                     <ion-icon [name]="
@@ -89,15 +89,15 @@
                     <ion-label style="margin-left: 5px">Erase</ion-label>
                   </ion-button>
                 </ion-col>
-                <span *ngIf="selectedEraser || selectedEntity || selectedLetter">
-                  <ion-col size="4">
+                  <ion-col>
+                    <span *ngIf="selectedEraser || selectedEntity || selectedLetter">
                     <ion-button (click)="deselectAll()" id="deselect-button" expand="block"
                       [fill]="selectedEraser ? 'solid' : 'clear'" color="danger">
                       <ion-icon name="close-outline"></ion-icon>
                       <ion-label style="margin-left: 5px">De-select</ion-label>
                     </ion-button>
+                  </span>
                   </ion-col>
-                </span>
               </ion-row>
             </ion-grid>
           </ion-item>
